@@ -21,7 +21,11 @@ const App = () => {
             light: colors.indigo[700],
             dark: colors.indigo[300],
           },
-          secondary: colors.lime,
+          secondary: {
+            main: colors.pink[500],
+            light: colors.pink[700],
+            dark: colors.pink[300],
+          }
         },
       }),
     [themeMode]
