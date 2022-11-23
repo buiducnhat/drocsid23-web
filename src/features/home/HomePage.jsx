@@ -1,10 +1,19 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import { Container, Button, Typography, Switch } from '@mui/material';
+import { Box, styled, Paper } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { APP_NAME } from 'src/app/constants';
 import { selectThemeMode, toggleThemeMode } from 'src/features/theme/themeSlice';
+
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+}));
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -17,14 +26,20 @@ const HomePage = () => {
         <title>{`Home | ${APP_NAME}`}</title>
       </Helmet>
 
-      <Container>
-        <Typography variant="h1" component="h1" gutterBottom>
-          Home
-        </Typography>
+      <Box p={2} sx={{ flexGrow: 1 }}>
+        <Grid container spacing={1}>
+          <Grid xs={0.5}>
+            <Item>xs=0.5</Item>
+          </Grid>
+          <Grid xs={1.5}>
+            <Item>xs=1.5</Item>
+          </Grid>
+          <Grid xs={10}>
+            <Item>xs=10</Item>
+          </Grid>
 
-        <Button>Theme</Button>
-        <Switch checked={themeMode === 'dark'} onChange={(e) => dispatch(toggleThemeMode())} />
-      </Container>
+        </Grid>
+      </Box>
     </React.Fragment>
   );
 };
