@@ -39,7 +39,12 @@ export default function RegisterPage() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: themeMode === 'light' ? 'primary.light' : 'primary.dark' }}>
+        <Avatar
+          sx={{
+            m: 1,
+            bgcolor: themeMode === 'light' ? 'primary.light' : 'primary.dark',
+          }}
+        >
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -96,7 +101,12 @@ export default function RegisterPage() {
               />
             </Grid>
           </Grid>
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
             Register
           </Button>
           <Grid container justifyContent="flex-end">

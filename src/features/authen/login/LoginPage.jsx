@@ -39,7 +39,12 @@ export default function LoginPage() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: themeMode === 'light' ? 'primary.light' : 'primary.dark' }}>
+        <Avatar
+          sx={{
+            m: 1,
+            bgcolor: themeMode === 'light' ? 'primary.light' : 'primary.dark',
+          }}
+        >
           <LockOutlinedIcon />
         </Avatar>
 
@@ -72,7 +77,12 @@ export default function LoginPage() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
-          <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
             Login
           </Button>
           <Grid container>
