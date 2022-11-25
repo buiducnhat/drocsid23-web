@@ -26,6 +26,10 @@ const App = () => {
             light: colors.pink[700],
             dark: colors.pink[300],
           },
+          grey: {
+            ...colors.grey,
+            850: '#2d2d2d',
+          },
         },
       }),
     [themeMode]

@@ -1,9 +1,15 @@
 import React from 'react';
-import { Box, colors } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 function ChatColumn() {
+  const theme = useTheme();
+
   return (
-    <Box height="100%" width="100%" backgroundColor={colors.grey[800]}></Box>
+    <Box
+      height="100%"
+      width="100%"
+      backgroundColor={theme.palette.grey[850]}
+    ></Box>
   );
 }
 
