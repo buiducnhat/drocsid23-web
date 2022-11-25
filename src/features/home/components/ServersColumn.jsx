@@ -4,7 +4,7 @@ import { Stack, useTheme } from '@mui/material';
 import ChatAvatar from './ChatAvatar';
 import AddServerOnColumn from './AddServerOnColumn';
 
-function MessageColumn() {
+function ServersColumn() {
   const theme = useTheme();
 
   return (
@@ -12,7 +12,6 @@ function MessageColumn() {
       direction="column"
       height="100%"
       py={1}
-      pr={2}
       spacing={2}
       backgroundColor={theme.palette.background.paper}
     >
@@ -36,4 +35,4 @@ function MessageColumn() {
   );
 }
 
-export default MessageColumn;
+export default ServersColumn;

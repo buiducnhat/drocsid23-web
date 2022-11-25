@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import { Stack, Box } from '@mui/material';
 
 import { APP_NAME } from 'src/app/constants';
-import MessageColumn from './components/MessagesColumn';
+import ServersColumn from './components/ServersColumn';
 import ServerInfoColumn from './components/ServerInfoColumn';
 import ChatColumn from './components/ChatColumn';
 
@@ -16,7 +16,7 @@ const HomePage = () => {
 
       <Stack height="100vh" direction="row">
         <Box height="100%" maxWidth={80}>
-          <MessageColumn />
+          <ServersColumn />
         </Box>
 
         <Box height="100%" maxWidth={250}>

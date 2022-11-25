@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Tooltip, Typography, useTheme, Stack } from '@mui/material';
 import * as colors from '@mui/material/colors';
 
 function AddServerOnColumn() {
@@ -9,7 +9,14 @@ function AddServerOnColumn() {
 
   return (
     <Tooltip title={'Add new Server'} placement="right">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Stack
+        width="100%"
+        direction="row"
+        spacing={1}
+        pr={2}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Box
           height={'20px'}
           width="3px"
@@ -46,7 +53,7 @@ function AddServerOnColumn() {
             +
           </Typography>
         </Box>
-      </Box>
+      </Stack>
     </Tooltip>
   );
 }

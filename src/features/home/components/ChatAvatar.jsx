@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Stack, Tooltip, Typography, useTheme } from '@mui/material';
 import * as colors from '@mui/material/colors';
 import PeopleAltTwoTone from '@mui/icons-material/PeopleAltTwoTone';
 
@@ -10,7 +10,14 @@ function ChatAvatar({ isDirect, isSelected, name, imgUrl, ...rest }) {
 
   return (
     <Tooltip title={name} placement="right">
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Stack
+        width="100%"
+        direction="row"
+        spacing={1}
+        pr={2}
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Box
           height={isSelected ? '40px' : '20px'}
           width="3px"
@@ -53,7 +60,7 @@ function ChatAvatar({ isDirect, isSelected, name, imgUrl, ...rest }) {
             </Typography>
           )}
         </Box>
-      </Box>
+      </Stack>
     </Tooltip>
   );
 }
