@@ -4,7 +4,7 @@ import { Stack, useTheme } from '@mui/material';
 import ChatAvatar from './ChatAvatar';
 import AddServerOnColumn from './AddServerOnColumn';
 
-function ServersColumn() {
+function ServersColumn({ servers, selectedServerId, setSelectedServerId }) {
   const theme = useTheme();
 
   return (
@@ -17,18 +17,15 @@ function ServersColumn() {
     >
       <ChatAvatar isDirect={true} name="Direct Messages" />
 
-      <ChatAvatar name="group 23 server" />
-
-      <ChatAvatar
-        name="bui ducnhat"
-        imgUrl="https://material-ui.com/static/images/avatar/1.jpg"
-        isSelected={true}
-      />
-
-      <ChatAvatar
-        name="bui ducnhat22"
-        imgUrl="https://material-ui.com/static/images/avatar/2.jpg"
-      />
+      {servers.map((server) => (
+        <ChatAvatar
+          key={server.id}
+          name={server.name}
+          imgUrl={server?.avatar}
+          isSelected={server.id === selectedServerId}
+          onClick={() => setSelectedServerId(server.id)}
+        />
+      ))}
 
       <AddServerOnColumn />
     </Stack>

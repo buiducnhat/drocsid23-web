@@ -23,29 +23,6 @@ import {
   SettingsRounded as SettingsIcon,
 } from '@mui/icons-material';
 
-const channels = [
-  {
-    id: 1,
-    name: 'General',
-    type: 'text',
-  },
-  {
-    id: 2,
-    name: 'Learning',
-    type: 'text',
-  },
-  {
-    id: 3,
-    name: 'Voice main',
-    type: 'voice',
-  },
-  {
-    id: 4,
-    name: 'Gaming',
-    type: 'voice',
-  },
-];
-
 const ChannelRow = ({ channel }) => {
   return (
     <Link
@@ -70,7 +47,7 @@ const ChannelRow = ({ channel }) => {
   );
 };
 
-function ServerInfoColumn() {
+function ServerInfoColumn({channels}) {
   const theme = useTheme();
 
   const [offMic, setOffMic] = React.useState(false);
