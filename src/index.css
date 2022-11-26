@@ -13,5 +13,18 @@ code {
 }
 
 ::-webkit-scrollbar {
-  display: none;
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #424242;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #212121;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #616161; /* 1 */
 }

@@ -1,37 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   IconButton,
   Stack,
   Typography,
   useTheme,
-  OutlinedInput,
   Avatar,
+  colors,
+  TextField,
+  Box,
+  InputBase,
 } from '@mui/material';
 import {
   NotificationsRounded as NotificationIcon,
   PeopleAltRounded as PeopleIcon,
+  AddCircleRounded as AddIcon,
 } from '@mui/icons-material';
 
-const messages = [
-  {
-    id: 1,
-    author: 'John Doe',
-    content: 'Hey, how are you?',
-    time: '12:00',
-    avatar: 'https://mui.com/static/images/avatar/1.jpg',
-  },
-  {
-    id: 2,
-    author: 'John Doe',
-    content:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium veniam libero molestias delectus neque, ducimus vel deleniti eum sit. Tempora eos fuga, aliquam quidem laborum vero ratione cum ipsam dicta?',
-    time: '12:00',
-    avatar: 'https://mui.com/static/images/avatar/2.jpg',
-  },
-];
+const message = {
+  id: 2,
+  author: 'John Doe',
+  content:
+    'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium veniam libero molestias delectus neque, ducimus vel deleniti eum sit. Tempora eos fuga, aliquam quidem laborum vero ratione cum ipsam dicta?',
+  time: '12:00',
+  avatar: 'https://mui.com/static/images/avatar/2.jpg',
+};
 
 function ChatColumn({ channel }) {
   const theme = useTheme();
+
+  const [messages, setMessages] = useState(
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((i) => ({
+      ...message,
+      id: i,
+      time: new Date().toLocaleTimeString(),
+    }))
+  );
 
   return (
     <Stack height="100%" width="100%" backgroundColor={theme.palette.grey[850]}>
@@ -54,17 +57,22 @@ function ChatColumn({ channel }) {
             <PeopleIcon />
           </IconButton>
 
-          <OutlinedInput size="small" placeholder="Search" />
+          <TextField size="small" placeholder="Search" />
         </Stack>
       </Stack>
 
-      <Stack height="100%" width="100%">
+      <Stack height="100%" width="100%" p={1} pr={12} spacing={1} sx={{ overflowY: 'scroll' }}>
         {messages.map((message) => (
-          <Stack key={message.id} direction="row" p={1} spacing={1}>
-            <Avatar sizes='3'/>
+          <Stack key={message.id} direction="row" p={1} spacing={2}>
+            <Avatar sizes="3" />
+
             <Stack direction="column" width="100%">
               <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="subtitle1" component="span" fontWeight="bold">
+                <Typography
+                  variant="subtitle1"
+                  component="span"
+                  fontWeight="bold"
+                >
                   {message.author}
                 </Typography>
                 <Typography variant="caption" component="span">
@@ -79,6 +87,29 @@ function ChatColumn({ channel }) {
           </Stack>
         ))}
       </Stack>
+
+      <Box pb={2} px={2} sx={{ backgroundColor: 'transparent' }}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            backgroundColor: colors.grey[800],
+            borderRadius: 2,
+          }}
+        >
+          <IconButton>
+            <AddIcon />
+          </IconButton>
+
+          <InputBase
+            placeholder="Message #general"
+            variant="standard"
+            multiline
+            maxRows={10}
+            fullWidth
+          />
+        </Stack>
+      </Box>
     </Stack>
   );
 }
