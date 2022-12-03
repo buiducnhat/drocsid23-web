@@ -1,7 +1,4 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Grid, colors, IconButton } from '@mui/material';
@@ -9,39 +6,6 @@ import Profiles from './components/Profile';
 import MyAccount from './components/MyAccount';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Stack } from '@mui/system';
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 export default function UserSetting() {
   const user = {
@@ -62,12 +26,20 @@ export default function UserSetting() {
         : '',
   }));
 
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const styleTab ={
+    height:30,
+    // backgroundColor:colors.grey[900],
+    m:0.5,
+    borderRadius:1,
+    color:colors.grey[500],
+    '&:hover': {
+      backgroundColor: colors.grey[800],
+      color:colors.grey[200],
+    },
+    cursor:'pointer'
   };
 
+  const [index, setIndex] = React.useState(0);
   return (
     <Box>
       <Grid direction="row" container height="100vh">
@@ -80,53 +52,24 @@ export default function UserSetting() {
           <Box
             height="100%"
             py={6}
+            
             sx={{ display: 'flex', flexDirection: 'row-reverse' }}
           >
             <Box>
-              <Typography variant="h7" px={3}>
-                USER SETTINGS{' '}
+              <Typography variant="h7" pr={6} >
+                USER SETTINGS
               </Typography>
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                aria-label="basic tabs example"
-                sx={{ borderRight: 1, borderColor: 'divider' }}
-                orientation="vertical"
-                variant="scrollable"
-              >
-                <Tab
-                  sx={{
-                    color: colors.grey[600],
-                    '&:hover': {
-                      backgroundColor: colors.grey[800],
-                    },
-                  }}
-                  label="My Account"
-                  {...a11yProps(0)}
-                >
-                  <Box></Box>
-                </Tab>
-                <Tab
-                  sx={{
-                    color: colors.grey[600],
-                    '&:hover': {
-                      backgroundColor: colors.grey[800],
-                    },
-                  }}
-                  label="Profile"
-                  {...a11yProps(1)}
-                />
-                <Tab
-                  sx={{
-                    color: colors.grey[600],
-                    '&:hover': {
-                      backgroundColor: colors.grey[800],
-                    },
-                  }}
-                  label="Log Out"
-                  {...a11yProps(2)}
-                />
-              </Tabs>
+              <Stack className="tabList" >
+                <Stack justifyContent='center' sx={styleTab}  onClick={() => setIndex(0)}>
+                  <Typography px={2}>My Account</Typography>
+                </Stack>
+                <Stack justifyContent='center'  sx={styleTab} onClick={() => setIndex(1)}>
+                <Typography px={2}>My Profiles</Typography>
+                </Stack>
+                <Stack justifyContent='center'  sx={styleTab}  onClick={() => setIndex(2)}>
+                <Typography px={2}>Log Out</Typography>
+                </Stack>
+              </Stack>
             </Box>
           </Box>
         </Grid>
@@ -149,14 +92,16 @@ export default function UserSetting() {
             </IconButton>
             <Typography> ESC </Typography>
           </Stack>
-          <Box height="100%">
-            <TabPanel value={value} index={0}>
+          <Box height="100%" p={3}>
+            <div className="tabContent " hidden={index !== 0}>
               <MyAccount user={user} />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
+            </div>
+            <div className="tabContent " hidden={index !== 1}>
               <Profiles user={user} servers={servers} />
-            </TabPanel>
-            <TabPanel value={value} index={2}></TabPanel>
+            </div>
+            <div className="tabContent " hidden={index !== 2}>
+              tabContent 3
+            </div>
           </Box>
         </Grid>
       </Grid>
