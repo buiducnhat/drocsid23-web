@@ -11,10 +11,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 export default function UserSetting() {
   const user = {
     id: 1,
-    username: 'TH',
+    username: 'Titi',
     email: 'henry@gmail.com',
     first_name: 'Henry',
-    last_name: 'thierry',
+    last_name: 'Thierry',
     avatar:
       'https://i0.wp.com/www.sportsbignews.com/wp-content/uploads/2021/06/henry-hd-best-pl.jpg?fit=640%2C460&ssl=1',
   };
