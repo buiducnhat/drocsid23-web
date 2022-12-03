@@ -10,12 +10,15 @@ import {
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import { DialogEditName, DialogEditUsername } from './Dialog';
+import {
+  DialogChangePassword,
+  DialogEditName,
+  DialogEditUsername,
+} from './Dialog';
 
 function MyAccount({ user }) {
-  const [openUsername, setOpenUsername] = React.useState(false);
-  const [openName, setOpenName] = React.useState(false);
-  const [openEmail, setOpenEmail] = React.useState(false);
+  const [index, setIndex] = React.useState(0);
+  const [openDialog, setOpenDialog] = React.useState(false);
   return (
     <Stack>
       <Stack width="100%" py={2} color={colors.grey[100]}>
@@ -66,44 +69,56 @@ function MyAccount({ user }) {
         >
           <Stack py={1.5} px={2} justifyContent="space-between" direction="row">
             Username: {user.username}
-            <Button onClick={() => setOpenUsername(true)} variant="contained" color="grey">
+            <Button
+              onClick={() => {
+                setIndex(0);
+                setOpenDialog(true);
+              }}
+              variant="contained"
+            >
               Edit
             </Button>
           </Stack>
 
           <Modal
-            open={openUsername}
-            onClose={() => setOpenUsername(false)}
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <DialogEditUsername user={user} />
+            <div>
+              {(() => {
+                switch (index) {
+                  case 1:
+                    return <DialogEditName user={user} />;
+                  case 0:
+                    return <DialogEditUsername user={user} />;
+                  case 2:
+                    return;
+                  case 3:
+                    return <DialogChangePassword />;
+                  default:
+                    return <DialogEditName />;
+                }
+              })()}
+            </div>
           </Modal>
-
           <Stack py={1.5} px={2} justifyContent="space-between" direction="row">
             Name: {user.first_name} {user.last_name}
-            <Button onClick={() => setOpenName(true)} variant="contained">Edit</Button>
+            <Button
+              onClick={() => {
+                setIndex(1);
+                setOpenDialog(true);
+              }}
+              variant="contained"
+            >
+              Edit
+            </Button>
           </Stack>
-          <Modal
-            open={openName}
-            onClose={() => setOpenName(false)}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <DialogEditName user={user} />
-          </Modal>
           <Stack py={1.5} px={2} justifyContent="space-between" direction="row">
             Email: {user.email}
-            <Button onClick={() => setOpenEmail(true)} variant="contained">Edit</Button>
+            <Button variant="contained">Edit</Button>
           </Stack>
-          <Modal
-            open={openEmail}
-            onClose={() => setOpenEmail(false)}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <DialogEditUsername user={user} />
-          </Modal>
         </Box>
       </Card>
       <Box py={2}>
@@ -113,7 +128,15 @@ function MyAccount({ user }) {
         <Typography py={1} variant="h5">
           Password and Authentication
         </Typography>
-        <Button variant="contained">Change Password</Button>
+        <Button
+          onClick={() => {
+            setIndex(3);
+            setOpenDialog(true);
+          }}
+          variant="contained"
+        >
+          Change Password
+        </Button>
       </Box>
     </Stack>
   );

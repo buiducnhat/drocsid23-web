@@ -1,11 +1,12 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Grid, colors, IconButton } from '@mui/material';
+import { Grid, colors, IconButton, Divider, Button } from '@mui/material';
 import Profiles from './components/Profile';
 import MyAccount from './components/MyAccount';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Stack } from '@mui/system';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function UserSetting() {
   const user = {
@@ -26,17 +27,17 @@ export default function UserSetting() {
         : '',
   }));
 
-  const styleTab ={
-    height:30,
-    // backgroundColor:colors.grey[900],
-    m:0.5,
-    borderRadius:1,
-    color:colors.grey[500],
+  const styleTab = {
+    height: 30,
+    mr: 0.5,
+    mt: 0.3,
+    borderRadius: 1,
+    color: colors.grey[500],
     '&:hover': {
       backgroundColor: colors.grey[800],
-      color:colors.grey[200],
+      color: colors.grey[200],
     },
-    cursor:'pointer'
+    cursor: 'pointer',
   };
 
   const [index, setIndex] = React.useState(0);
@@ -52,23 +53,57 @@ export default function UserSetting() {
           <Box
             height="100%"
             py={6}
-            
             sx={{ display: 'flex', flexDirection: 'row-reverse' }}
           >
             <Box>
-              <Typography variant="h7" pr={6} >
+              <Typography variant="h7" pr={6}>
                 USER SETTINGS
               </Typography>
-              <Stack className="tabList" >
-                <Stack justifyContent='center' sx={styleTab}  onClick={() => setIndex(0)}>
-                  <Typography px={2}>My Account</Typography>
+              <Stack className="tabList">
+                <Stack
+                  justifyContent="center"
+                  sx={styleTab}
+                  bgcolor={index === 0 ? colors.grey[800] : ''}
+                  color={colors.grey[400]}
+                  onClick={() => setIndex(0)}
+                >
+                  <Typography
+                    color={index === 0 ? colors.grey[100] : ''}
+                    px={2}
+                  >
+                    My Account
+                  </Typography>
                 </Stack>
-                <Stack justifyContent='center'  sx={styleTab} onClick={() => setIndex(1)}>
-                <Typography px={2}>My Profiles</Typography>
+                <Stack
+                  justifyContent="center"
+                  sx={styleTab}
+                  bgcolor={index === 1 ? colors.grey[800] : ''}
+                  onClick={() => setIndex(1)}
+                >
+                  <Typography
+                    color={index === 1 ? colors.grey[100] : ''}
+                    px={2}
+                  >
+                    My Profiles
+                  </Typography>
                 </Stack>
-                <Stack justifyContent='center'  sx={styleTab}  onClick={() => setIndex(2)}>
-                <Typography px={2}>Log Out</Typography>
-                </Stack>
+                <Box py={1}>
+                  <Divider color={colors.grey[400]} />
+                </Box>
+                <Button
+                  justifyContent="center"
+                  sx={styleTab}
+                  bgcolor={index === 2 ? colors.grey[800] : ''}
+                  direction="row"
+                >
+                  <LogoutIcon />
+                  <Typography
+                    color={index === 2 ? colors.grey[100] : ''}
+                    px={2}
+                  >
+                    Log Out
+                  </Typography>
+                </Button>
               </Stack>
             </Box>
           </Box>
@@ -98,9 +133,6 @@ export default function UserSetting() {
             </div>
             <div className="tabContent " hidden={index !== 1}>
               <Profiles user={user} servers={servers} />
-            </div>
-            <div className="tabContent " hidden={index !== 2}>
-              tabContent 3
             </div>
           </Box>
         </Grid>

@@ -55,12 +55,7 @@ export function DialogEditUsername({ user }) {
       </Box>
       <Typography marginTop={1}>Password</Typography>
       <Box>
-        <input
-          value={username}
-          type="password"
-          style={styleInput}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <input type="password" style={styleInput} />
       </Box>
       <Box py={2} align="right">
         <Button variant="contained">Done</Button>
@@ -107,6 +102,44 @@ export function DialogEditName({ user }) {
         />
       </Box>
       <Typography marginTop={1}>Password</Typography>
+      <Box>
+        <input type="password" style={styleInput} />
+      </Box>
+      <Box py={2} align="right">
+        <Button variant="contained">Done</Button>
+      </Box>
+    </Box>
+  );
+}
+
+export function DialogChangePassword() {
+  return (
+    <Box sx={styleDialog}>
+      <Typography
+        align="center"
+        color={colors.grey[100]}
+        id="modal-modal-title"
+        variant="h5"
+        component="h2"
+      >
+        Update your password
+      </Typography>
+      <Typography
+        align="center"
+        variant="subtitle1"
+        id="modal-modal-description"
+      >
+        Enter a your current password and a new password
+      </Typography>
+      <Typography marginTop={1}>Current Password</Typography>
+      <Box>
+        <input type="password" style={styleInput} />
+      </Box>
+      <Typography marginTop={1}>New Password</Typography>
+      <Box>
+        <input type="password" style={styleInput} />
+      </Box>
+      <Typography marginTop={1}>Confirm New Password</Typography>
       <Box>
         <input type="password" style={styleInput} />
       </Box>
