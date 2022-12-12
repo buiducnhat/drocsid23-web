@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Stack,
-  colors,
-  Divider,
-  Card,
-  Modal,
-} from '@mui/material';
+import { Box, Button, Stack, colors, Divider, Card } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import {
@@ -15,10 +7,21 @@ import {
   DialogEditName,
   DialogEditUsername,
 } from './Dialog';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function MyAccount({ user }) {
   const [index, setIndex] = React.useState(0);
   const [openDialog, setOpenDialog] = React.useState(false);
+
+  const handleCloseModal = (isOpen) => {
+    setOpenDialog(!isOpen);
+    console.log(!openDialog);
+  };
   return (
     <Stack>
       <Stack width="100%" py={2} color={colors.grey[100]}>
@@ -26,7 +29,7 @@ function MyAccount({ user }) {
       </Stack>
       <Card
         sx={{
-          width: 700,
+          width: 680,
           height: 350,
           borderRadius: 2,
           backgroundColor: colors.grey[900],
@@ -52,16 +55,13 @@ function MyAccount({ user }) {
             />
             {user.first_name} {user.last_name}
           </Stack>
-          <Button sx={{ height: 40 }} variant="contained">
-            Edit User Profile
-          </Button>
         </Stack>
         <Box
           color={colors.grey[100]}
           m="auto"
           backgroundColor={colors.grey[800]}
           sx={{
-            width: 650,
+            width: 620,
             height: 180,
             borderRadius: 2,
             fontSize: '1.2rem',
@@ -80,29 +80,44 @@ function MyAccount({ user }) {
             </Button>
           </Stack>
 
-          <Modal
+          <Dialog
             open={openDialog}
+            TransitionComponent={Transition}
+            keepMounted
             onClose={() => setOpenDialog(false)}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
+            aria-describedby="alert-dialog-slide-description"
           >
             <div>
               {(() => {
                 switch (index) {
                   case 1:
-                    return <DialogEditName user={user} />;
+                    return (
+                      <DialogEditName
+                        user={user}
+                        handleCloseModal={handleCloseModal}
+                      />
+                    );
                   case 0:
-                    return <DialogEditUsername user={user} />;
+                    return (
+                      <DialogEditUsername
+                        user={user}
+                        handleCloseModal={handleCloseModal}
+                      />
+                    );
                   case 2:
                     return;
                   case 3:
-                    return <DialogChangePassword />;
+                    return (
+                      <DialogChangePassword
+                        handleCloseModal={handleCloseModal}
+                      />
+                    );
                   default:
                     return <DialogEditName />;
                 }
               })()}
             </div>
-          </Modal>
+          </Dialog>
           <Stack py={1.5} px={2} justifyContent="space-between" direction="row">
             Name: {user.first_name} {user.last_name}
             <Button
@@ -122,7 +137,7 @@ function MyAccount({ user }) {
         </Box>
       </Card>
       <Box py={2}>
-        <Divider width={750} color={colors.grey[500]} />
+        <Divider color={colors.grey[500]} />
       </Box>
       <Box color={colors.grey[100]}>
         <Typography py={1} variant="h5">

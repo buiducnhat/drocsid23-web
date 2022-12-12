@@ -20,7 +20,7 @@ function Profiles({ user, servers }) {
       <Typography color={colors.grey[200]} mb={2}>
         User Profile
       </Typography>
-      <Divider width={750} color={colors.grey[700]} />
+      <Divider  color={colors.grey[700]} />
       <Stack direction="row">
         <Box p={1} sx={{ width: 400 }}>
           <Typography sx={{ fontSize: '0.8rem' }}>AVATAR</Typography>
@@ -68,7 +68,7 @@ function Profiles({ user, servers }) {
       <Typography color={colors.grey[200]} mb={2}>
         Server Profiles
       </Typography>
-      <Divider width={750} color={colors.grey[700]} />
+      <Divider color={colors.grey[700]} />
       <Stack py={2}>
         {servers.map((server) => (
           <Stack
