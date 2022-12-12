@@ -25,12 +25,11 @@ function MyAccount({ user }) {
   return (
     <Stack>
       <Stack width="100%" py={2} color={colors.grey[100]}>
-        <Typography variant="h5">My Account</Typography>
+        <Typography variant="h6">My Account</Typography>
       </Stack>
       <Card
         sx={{
           width: 680,
-          height: 350,
           borderRadius: 2,
           backgroundColor: colors.grey[900],
         }}
@@ -59,25 +58,85 @@ function MyAccount({ user }) {
         <Box
           color={colors.grey[100]}
           m="auto"
+          mb={4}
+          p={2}
           backgroundColor={colors.grey[800]}
           sx={{
             width: 620,
-            height: 180,
             borderRadius: 2,
             fontSize: '1.2rem',
           }}
         >
-          <Stack py={1.5} px={2} justifyContent="space-between" direction="row">
-            Username: {user.username}
-            <Button
-              onClick={() => {
-                setIndex(0);
-                setOpenDialog(true);
-              }}
-              variant="contained"
-            >
-              Edit
-            </Button>
+          <Stack justifyContent="space-between" direction="row" mb={1}>
+            <Stack>
+              <Typography
+                fontSize={13}
+                variant="inherit"
+                color={colors.grey[400]}
+              >
+                Username:{' '}
+              </Typography>
+              <Typography variant="inherit" pl={1}>
+                {user.username}
+              </Typography>
+            </Stack>
+            <Box>
+              <Button
+                onClick={() => {
+                  setIndex(0);
+                  setOpenDialog(true);
+                }}
+                height={20}
+                variant="contained"
+              >
+                Edit
+              </Button>
+            </Box>
+          </Stack>
+          <Stack justifyContent="space-between" direction="row"  mb={1}>
+            <Stack>
+              <Typography
+                fontSize={13}
+                variant="inherit"
+                color={colors.grey[400]}
+              >
+                Full Name:{' '}
+              </Typography>
+              <Typography variant="inherit" pl={1}>
+                {user.first_name} {user.last_name}
+              </Typography>
+            </Stack>
+            <Box>
+              <Button
+                onClick={() => {
+                  setIndex(1);
+                  setOpenDialog(true);
+                }}
+                height={20}
+                variant="contained"
+              >
+                Edit
+              </Button>
+            </Box>
+          </Stack>
+          <Stack justifyContent="space-between" direction="row">
+            <Stack>
+              <Typography
+                fontSize={13}
+                variant="inherit"
+                color={colors.grey[400]}
+              >
+                Email:{' '}
+              </Typography>
+              <Typography variant="inherit" pl={1}>
+                {user.email}
+              </Typography>
+            </Stack>
+            <Box>
+              <Button height={20} variant="contained">
+                Edit
+              </Button>
+            </Box>
           </Stack>
 
           <Dialog
@@ -118,22 +177,6 @@ function MyAccount({ user }) {
               })()}
             </div>
           </Dialog>
-          <Stack py={1.5} px={2} justifyContent="space-between" direction="row">
-            Name: {user.first_name} {user.last_name}
-            <Button
-              onClick={() => {
-                setIndex(1);
-                setOpenDialog(true);
-              }}
-              variant="contained"
-            >
-              Edit
-            </Button>
-          </Stack>
-          <Stack py={1.5} px={2} justifyContent="space-between" direction="row">
-            Email: {user.email}
-            <Button variant="contained">Edit</Button>
-          </Stack>
         </Box>
       </Card>
       <Box py={2}>

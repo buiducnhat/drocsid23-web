@@ -15,7 +15,7 @@ function Profiles({ user, servers }) {
   return (
     <Stack color={colors.grey[400]}>
       <Stack width="100%" py={2} color={colors.grey[100]}>
-        <Typography variant="h5">Profiles</Typography>
+        <Typography variant="h6">Profiles</Typography>
       </Stack>
       <Typography color={colors.grey[200]} mb={2}>
         User Profile
