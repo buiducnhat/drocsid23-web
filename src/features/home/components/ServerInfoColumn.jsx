@@ -47,7 +47,7 @@ const ChannelRow = ({ channel }) => {
   );
 };
 
-function ServerInfoColumn({channels}) {
+function ServerInfoColumn({ channels }) {
   const theme = useTheme();
 
   const [offMic, setOffMic] = React.useState(false);

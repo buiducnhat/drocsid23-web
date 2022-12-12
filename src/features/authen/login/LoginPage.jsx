@@ -13,20 +13,25 @@ import {
   useTheme,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useDispatch } from 'react-redux';
 
 import Copyright from 'src/commons/components/Copyright';
+import { loginAction } from 'src/features/authen/authenSlice';
 
 export default function LoginPage() {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const themeMode = theme.palette.mode;
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    dispatch(
+      loginAction({
+        email: data.get('email'),
+        password: data.get('password'),
+      })
+    );
   };
 
   return (
