@@ -1,5 +1,5 @@
 import React from 'react';
-import { Stack, Typography, colors, Divider, Grid } from '@mui/material';
+import { Stack, Typography, colors, Divider, Grid, Link } from '@mui/material';
 
 function Invites() {
   return (
@@ -11,10 +11,7 @@ function Invites() {
         <Typography fontSize={13} mr={0.5}>
           Here's a list of all active invite links. You can revoke any one or
         </Typography>
-        <Stack fontSize={13} color={colors.blue[600]} cursor="pointer">
-          {' '}
-          create one{' '}
-        </Stack>
+        <Link fontSize={13}>create one</Link>
       </Stack>
       <Divider
         sx={{
@@ -25,16 +22,32 @@ function Invites() {
       ></Divider>
 
       <Stack className="table" color={colors.grey[300]} pb={2} direction="row">
-        <Grid xs={3}>INVITER</Grid>
-        <Grid xs={5}>INVITE CODE</Grid>
-        <Grid xs={2}>USES</Grid>
-        <Grid xs={3}>EXPIRES</Grid>
+        <Grid item xs={3}>
+          INVITER
+        </Grid>
+        <Grid item xs={5}>
+          INVITE CODE
+        </Grid>
+        <Grid item xs={2}>
+          USES
+        </Grid>
+        <Grid item xs={3}>
+          EXPIRES
+        </Grid>
       </Stack>
       <Stack className="table-content" direction="row">
-        <Grid xs={3}>Titi</Grid>
-        <Grid xs={5}>SHDfeasfcsad</Grid>
-        <Grid xs={2}>0</Grid>
-        <Grid xs={3}>06:17:33:54</Grid>
+        <Grid item xs={3}>
+          Titi
+        </Grid>
+        <Grid item xs={5}>
+          SHDfeasfcsad
+        </Grid>
+        <Grid item xs={2}>
+          0
+        </Grid>
+        <Grid item xs={3}>
+          06:17:33:54
+        </Grid>
       </Stack>
       <Divider
         sx={{

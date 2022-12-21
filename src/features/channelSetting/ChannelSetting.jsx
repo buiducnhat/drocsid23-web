@@ -34,11 +34,11 @@ function ChannelSetting() {
           color={colors.grey[100]}
           backgroundColor={colors.grey[800]}
         >
-          <Stack flexDirection="row">
-            <Grid xs={8.5}>
+          <Grid container flexDirection="row">
+            <Grid item xs={8.5}>
               <ContentChannelSetting index={index} />
             </Grid>
-            <Grid xs={3.5}>
+            <Grid item xs={3.5}>
               <Box
                 sx={{ color: colors.grey[400] }}
                 justifyContent="center"
@@ -54,7 +54,7 @@ function ChannelSetting() {
                 <Typography color="grey"> ESC </Typography>
               </Box>
             </Grid>
-          </Stack>
+          </Grid>
         </Grid>
       </Grid>
     </Stack>
