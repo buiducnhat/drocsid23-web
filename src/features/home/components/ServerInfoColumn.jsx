@@ -62,8 +62,8 @@ function ServerInfoColumn({ channels }) {
       {[
         ['text channel', 'text'],
         ['voice channel', 'voice'],
-      ].map(([title, type]) => (
-        <Accordion defaultExpanded={true} disableGutters={true}>
+      ].map(([title, type], key) => (
+        <Accordion key={key} defaultExpanded={true} disableGutters={true}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon sx={{ color: colors.grey[500] }} />}
           >

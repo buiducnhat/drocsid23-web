@@ -1,25 +1,25 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
+import { Dialog } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import * as colors from '@mui/material/colors';
-import { useSelector } from 'react-redux';
 
 import routes from './app/routes';
-import { selectThemeMode } from './features/theme/themeSlice';
+import useModal from './hooks/useModal';
 
 const App = () => {
-  const themeMode = useSelector(selectThemeMode);
+  const { modalProps, isOpen, close } = useModal();
 
   const theme = React.useMemo(
     () =>
       createTheme({
         palette: {
-          mode: themeMode,
+          mode: 'dark',
           primary: {
-            main: colors.indigo[500],
-            light: colors.indigo[700],
-            dark: colors.indigo[300],
+            main: colors.blue[500],
+            light: colors.blue[700],
+            dark: colors.blue[300],
           },
           secondary: {
             main: colors.pink[500],
@@ -32,13 +32,14 @@ const App = () => {
           },
         },
       }),
-    [themeMode]
+    []
   );
   const routing = useRoutes(routes);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Dialog open={isOpen} onClose={close} {...modalProps} />
       {routing}
     </ThemeProvider>
   );

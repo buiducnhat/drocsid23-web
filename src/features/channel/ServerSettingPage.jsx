@@ -15,8 +15,8 @@ export default function ServerSettingPage() {
 
       <Container>
         {/* <Stack direction="row"> */}
-          <Box maxWidth={250}>
-            <Stack direction="column" backgroundColor={'red'}>
+          <Box maxWidth={250} backgroundColor={theme.palette.primary.main}>
+            <Stack direction="column">
               <Typography component="h1" variant='h5'>Server name</Typography>
               <Typography>Overview</Typography>
               <Typography>Invites</Typography>
