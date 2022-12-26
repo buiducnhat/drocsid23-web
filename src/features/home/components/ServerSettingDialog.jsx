@@ -15,8 +15,13 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
+  Accordion,
+  AccordionSummary,
 } from '@mui/material';
-import { Search as SearchIcon } from '@mui/icons-material';
+import {
+  Search as SearchIcon,
+  ExpandMore as ExpandMoreIcon,
+} from '@mui/icons-material';
 import PropTypes from 'prop-types';
 
 function TabPanel(props) {
@@ -112,7 +117,7 @@ export default function ServerSettingDialog({ close }) {
               Use roles to manage permissions for your server members.
             </Typography>
 
-            <Box display="flex" sx={{ width: '100%' }}>
+            <Box display="flex" mb={2} sx={{ width: '100%' }}>
               <FormControl sx={{ mr: 1, width: '50ch' }}>
                 <InputLabel htmlFor="search-role-input">Search role</InputLabel>
                 <OutlinedInput
@@ -127,6 +132,26 @@ export default function ServerSettingDialog({ close }) {
               </FormControl>
               <Button variant="contained">Create role</Button>
             </Box>
+
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1-content"
+                id="panel2"
+              >
+                <Typography>admin</Typography>
+              </AccordionSummary>
+            </Accordion>
+
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2-content"
+                id="panel2"
+              >
+                <Typography>admin</Typography>
+              </AccordionSummary>
+            </Accordion>
           </TabPanel>
 
           <TabPanel value={currentTab} index={2}>
