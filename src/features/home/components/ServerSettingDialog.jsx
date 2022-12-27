@@ -23,11 +23,15 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  ListItemAvatar,
+  IconButton,
 } from '@mui/material';
 import {
   Search as SearchIcon,
   ExpandMore as ExpandMoreIcon,
   Person as PersonIcon,
+  Delete as DeleteIcon,
+  Close as CloseIcon,
 } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 
@@ -61,7 +65,7 @@ function a11yProps(index) {
   };
 }
 
-const roles = [
+const _mockRoles_ = [
   {
     name: 'admin',
     countMember: 3,
@@ -178,11 +182,46 @@ const roles = [
   },
 ];
 
+const _mockUsers_ = [
+  {
+    name: 'John Smith',
+    avatarUrl: 'https://example.com/avatar1.jpg',
+    username: 'jsmith',
+    roles: ['admin', 'moderator'],
+  },
+  {
+    name: 'Jane Doe',
+    avatarUrl: 'https://example.com/avatar2.jpg',
+    username: 'jdoe',
+    roles: ['member'],
+  },
+  {
+    name: 'Bob Johnson',
+    avatarUrl: 'https://example.com/avatar3.jpg',
+    username: 'bjohnson',
+    roles: ['member'],
+  },
+];
+
 export default function ServerSettingDialog({ close }) {
   const [currentTab, setCurrentTab] = React.useState(0);
 
   return (
-    <Container>
+    <Container sx={{ position: 'relative' }}>
+      <IconButton
+        aria-label="close"
+        onClick={close}
+        sx={{
+          position: 'absolute',
+          top: 36,
+          right: 48,
+
+          color: (theme) => theme.palette.grey[500],
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+
       <DialogContent>
         <DialogTitle>Server settings</DialogTitle>
         <Box
@@ -224,7 +263,7 @@ export default function ServerSettingDialog({ close }) {
                 }}
                 onClick={() => alert('Change avatar')}
               />
-              <TextField size="medium" label="Server name" />
+              <TextField size="small" label="Server name" />
             </Box>
           </TabPanel>
 
@@ -242,12 +281,11 @@ export default function ServerSettingDialog({ close }) {
             </Typography>
 
             <Box display="flex" mb={2} sx={{ width: '100%' }}>
-              <FormControl sx={{ mr: 1, width: '50ch' }}>
-                <InputLabel htmlFor="search-role-input">Search role</InputLabel>
+              <FormControl size="small" sx={{ mr: 1, width: '50ch' }}>
+                <InputLabel>Search role</InputLabel>
                 <OutlinedInput
-                  size="medium"
                   endAdornment={
-                    <InputAdornment position="end">
+                    <InputAdornment position="end" sx={{ color: 'GrayText' }}>
                       <SearchIcon />
                     </InputAdornment>
                   }
@@ -257,7 +295,7 @@ export default function ServerSettingDialog({ close }) {
               <Button variant="contained">Create role</Button>
             </Box>
 
-            {roles.map((role, index) => (
+            {_mockRoles_.map((role, index) => (
               <Accordion key={index} sx={{ backgroundColor: colors.grey[900] }}>
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
@@ -301,7 +339,48 @@ export default function ServerSettingDialog({ close }) {
           </TabPanel>
 
           <TabPanel value={currentTab} index={2}>
-            Item Three
+            <Typography variant="h5" component="h2">
+              Members
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              component="p"
+              color={'GrayText'}
+              mb={4}
+            >
+              Manage your server members.
+            </Typography>
+
+            <Box display="flex" mb={2} sx={{ width: '100%' }}>
+              <FormControl fullWidth size="small" sx={{ mr: 1, width: '50ch' }}>
+                <InputLabel>Search member</InputLabel>
+                <OutlinedInput
+                  endAdornment={
+                    <InputAdornment position="end" sx={{ color: 'GrayText' }}>
+                      <SearchIcon />
+                    </InputAdornment>
+                  }
+                  label="Search member"
+                />
+              </FormControl>
+              <Button variant="outlined">Invite member</Button>
+            </Box>
+
+            <List>
+              {_mockUsers_.map((user, index) => (
+                <ListItem key={index}>
+                  <ListItemAvatar>
+                    <Avatar alt={user.name} src={user.avatarUrl} />
+                  </ListItemAvatar>
+                  <ListItemText primary={user.name} secondary={user.username} />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
           </TabPanel>
         </Box>
       </DialogContent>
