@@ -17,10 +17,17 @@ import {
   InputAdornment,
   Accordion,
   AccordionSummary,
+  AccordionDetails,
+  Switch,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
 } from '@mui/material';
 import {
   Search as SearchIcon,
   ExpandMore as ExpandMoreIcon,
+  Person as PersonIcon,
 } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 
@@ -54,6 +61,123 @@ function a11yProps(index) {
   };
 }
 
+const roles = [
+  {
+    name: 'admin',
+    countMember: 3,
+    permissions: [
+      {
+        name: 'View channels',
+        value: true,
+        description:
+          'Allows members to view and read messages in text channels and see voice channels.',
+      },
+      {
+        name: 'Send messages',
+        value: true,
+        description: 'Allows members to send messages in text channels.',
+      },
+      {
+        name: 'Manage messages',
+        value: false,
+        description:
+          'Allows members to delete and edit other members messages.',
+      },
+      {
+        name: 'Manage roles',
+        value: false,
+        description: 'Allows members to create, edit and delete roles.',
+      },
+      {
+        name: 'Manage channels',
+        value: false,
+        description: 'Allows members to create, edit and delete channels.',
+      },
+      {
+        name: 'Manage server',
+        value: false,
+        description: 'Allows members to edit server settings.',
+      },
+    ],
+  },
+  {
+    name: 'moderator',
+    countMember: 15,
+    permissions: [
+      {
+        name: 'View channels',
+        value: true,
+        description:
+          'Allows members to view and read messages in text channels and see voice channels.',
+      },
+      {
+        name: 'Send messages',
+        value: true,
+        description: 'Allows members to send messages in text channels.',
+      },
+      {
+        name: 'Manage messages',
+        value: false,
+        description:
+          'Allows members to delete and edit other members messages.',
+      },
+      {
+        name: 'Manage roles',
+        value: false,
+        description: 'Allows members to create, edit and delete roles.',
+      },
+      {
+        name: 'Manage channels',
+        value: false,
+        description: 'Allows members to create, edit and delete channels.',
+      },
+      {
+        name: 'Manage server',
+        value: false,
+        description: 'Allows members to edit server settings.',
+      },
+    ],
+  },
+  {
+    name: 'member',
+    countMember: 140,
+    permissions: [
+      {
+        name: 'View channels',
+        value: true,
+        description:
+          'Allows members to view and read messages in text channels and see voice channels.',
+      },
+      {
+        name: 'Send messages',
+        value: true,
+        description: 'Allows members to send messages in text channels.',
+      },
+      {
+        name: 'Manage messages',
+        value: false,
+        description:
+          'Allows members to delete and edit other members messages.',
+      },
+      {
+        name: 'Manage roles',
+        value: false,
+        description: 'Allows members to create, edit and delete roles.',
+      },
+      {
+        name: 'Manage channels',
+        value: false,
+        description: 'Allows members to create, edit and delete channels.',
+      },
+      {
+        name: 'Manage server',
+        value: false,
+        description: 'Allows members to edit server settings.',
+      },
+    ],
+  },
+];
+
 export default function ServerSettingDialog({ close }) {
   const [currentTab, setCurrentTab] = React.useState(0);
 
@@ -77,7 +201,7 @@ export default function ServerSettingDialog({ close }) {
               setCurrentTab(newTab);
             }}
             aria-label="Vertical tabs"
-            sx={{ borderRight: 1, borderColor: 'divider', width: 250 }}
+            sx={{ borderRight: 1, borderColor: 'divider', width: 350 }}
           >
             <Tab label="Overview" {...a11yProps(0)} />
             <Tab label="Roles" {...a11yProps(1)} />
@@ -133,25 +257,47 @@ export default function ServerSettingDialog({ close }) {
               <Button variant="contained">Create role</Button>
             </Box>
 
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1-content"
-                id="panel2"
-              >
-                <Typography>admin</Typography>
-              </AccordionSummary>
-            </Accordion>
+            {roles.map((role, index) => (
+              <Accordion key={index} sx={{ backgroundColor: colors.grey[900] }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1-content"
+                  id="panel2"
+                >
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="bold"
+                    sx={{ width: '50%', flexShrink: 0 }}
+                  >
+                    {role.name}
+                  </Typography>
+                  <PersonIcon sx={{ color: 'text.secondary', mr: 1 }} />
+                  <Typography sx={{ color: 'text.secondary' }}>
+                    {role.countMember}
+                  </Typography>
+                </AccordionSummary>
 
-            <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel2-content"
-                id="panel2"
-              >
-                <Typography>admin</Typography>
-              </AccordionSummary>
-            </Accordion>
+                <AccordionDetails>
+                  <List>
+                    {role.permissions.map((permission, index2) => (
+                      <ListItem key={index2}>
+                        <ListItemText
+                          primary={permission.name}
+                          secondary={permission.description}
+                        />
+                        <ListItemSecondaryAction>
+                          <Switch
+                            edge="end"
+                            checked={permission.value}
+                            value={permission.value}
+                          />
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    ))}
+                  </List>
+                </AccordionDetails>
+              </Accordion>
+            ))}
           </TabPanel>
 
           <TabPanel value={currentTab} index={2}>
