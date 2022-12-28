@@ -10,14 +10,12 @@ import {
 } from '@mui/material';
 import * as colors from '@mui/material/colors';
 import PeopleAltTwoTone from '@mui/icons-material/PeopleAltTwoTone';
+import NiceModal from '@ebay/nice-modal-react';
 
 import ServerSettingDialog from './ServerSettingDialog';
-import useModal from 'src/hooks/useModal';
 
 function ChatAvatar({ isDirect, isSelected, name, imgUrl, ...rest }) {
   const theme = useTheme();
-
-  const { open: openModal, close: closeModal } = useModal();
 
   const [isHover, setIsHover] = useState(false);
   const [contextMenu, setContextMenu] = React.useState(null);
@@ -57,10 +55,11 @@ function ChatAvatar({ isDirect, isSelected, name, imgUrl, ...rest }) {
         <MenuItem>Access</MenuItem>
         <MenuItem
           onClick={() => {
-            openModal('serverSettings', {
-              fullScreen: true,
-              children: <ServerSettingDialog close={closeModal} />,
-            });
+            // openModal('serverSettings', {
+            //   fullScreen: true,
+            //   children: <ServerSettingDialog close={closeModal} />,
+            // });
+            NiceModal.show(ServerSettingDialog);
           }}
         >
           Server Settings

@@ -1,16 +1,13 @@
 import React from 'react';
 import { useRoutes } from 'react-router-dom';
-import { Dialog } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import * as colors from '@mui/material/colors';
 
 import routes from './app/routes';
-import useModal from './hooks/useModal';
+import NiceModal from '@ebay/nice-modal-react';
 
 const App = () => {
-  const { modalProps, isOpen, close } = useModal();
-
   const theme = React.useMemo(
     () =>
       createTheme({
@@ -38,9 +35,10 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Dialog open={isOpen} onClose={close} {...modalProps} />
-      {routing}
+      <NiceModal.Provider>
+        <CssBaseline />
+        {routing}
+      </NiceModal.Provider>
     </ThemeProvider>
   );
 };
