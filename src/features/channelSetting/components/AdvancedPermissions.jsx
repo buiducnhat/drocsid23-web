@@ -244,7 +244,7 @@ export default function AdvancedPermissions() {
               </Typography>
               {roles.map((role, index) => (
                 <Stack
-                  key={index}
+                  key={index + role.name}
                   p={0.5}
                   direction="row"
                   alignItems="center"
@@ -275,7 +275,7 @@ export default function AdvancedPermissions() {
               {members.map((member, index) => (
                 <Stack
                   p={1}
-                  key={index}
+                  key={member.id}
                   direction="row"
                   alignItems="center"
                   sx={{
@@ -299,7 +299,7 @@ export default function AdvancedPermissions() {
           />
           {role.map((r, index) => (
             <Stack
-              key={index}
+              key={index + r}
               height={32}
               bgcolor={
                 activeRoleMember === index ? colors.grey[900] : colors.grey[800]
@@ -358,7 +358,7 @@ export default function AdvancedPermissions() {
             General Channel Permissions
           </Typography>
           {permissions.map((permission, index) => (
-            <Stack key={index}>
+            <Stack key={index + permission.title}>
               <Stack
                 direction="row"
                 alignItems="center"
