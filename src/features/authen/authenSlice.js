@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import cookie from 'js-cookie';
+import Cookies from 'js-cookie';
 
 import authenAPI from './authenAPI';
 
@@ -35,7 +35,7 @@ export const getInforAction = createAsyncThunk(
   'authen/user-info',
   async (params, { rejectWithValue }) => {
     try {
-      const accessToken = cookie.get('accessToken');
+      const accessToken = Cookies.get('accessToken');
       const response = await authenAPI.getInfor({ accessToken });
       return response.data;
     } catch (error) {
@@ -67,7 +67,7 @@ const authenSlice = createSlice({
       state.userData = null;
       state.isAuth = false;
       state.accessToken = null;
-      cookie.remove('accessToken');
+      Cookies.remove('accessToken');
     },
   },
 
@@ -98,7 +98,7 @@ const authenSlice = createSlice({
         state.isLogin = false;
         state.isAuth = true;
         state.accessToken = action.payload.data.token;
-        cookie.set('accessToken', action.payload.data.token);
+        Cookies.set('accessToken', action.payload.data.token);
       })
       .addCase(loginAction.rejected, (state, action) => {
         state.isLogin = false;
