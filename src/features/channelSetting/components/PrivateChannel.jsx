@@ -101,7 +101,7 @@ const DialogAddRole = (props) => {
           <Typography fontSize={15}>ROLES</Typography>
           {roles.map((role, index) => (
             <Stack
-              key={index+role.name}
+              key={index + role.name}
               classes="addRoles"
               direction="row"
               alignItems="center"
@@ -215,7 +215,11 @@ export default function PrivateChannel() {
           Roles
         </Typography>
         {dataRole.map((role, index) => (
-          <Stack direction="row" justifyContent="space-between" key={index + role}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            key={index + role}
+          >
             <Stack direction="row">
               <TokenIcon />
               <Typography ml={1} mb={1.2}>

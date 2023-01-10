@@ -64,11 +64,11 @@ function SidebarSetting(props) {
             <Stack
               sx={styleTab}
               direction="row"
-              alignItems='center'
-              justifyContent='space-between'
+              alignItems="center"
+              justifyContent="space-between"
             >
               <Typography px={2}>Log Out</Typography>
-              <LogoutIcon fontSize='small' />
+              <LogoutIcon fontSize="small" />
             </Stack>
           </Stack>
         </Box>

@@ -98,6 +98,7 @@ const authenSlice = createSlice({
         state.isLogin = false;
         state.isAuth = true;
         state.accessToken = action.payload.data.token;
+        state.userData = action.payload.data.data;
         Cookies.set('accessToken', action.payload.data.token);
       })
       .addCase(loginAction.rejected, (state, action) => {

@@ -1,28 +1,27 @@
-import React from 'react'
+import React from 'react';
 import { Stack } from '@mui/material';
 import { Box } from '@mui/system';
 import Overview from './Overview';
 import Permissions from './Permissions';
 import Invites from './Invites';
 
-
 function ContentChannelSetting(props) {
   const index = props.index;
   return (
-    <Stack >
+    <Stack>
       <Box height="100%" py={3} px={5}>
         <div className="tabContent " hidden={index !== 0}>
-          <Overview  />
+          <Overview />
         </div>
         <div className="tabContent " hidden={index !== 1}>
-          <Permissions  />
+          <Permissions />
         </div>
         <div className="tabContent " hidden={index !== 2}>
-          <Invites  />
+          <Invites />
         </div>
       </Box>
     </Stack>
-  )
+  );
 }
 
-export default ContentChannelSetting
+export default ContentChannelSetting;

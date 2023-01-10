@@ -1,11 +1,15 @@
 import React from 'react';
 import { Stack, useTheme } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 import ChatAvatar from './ChatAvatar';
 import AddServerOnColumn from './AddServerOnColumn';
+import { selectListJoinedServer } from 'src/features/server/serverSlice';
 
-function ServersColumn({ servers, selectedServerId, setSelectedServerId }) {
+function ServersColumn() {
   const theme = useTheme();
+
+  const listJoinedServer = useSelector(selectListJoinedServer);
 
   return (
     <Stack
@@ -17,13 +21,14 @@ function ServersColumn({ servers, selectedServerId, setSelectedServerId }) {
     >
       <ChatAvatar isDirect={true} name="Direct Messages" />
 
-      {servers.map((server) => (
+      {listJoinedServer.map((server) => (
         <ChatAvatar
-          key={server.id}
+          key={server._id}
+          serverId={server._id}
           name={server.name}
-          imgUrl={server?.avatar}
-          isSelected={server.id === selectedServerId}
-          onClick={() => setSelectedServerId(server.id)}
+          imgUrl={`https://ui-avatars.com/api/?name=${server.name
+            .split(' ')
+            .join()}&background=random`}
         />
       ))}
 

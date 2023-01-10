@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { Stack, Box} from '@mui/material';
+import { Stack, Box } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { APP_NAME } from 'src/app/constants';
 import ServersColumn from './components/ServersColumn';
 import ServerInfoColumn from './components/ServerInfoColumn';
 import ChatColumn from './components/ChatColumn';
+import {
+  getListJoinedServerAction,
+  selectListJoinedServer,
+} from 'src/features/server/serverSlice';
 
 const channels = [
   {
@@ -40,7 +45,13 @@ const servers = [1, 2, 3, 4, 5].map((id) => ({
 }));
 
 const HomePage = () => {
-  const [selectedServerId, setSelectedServerId] = React.useState(servers[0]);
+  const dispatch = useDispatch();
+
+  const listJoinedServer = useSelector(selectListJoinedServer);
+
+  useEffect(() => {
+    dispatch(getListJoinedServerAction());
+  }, [dispatch]);
 
   return (
     <React.Fragment>
@@ -48,14 +59,9 @@ const HomePage = () => {
         <title>{`Home | ${APP_NAME}`}</title>
       </Helmet>
 
-
       <Stack height="100vh" direction="row">
         <Box height="100%" maxWidth={80}>
-          <ServersColumn
-            servers={servers}
-            selectedServerId={selectedServerId}
-            setSelectedServerId={setSelectedServerId}
-          />
+          <ServersColumn servers={listJoinedServer} />
         </Box>
 
         <Box height="100%" maxWidth={250}>

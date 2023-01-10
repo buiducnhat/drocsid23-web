@@ -11,11 +11,21 @@ import {
 import * as colors from '@mui/material/colors';
 import PeopleAltTwoTone from '@mui/icons-material/PeopleAltTwoTone';
 import NiceModal from '@ebay/nice-modal-react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ServerSettingDialog from './ServerSettingDialog';
+import {
+  getServerInfoAction,
+  selectCurrentServer,
+} from 'src/features/server/serverSlice';
 
-function ChatAvatar({ isDirect, isSelected, name, imgUrl, ...rest }) {
+function ChatAvatar({ isDirect, serverId, name, imgUrl }) {
   const theme = useTheme();
+
+  const dispatch = useDispatch();
+
+  const currentServer = useSelector(selectCurrentServer);
+  const isSelected = currentServer._id === serverId;
 
   const [isHover, setIsHover] = useState(false);
   const [contextMenu, setContextMenu] = React.useState(null);
@@ -29,6 +39,9 @@ function ChatAvatar({ isDirect, isSelected, name, imgUrl, ...rest }) {
       pr={2}
       justifyContent="space-between"
       alignItems="center"
+      onClick={() => {
+        dispatch(getServerInfoAction(serverId));
+      }}
       onContextMenu={(e) => {
         e.preventDefault();
         setIsHover(false);

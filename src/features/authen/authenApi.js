@@ -4,12 +4,12 @@ import { axiosMethod, axiosRequest } from 'src/helpers/axios.helper';
 
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
-const authenEndPoint = API_ENDPOINT + '/authen';
+const authenEndPoint = API_ENDPOINT + '/users';
 
 const authenAPI = {
   login: (data) => {
     return axiosRequest(
-      authenEndPoint + '/users/login',
+      authenEndPoint + '/login',
       axiosMethod.POST,
       null,
       null,

@@ -93,7 +93,7 @@ function MyAccount({ user }) {
               </Button>
             </Box>
           </Stack>
-          <Stack justifyContent="space-between" direction="row"  mb={1}>
+          <Stack justifyContent="space-between" direction="row" mb={1}>
             <Stack>
               <Typography
                 fontSize={13}

@@ -15,15 +15,17 @@ export default function ServerSettingPage() {
 
       <Container>
         {/* <Stack direction="row"> */}
-          <Box maxWidth={250} backgroundColor={theme.palette.primary.main}>
-            <Stack direction="column">
-              <Typography component="h1" variant='h5'>Server name</Typography>
-              <Typography>Overview</Typography>
-              <Typography>Invites</Typography>
-              <Typography>Members</Typography>
-              <Typography>Delete</Typography>
-            </Stack>
-          </Box>
+        <Box maxWidth={250} backgroundColor={theme.palette.primary.main}>
+          <Stack direction="column">
+            <Typography component="h1" variant="h5">
+              Server name
+            </Typography>
+            <Typography>Overview</Typography>
+            <Typography>Invites</Typography>
+            <Typography>Members</Typography>
+            <Typography>Delete</Typography>
+          </Stack>
+        </Box>
         {/* </Stack> */}
       </Container>
     </React.Fragment>

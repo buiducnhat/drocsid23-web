@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -17,11 +18,17 @@ import { useDispatch } from 'react-redux';
 
 import Copyright from 'src/commons/components/Copyright';
 import { loginAction } from 'src/features/authen/authenSlice';
+import useCheckAuth from 'src/hooks/useCheckAuth';
 
 export default function LoginPage() {
   const dispatch = useDispatch();
   const theme = useTheme();
   const themeMode = theme.palette.mode;
+
+  const navigate = useNavigate();
+  const { isAuth } = useCheckAuth();
+
+  isAuth && navigate('/');
 
   const handleSubmit = (event) => {
     event.preventDefault();
