@@ -1,13 +1,24 @@
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { selectUserData, selectIsAuth } from 'src/features/authen/authenSlice';
+import {
+  selectUserData,
+  selectIsAuth,
+  getMeAction,
+} from 'src/features/authen/authenSlice';
 
 function useCheckAuth() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMeAction());
+  }, [dispatch]);
+
   const isAuth = useSelector(selectIsAuth);
   const userData = useSelector(selectUserData);
-  const isGetUserInfor = useSelector((state) => state.authen.isGetUserInfor);
+  const isGetMe = useSelector((state) => state.authen.isGetMe);
 
-  return { isAuth, userData, isGetUserInfor };
+  return { isAuth, userData, isGetMe };
 }
 
 export default useCheckAuth;

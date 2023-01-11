@@ -27,9 +27,9 @@ const authenAPI = {
     );
   },
 
-  getInfor: () => {
+  getMe: () => {
     return axiosRequest(
-      authenEndPoint + '/user-info',
+      authenEndPoint + '/',
       axiosMethod.GET,
       Cookies.get('accessToken')
     );

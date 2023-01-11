@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 import Copyright from 'src/commons/components/Copyright';
 import { loginAction } from 'src/features/authen/authenSlice';
@@ -28,8 +29,6 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const { isAuth } = useCheckAuth();
 
-  isAuth && navigate('/');
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -40,6 +39,12 @@ export default function LoginPage() {
       })
     );
   };
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/');
+    }
+  }, [isAuth, navigate]);
 
   return (
     <Container component="main" maxWidth="xs">

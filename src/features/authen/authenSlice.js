@@ -31,12 +31,11 @@ export const registerAction = createAsyncThunk(
   }
 );
 
-export const getInforAction = createAsyncThunk(
-  'authen/user-info',
+export const getMeAction = createAsyncThunk(
+  'authen/getMe',
   async (params, { rejectWithValue }) => {
     try {
-      const accessToken = Cookies.get('accessToken');
-      const response = await authenAPI.getInfor({ accessToken });
+      const response = await authenAPI.getMe();
       return response.data;
     } catch (error) {
       return rejectWithValue(
@@ -59,8 +58,8 @@ const authenSlice = createSlice({
     isRegister: false,
     registerMsg: null,
 
-    isGetUserInfor: false,
-    getUserInforMsg: null,
+    isGetMe: true,
+    getMeMsg: null,
   },
   reducers: {
     logout(state) {
@@ -73,19 +72,19 @@ const authenSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(getInforAction.pending, (state, action) => {
-        state.isGetUserInfor = true;
-        state.getUserInforMsg = null;
+      .addCase(getMeAction.pending, (state, action) => {
+        state.isGetMe = true;
+        state.getMeMsg = null;
       })
-      .addCase(getInforAction.fulfilled, (state, action) => {
-        state.isGetUserInfor = false;
-        state.getUserInforMsg = null;
+      .addCase(getMeAction.fulfilled, (state, action) => {
+        state.isGetMe = false;
+        state.getMeMsg = null;
         state.userData = action.payload.data.user;
         state.isAuth = true;
       })
-      .addCase(getInforAction.rejected, (state, action) => {
-        state.isFetchingGetUserData = false;
-        state.fetchGetUserDataMsg = action.payload.message;
+      .addCase(getMeAction.rejected, (state, action) => {
+        state.isGetMe = false;
+        state.getMeMsg = action.payload.message;
         state.isAuth = false;
         state.userData = null;
       })
