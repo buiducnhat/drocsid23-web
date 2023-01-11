@@ -5,6 +5,7 @@ import { axiosMethod, axiosRequest } from 'src/helpers/axios.helper';
 const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 
 const serverEndPoint = API_ENDPOINT + '/servers';
+const channelEndPoint = API_ENDPOINT + '/channels';
 
 const serverAPI = {
   getJoinedServers: () => {
@@ -60,6 +61,14 @@ const serverAPI = {
       Cookies.get('accessToken'),
       null,
       data
+    );
+  },
+
+  getChannelsOfServer(serverId) {
+    return axiosRequest(
+      channelEndPoint + `/getall/${serverId}`,
+      axiosMethod.GET,
+      Cookies.get('accessToken')
     );
   },
 };

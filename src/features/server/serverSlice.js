@@ -37,6 +37,13 @@ export const getServerInfoAction = createAsyncThunk(
   async (serverId, { rejectWithValue }) => {
     try {
       const response = await serverAPI.getServerInfo(serverId);
+      const channelResponse = await serverAPI.getChannelsOfServer(serverId);
+
+      const serverData = response.data.data;
+      serverData.listChannel = channelResponse.data.data;
+
+      console.log(serverData);
+
       return response.data.data;
     } catch (error) {
       return rejectWithValue(
