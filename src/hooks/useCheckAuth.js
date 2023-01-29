@@ -6,17 +6,26 @@ import {
   selectIsAuth,
   getMeAction,
 } from 'src/features/authen/authenSlice';
+import { hideLoadingModal, showLoadingModal } from 'src/helpers/modal.helper';
 
 function useCheckAuth() {
   const dispatch = useDispatch();
+
+  const isAuth = useSelector(selectIsAuth);
+  const userData = useSelector(selectUserData);
+  const isGetMe = useSelector((state) => state.authen.isGetMe);
 
   useEffect(() => {
     dispatch(getMeAction());
   }, [dispatch]);
 
-  const isAuth = useSelector(selectIsAuth);
-  const userData = useSelector(selectUserData);
-  const isGetMe = useSelector((state) => state.authen.isGetMe);
+  useEffect(() => {
+    if (isGetMe) {
+      showLoadingModal();
+    } else {
+      hideLoadingModal();
+    }
+  }, [isGetMe]);
 
   return { isAuth, userData, isGetMe };
 }

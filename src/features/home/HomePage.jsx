@@ -3,8 +3,6 @@ import { Helmet } from 'react-helmet';
 import { Stack, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import NiceModal from '@ebay/nice-modal-react';
-
 import { APP_NAME } from 'src/app/constants';
 import ServersColumn from './components/ServersColumn';
 import ServerInfoColumn from './components/ServerInfoColumn';
@@ -14,7 +12,6 @@ import {
   selectListJoinedServer,
 } from 'src/features/server/serverSlice';
 import useCheckAuth from 'src/hooks/useCheckAuth';
-import LoadingModal from 'src/commons/components/LoadingModal';
 
 const channels = [
   {
@@ -56,14 +53,6 @@ const HomePage = () => {
       navigate('/authen/login');
     }
   }, [isAuth, isGetMe, navigate]);
-
-  useEffect(() => {
-    if (isGetMe) {
-      NiceModal.show(LoadingModal);
-    } else {
-      NiceModal.hide(LoadingModal);
-    }
-  }, [isGetMe]);
 
   return (
     <React.Fragment>

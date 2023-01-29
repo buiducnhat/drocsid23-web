@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
+import { hideLoadingModal, showLoadingModal } from 'src/helpers/modal.helper';
 
-import authenAPI from './authenAPI';
+import authenAPI from './authenApi';
 
 export const loginAction = createAsyncThunk(
   'authen/login',
@@ -92,6 +93,7 @@ const authenSlice = createSlice({
       .addCase(loginAction.pending, (state, action) => {
         state.isLogin = true;
         state.isAuth = false;
+        showLoadingModal();
       })
       .addCase(loginAction.fulfilled, (state, action) => {
         state.isLogin = false;
@@ -99,25 +101,30 @@ const authenSlice = createSlice({
         state.accessToken = action.payload.data.token;
         state.userData = action.payload.data.data;
         Cookies.set('accessToken', action.payload.data.token);
+        hideLoadingModal();
       })
       .addCase(loginAction.rejected, (state, action) => {
         state.isLogin = false;
         state.isAuth = false;
         state.loginMsg = action.payload.message;
+        hideLoadingModal();
       })
 
       .addCase(registerAction.pending, (state, action) => {
         state.isRegister = true;
         state.isAuth = false;
+        showLoadingModal();
       })
       .addCase(registerAction.fulfilled, (state, action) => {
         state.isRegister = false;
         state.isAuth = true;
         state.accessToken = action.payload.data.token;
+        hideLoadingModal();
       })
       .addCase(registerAction.rejected, (state, action) => {
         state.isAuth = false;
         state.registerMsg = action.payload.message;
+        hideLoadingModal();
       });
   },
 });

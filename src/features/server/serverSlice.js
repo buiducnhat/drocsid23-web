@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { hideLoadingModal, showLoadingModal } from 'src/helpers/modal.helper';
 
 import serverAPI from './serverAPI';
 
@@ -42,8 +43,6 @@ export const getServerInfoAction = createAsyncThunk(
       const serverData = response.data.data;
       serverData.listChannel = channelResponse.data.data;
 
-      console.log(serverData);
-
       return response.data.data;
     } catch (error) {
       return rejectWithValue(
@@ -63,14 +62,37 @@ const serverSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
+      .addCase(getListJoinedServerAction.pending, (state, action) => {
+        showLoadingModal();
+      })
       .addCase(getListJoinedServerAction.fulfilled, (state, action) => {
         state.listJoinedServer = action.payload;
+        hideLoadingModal();
+      })
+      .addCase(getListJoinedServerAction.rejected, (state, action) => {
+        hideLoadingModal();
+      })
+
+      .addCase(createServerAction.pending, (state, action) => {
+        showLoadingModal();
       })
       .addCase(createServerAction.fulfilled, (state, action) => {
         state.listJoinedServer.push(action.payload);
+        hideLoadingModal();
+      })
+      .addCase(createServerAction.rejected, (state, action) => {
+        hideLoadingModal();
+      })
+
+      .addCase(getServerInfoAction.pending, (state, action) => {
+        showLoadingModal();
       })
       .addCase(getServerInfoAction.fulfilled, (state, action) => {
         state.currentServer = action.payload;
+        hideLoadingModal();
+      })
+      .addCase(getServerInfoAction.rejected, (state, action) => {
+        hideLoadingModal();
       });
   },
 });
