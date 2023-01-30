@@ -19,7 +19,7 @@ const userSettingSlice = createSlice({
 
 })
 const api = axios.create();
-export const updateUser = createAsyncThunk("user/updateUser", async (id, newUser) => {
+export const updateUser = createAsyncThunk("user/updateUser", async (id, newUser,token) => {
   const data = await api.patch(`/${id}`, {newUser})
   return data.data;
 })
