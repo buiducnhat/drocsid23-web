@@ -1,20 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import {
-  Grid,
-  Paper,
-  Typography,
-  Button,
-  AppBar,
-  Box,
-  TextField,
-  Container,
-} from '@mui/material';
+import { Grid, Paper, Typography, Button, Box, TextField } from '@mui/material';
 import { io } from 'socket.io-client';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Assignment, Phone, PhoneDisabled } from '@mui/icons-material';
 import Peer from 'simple-peer';
+import { createRef } from 'react';
 
-const socket = io('http://localhost:9999');
+const socket = io('https://buiducnhat.ddns.net:9990');
 
 function VideoChat() {
   const [localStream, setLocalStream] = useState();
@@ -24,8 +14,7 @@ function VideoChat() {
   const [curChannel, setCurChannel] = useState({});
   const [peers, setPeers] = useState([]);
 
-  const myVideo = useRef();
-  const connectionRef = useRef();
+  const myVideoRef = useRef();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -33,94 +22,119 @@ function VideoChat() {
       .then((stream) => {
         setLocalStream(stream);
 
-        myVideo.current.srcObject = stream;
+        myVideoRef.current.srcObject = stream;
       });
   }, []);
 
   const joinChannel = () => {
     setIsJoined(true);
 
+    socket.emit('joinChannel', {
+      userId,
+      channelId,
+    });
+
     socket.on('acceptToChannel', (channel) => {
       setCurChannel(channel);
-    });
-
-    // Có user mới vào phòng, user đó đã gửi signal lên channel room
-    // => tạo peer kiểu khách, gửi signal về cho user đó qua event 'pair'
-    socket.on('userJoined', (newUser) => {
-      const newPeer = new Peer({
-        initiator: true,
-        trickle: false,
-        stream: localStream,
-      });
-
-      newPeer.on('signal', (data) => {
-        socket.emit('pair', {
-          isInitiator: true,
-          to: newUser.id,
-          userId,
-          channelId,
-          signal: data,
-        });
-      });
-
-      newPeer.on('stream', (stream) => {
-        setPeers((prev) => [
-          ...prev,
-          {
-            user: newUser,
-            stream,
-          },
-        ]);
-      });
-
-      newPeer.signal(newUser.signal);
-
-      socket.on('pair', ({ isInitiator, to, userId, channelId, signal }) => {
-        // Đây là data user mới joined gửi lại signal
-        if (!isInitiator && to === userId && channelId === curChannel.id) {
-          newPeer.signal(signal);
+      const newPeers = [];
+      channel.listActiveUser.forEach((user) => {
+        if (user.id !== userId) {
+          newPeers.push({
+            user,
+            stream: null,
+            ref: createRef(),
+          });
         }
       });
-    });
+      setPeers(newPeers);
+      const ps = new Map();
 
-    // Khi đã được accept vào room, sau khi gửi signal đi, các user khác
-    // sẽ gửi lại signal chờ kết nối với user này qua event 'pair'
-    socket.on('pair', ({ isInitiator, to, userId, channelId, signal }) => {
-      // Đây là data user có sẵn gửi cho mình khi vừa joined
-      if (isInitiator && to === userId && channelId === curChannel.id) {
-        const newPeer = new Peer({
-          initiator: false,
+      // Có user mới vào room
+      // => tạo peer kiểu host, gửi signal về cho user đó qua event 'pair'
+      socket.on('userJoined', (newUser) => {
+        const peer = new Peer({
+          initiator: true,
           trickle: false,
           stream: localStream,
         });
+        ps.set(newUser.id, peer);
+        console.log(ps.get(newUser.id));
 
-        newPeer.on('signal', (data) => {
-          socket.emit('pair', {
-            isInitiator: false,
-            to: userId,
-            userId: to,
+        peer.on('signal', (data) => {
+          // Emit signal về cho user mới joined
+          socket.emit('pairT', {
+            isInitiator: true,
+            from: userId,
+            to: newUser.id,
             channelId,
             signal: data,
           });
         });
 
-        newPeer.on('stream', (stream) => {
-          setPeers((prev) => [
-            ...prev,
-            {
-              peerId: userId,
-              stream,
-            },
-          ]);
+        peer.on('stream', (stream) => {
+          setPeers((prev) =>
+            prev.map((p) => {
+              if (p.user.id === newUser.id) {
+                p.ref.current.srcObject = stream;
+                p.stream = stream;
+                return p;
+              } else {
+                return p;
+              }
+            })
+          );
         });
+      });
 
-        newPeer.signal(signal);
-      }
+      socket.on('pairF', ({ isInitiator, from, to, channelId, signal }) => {
+        console.log('pairF', { isInitiator, from, to, channelId, signal });
+        // Đây là data user mới joined gửi lại signal
+        if (!isInitiator && to === userId && channelId === channel.id) {
+          ps.get(from).signal(signal);
+        }
+      });
+
+      // Khi đã được accept vào room, sau khi gửi signal đi, các user khác
+      // sẽ gửi lại signal chờ kết nối với user này qua event 'pair'
+      // Có 2 case: là user cũ, nhận được accept từ user mới join
+      // hoặc là user mới, nhận được signal từ user cũ
+      socket.on('pairT', ({ isInitiator, from, to, channelId, signal }) => {
+        console.log('pairT', { isInitiator, from, to, channelId, signal });
+        if (to === userId && channelId === channel.id) {
+          // Đây là data từ user cũ gửi cho mình khi vừa joined
+          if (isInitiator) {
+            const peer = new Peer({
+              initiator: false,
+              trickle: false,
+              stream: localStream,
+            });
+
+            peer.on('signal', (data) => {
+              socket.emit('pairF', {
+                isInitiator: false,
+                from: to,
+                to: from,
+                channelId,
+                signal: data,
+              });
+            });
+
+            peer.on('stream', (stream) => {
+              peer.on('stream', (stream) => {
+                setPeers((prev) =>
+                  prev.map((p) => (p.user.id === from ? { ...p, stream } : p))
+                );
+              });
+            });
+
+            peer.signal(signal);
+          }
+        }
+      });
     });
   };
 
   const leaveChannel = () => {
-    connectionRef.current.destroy();
     socket.emit('leaveChannel');
     setIsJoined(false);
 
@@ -156,19 +170,43 @@ function VideoChat() {
             <Typography variant="h5" gutterBottom>
               Me: {userId}
             </Typography>
-            <video playsInline muted ref={myVideo} autoPlay />
+            <video playsInline muted ref={myVideoRef} autoPlay />
           </Grid>
         </Paper>
       )}
 
-      {isJoined && (
-        <Paper>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h5" gutterBottom></Typography>
-            {/* <video playsInline ref={null} autoPlay /> */}
-          </Grid>
-        </Paper>
-      )}
+      {isJoined &&
+        peers.length &&
+        peers.map((peer) => {
+          return (
+            <Paper key={peer.user.id}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h5" gutterBottom></Typography>
+                <video playsInline ref={peer.ref} autoPlay />
+              </Grid>
+            </Paper>
+          );
+        })}
+
+      {/* {isJoined &&
+        curChannel.listActiveUser.map((user) => {
+          const peer = peers.find((p) => p.user.id === user.id);
+
+          if (peer.ref.current) {
+            peer.ref.current.srcObject = peer.stream;
+          }
+
+          return (
+            <Paper key={user.id}>
+              <Grid item xs={12} md={6}>
+                <Typography variant="h5" gutterBottom>
+                  {user.id}
+                </Typography>
+                <video playsInline ref={peer.ref} autoPlay/>
+              </Grid>
+            </Paper>
+          );
+        })} */}
     </Box>
   );
 }
