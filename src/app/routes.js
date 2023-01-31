@@ -6,7 +6,7 @@ import NotFoundPage from 'src/layouts/NotFoundPage';
 import UserSetting from 'src/features/userSetting/UserSetting';
 import ChannelSetting from 'src/features/channelSetting/ChannelSetting';
 import ServerSettingPage from 'src/features/channel/ServerSettingPage';
-import VideoChat from 'src/features/video-call/Screen';
+import VideoChat from 'src/features/home/components/VideoChat';
 
 const routes = [
   {
