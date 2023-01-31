@@ -19,7 +19,7 @@ const routes = [
       { path: '*', element: <NotFoundPage /> },
       { path: '/setting', element: <UserSetting /> },
       { path: '/channelSetting', element: <ChannelSetting /> },
-      { path: '/video-chat', element: <VideoChat /> },
+      { path: '/:serverId/:channelId', element: <VideoChat /> },
     ],
   },
   {

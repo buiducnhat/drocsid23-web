@@ -3,10 +3,13 @@ import { Grid, Typography, Button, Box, TextField, Stack } from '@mui/material';
 import { io } from 'socket.io-client';
 import Peer from 'simple-peer';
 import Video from './Video';
+import useCheckAuth from 'src/hooks/useCheckAuth';
 
 const socket = io('http://localhost:9999');
 
 function VideoChat() {
+  const { userData } = useCheckAuth();
+
   const [localStream, setLocalStream] = useState();
   const [userId, setUserId] = useState('');
   const [channelId, setChannelId] = useState('');
@@ -25,25 +28,24 @@ function VideoChat() {
   const joinChannel = () => {
     setIsJoined(true);
 
-    socket.emit('joinChannel', {
+    socket.emit('joinVoiceChannel', {
       userId,
       channelId,
     });
 
-    socket.on('rejectToChannel', () => {
+    socket.on('rejectToVoiceChannel', () => {
       setIsJoined(false);
       setCurChannel({});
       console.log('rejectToChannel');
-      // alert('Reject to channel');
     });
 
-    socket.on('acceptToChannel', (channel) => {
+    socket.on('acceptToVoiceChannel', (channel) => {
       setCurChannel(channel);
       const tmpPeers = new Map();
 
       // Có user mới vào room
       // => tạo peer kiểu host, gửi signal về cho user đó qua event 'pair'
-      socket.on('userJoined', (newUser) => {
+      socket.on('userJoinedVoiceChannel', (newUser) => {
         const peer = new Peer({
           initiator: true,
           trickle: false,
@@ -79,7 +81,7 @@ function VideoChat() {
       // hoặc là user mới, nhận được signal từ user cũ
       socket.on('setupPeer', ({ isInitiator, from, to, channelId, signal }) => {
         console.log('setupPeer', { isInitiator, from, to, channelId, signal });
-        if (to === userId && channelId === channel._id) {
+        if (to === userData._id && channelId === channel._id) {
           // Đây là data từ user cũ gửi cho mình khi vừa joined
           if (isInitiator) {
             const peer = new Peer({
@@ -119,7 +121,7 @@ function VideoChat() {
   };
 
   const leaveChannel = () => {
-    socket.emit('leaveChannel');
+    socket.emit('leaveVoiceChannel');
     setIsJoined(false);
     setPeers([]);
     setCurChannel({});
