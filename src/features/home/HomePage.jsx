@@ -66,7 +66,7 @@ const HomePage = () => {
         </Box>
 
         <Box height="100%" maxWidth={250}>
-          <ServerInfoColumn channels={channels} />
+          <ServerInfoColumn />
         </Box>
 
         <Box height="100%" width="100%">

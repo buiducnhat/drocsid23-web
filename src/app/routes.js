@@ -7,6 +7,7 @@ import UserSetting from 'src/features/userSetting/UserSetting';
 import ChannelSetting from 'src/features/channelSetting/ChannelSetting';
 import ServerSettingPage from 'src/features/channel/ServerSettingPage';
 import ServerSetting from "src/features/serverSetting";
+import VideoChat from 'src/features/home/components/VideoChat';
 
 const routes = [
   {
@@ -20,6 +21,7 @@ const routes = [
       { path: '/setting', element: <UserSetting /> },
       { path: '/channelSetting', element: <ChannelSetting /> },
       { path: '/serverSetting', element: <ServerSetting /> },
+      { path: '/:serverId/:channelId', element: <VideoChat /> },
     ],
   },
   {

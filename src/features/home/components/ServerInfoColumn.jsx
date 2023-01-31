@@ -26,6 +26,7 @@ import {
   HeadsetOffRounded as HeadphoneOffIcon,
   SettingsRounded as SettingsIcon, PersonAddAlt, Settings, AddCircle,
 } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
 
 import {Link as LinkDom} from "react-router-dom";
 
@@ -64,8 +65,10 @@ const ChannelRow = ({channel}) => {
   );
 };
 
-function ServerInfoColumn({channels}) {
+function ServerInfoColumn() {
   const theme = useTheme();
+
+  const currentServer = useSelector((state) => state.servers.currentServer);
 
   const [offMic, setOffMic] = React.useState(false);
   const [offHeadphone, setOffHeadphone] = React.useState(false);
@@ -141,10 +144,10 @@ function ServerInfoColumn({channels}) {
           </AccordionSummary>
           <AccordionDetails>
             <Stack spacing={0.25}>
-              {channels
-                .filter((channel) => channel.type === type)
-                .map((channel) => (
-                  <ChannelRow key={channel.id} channel={channel}/>
+              {currentServer?.listChannel
+                ?.filter((item) => item.type === type)
+                ?.map((item) => (
+                  <ChannelRow key={item._id} channel={item} />
                 ))}
             </Stack>
           </AccordionDetails>
