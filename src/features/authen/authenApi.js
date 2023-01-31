@@ -1,0 +1,40 @@
+import Cookies from 'js-cookie';
+
+import { axiosMethod, axiosRequest } from 'src/helpers/axios.helper';
+
+const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
+
+const authenEndPoint = API_ENDPOINT + '/users';
+console.log(authenEndPoint)
+
+const authenAPI = {
+  login: (data) => {
+    return axiosRequest(
+      authenEndPoint + '/login',
+      axiosMethod.POST,
+      null,
+      null,
+      data
+    );
+  },
+
+  register: (data) => {
+    return axiosRequest(
+      authenEndPoint + '/signup',
+      axiosMethod.POST,
+      null,
+      null,
+      data
+    );
+  },
+
+  getMe: () => {
+    return axiosRequest(
+      authenEndPoint + '/',
+      axiosMethod.GET,
+      Cookies.get('accessToken')
+    );
+  },
+};
+
+export default authenAPI;

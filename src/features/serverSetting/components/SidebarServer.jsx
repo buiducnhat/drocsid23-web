@@ -1,11 +1,11 @@
-import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import { colors, Divider } from '@mui/material';
-import { Stack } from '@mui/system';
-import LogoutIcon from '@mui/icons-material/Logout';
+import {colors, Divider, Stack} from "@mui/material";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import LogoutIcon from "@mui/icons-material/Logout";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-function SidebarSetting(props) {
+const SidebarServer = (props) => {
   const styleTab = {
     height: 30,
     mr: 0.5,
@@ -28,7 +28,7 @@ function SidebarSetting(props) {
       >
         <Box>
           <Box sx={{ width: 200 }}>
-            <Typography variant="h7">USER SETTINGS</Typography>
+            <Typography variant="h7">Name Server</Typography>
           </Box>
           <Stack className="tabList">
             <Stack
@@ -42,7 +42,7 @@ function SidebarSetting(props) {
               }}
             >
               <Typography color={index === 0 ? colors.grey[100] : ''} px={2}>
-                My Account
+                Overview
               </Typography>
             </Stack>
             <Stack
@@ -55,7 +55,20 @@ function SidebarSetting(props) {
               }}
             >
               <Typography color={index === 1 ? colors.grey[100] : ''} px={2}>
-                My Profiles
+                Roles
+              </Typography>
+            </Stack>
+            <Stack
+              justifyContent="center"
+              sx={styleTab}
+              bgcolor={index === 2 ? colors.grey[800] : ''}
+              onClick={() => {
+                setIndex(2);
+                props.handleIndexTab(2);
+              }}
+            >
+              <Typography color={index === 2 ? colors.grey[100] : ''} px={2}>
+                Members
               </Typography>
             </Stack>
             <Box py={1}>
@@ -67,8 +80,8 @@ function SidebarSetting(props) {
               alignItems="center"
               justifyContent="space-between"
             >
-              <Typography px={2}>Log Out</Typography>
-              <LogoutIcon fontSize="small" />
+              <Typography px={2}>Delete Server</Typography>
+              <DeleteForeverIcon fontSize="small" />
             </Stack>
           </Stack>
         </Box>
@@ -77,4 +90,4 @@ function SidebarSetting(props) {
   );
 }
 
-export default SidebarSetting;
+export default SidebarServer

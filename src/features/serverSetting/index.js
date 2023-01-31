@@ -1,16 +1,15 @@
-import * as React from 'react';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import {Grid, colors, IconButton, useTheme} from '@mui/material';
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { Stack } from '@mui/system';
-import SidebarSetting from './components/SidebarSetting';
-import ContentSetting from './components/ContentSetting';
-import { Link } from 'react-router-dom';
+import React,{useState} from 'react'
+import {colors, Grid, IconButton, Stack, useTheme} from "@mui/material";
+import Box from "@mui/material/Box";
+import {Link} from "react-router-dom";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import Typography from "@mui/material/Typography";
+import SidebarServer from "src/features/serverSetting/components/SidebarServer";
+import ContentSettingServer from "src/features/serverSetting/components/ContentSettingServer";
 
-export default function UserSetting() {
+const ServerSetting = () => {
   const theme = useTheme();
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = useState(0);
   const handleIndexTab = (index) => {
     setIndex(index);
   };
@@ -23,7 +22,7 @@ export default function UserSetting() {
           color={colors.grey[100]}
           backgroundColor={colors.grey[900]}
         >
-          <SidebarSetting handleIndexTab={handleIndexTab} />
+          <SidebarServer handleIndexTab={handleIndexTab} />
         </Grid>
         <Grid
           item
@@ -33,7 +32,7 @@ export default function UserSetting() {
         >
           <Stack flexDirection="row">
             <Grid item xs={8.5}>
-              <ContentSetting index={index} />
+              <ContentSettingServer index = {index}  />
             </Grid>
             <Grid item xs={3.5}>
               <Box
@@ -57,3 +56,5 @@ export default function UserSetting() {
     </Stack>
   );
 }
+
+export default ServerSetting

@@ -8,7 +8,7 @@ import {
   Divider,
   Slide,
   Stack,
-  Typography,
+  Typography, useTheme,
 } from '@mui/material';
 import TokenIcon from '@mui/icons-material/Token';
 import IconButton from '@mui/material/IconButton';
@@ -101,7 +101,7 @@ const DialogAddRole = (props) => {
           <Typography fontSize={15}>ROLES</Typography>
           {roles.map((role, index) => (
             <Stack
-              key={index+role.name}
+              key={index + role.name}
               classes="addRoles"
               direction="row"
               alignItems="center"
@@ -182,8 +182,9 @@ export default function PrivateChannel() {
   const handleDeleteRole = (data) => {
     setDataRole(dataRole.filter((role) => role !== data));
   };
+  const theme = useTheme()
   return (
-    <Stack bgcolor={colors.grey[700]} borderRadius={2}>
+    <Stack bgcolor={theme.palette.grey[800]} borderRadius={2}>
       <Stack
         p={2}
         direction="row"
@@ -215,7 +216,11 @@ export default function PrivateChannel() {
           Roles
         </Typography>
         {dataRole.map((role, index) => (
-          <Stack direction="row" justifyContent="space-between" key={index + role}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            key={index + role}
+          >
             <Stack direction="row">
               <TokenIcon />
               <Typography ml={1} mb={1.2}>

@@ -61,7 +61,14 @@ function ChatColumn({ channel }) {
         </Stack>
       </Stack>
 
-      <Stack height="100%" width="100%" p={1} pr={12} spacing={1} sx={{ overflowY: 'scroll' }}>
+      <Stack
+        height="100%"
+        width="100%"
+        p={1}
+        pr={12}
+        spacing={1}
+        sx={{ overflowY: 'scroll' }}
+      >
         {messages.map((message) => (
           <Stack key={message.id} direction="row" p={1} spacing={2}>
             <Avatar sizes="3" />

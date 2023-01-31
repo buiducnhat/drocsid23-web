@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Button,
@@ -13,21 +14,37 @@ import {
   useTheme,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
 import Copyright from 'src/commons/components/Copyright';
+import { loginAction } from 'src/features/authen/authenSlice';
+import useCheckAuth from 'src/hooks/useCheckAuth';
 
 export default function LoginPage() {
+  const dispatch = useDispatch();
   const theme = useTheme();
   const themeMode = theme.palette.mode;
+
+  const navigate = useNavigate();
+  const { isAuth } = useCheckAuth();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    dispatch(
+      loginAction({
+        email: data.get('email'),
+        password: data.get('password'),
+      })
+    );
   };
+
+  useEffect(() => {
+    if (isAuth) {
+      navigate('/');
+    }
+  }, [isAuth, navigate]);
 
   return (
     <Container component="main" maxWidth="xs">

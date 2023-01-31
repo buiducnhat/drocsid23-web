@@ -20,7 +20,7 @@ function Profiles({ user, servers }) {
       <Typography color={colors.grey[200]} mb={2}>
         User Profile
       </Typography>
-      <Divider  color={colors.grey[700]} />
+      <Divider color={colors.grey[700]} />
       <Stack direction="row">
         <Box p={1} sx={{ width: 400 }}>
           <Typography sx={{ fontSize: '0.8rem' }}>AVATAR</Typography>

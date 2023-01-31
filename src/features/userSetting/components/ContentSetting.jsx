@@ -5,7 +5,6 @@ import MyAccount from './MyAccount';
 import Profiles from './Profile';
 
 const ContentSetting = (props) => {
-  
   const index = props.index;
   const user = {
     id: 1,

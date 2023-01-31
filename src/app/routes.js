@@ -5,6 +5,8 @@ import HomePage from 'src/features/home/HomePage';
 import NotFoundPage from 'src/layouts/NotFoundPage';
 import UserSetting from 'src/features/userSetting/UserSetting';
 import ChannelSetting from 'src/features/channelSetting/ChannelSetting';
+import ServerSettingPage from 'src/features/channel/ServerSettingPage';
+import ServerSetting from "src/features/serverSetting";
 
 const routes = [
   {
@@ -12,11 +14,12 @@ const routes = [
     element: <MainLayout />,
     children: [
       { path: '/', element: <HomePage /> },
+      { path: '/channels/:serverId/settings', element: <ServerSettingPage /> },
       { path: '404', element: <NotFoundPage /> },
-      { path: '/', element: <HomePage /> },
       { path: '*', element: <NotFoundPage /> },
       { path: '/setting', element: <UserSetting /> },
       { path: '/channelSetting', element: <ChannelSetting /> },
+      { path: '/serverSetting', element: <ServerSetting /> },
     ],
   },
   {

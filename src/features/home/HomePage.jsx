@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Stack, Box } from '@mui/material';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { APP_NAME } from 'src/app/constants';
 import ServersColumn from './components/ServersColumn';
 import ServerInfoColumn from './components/ServerInfoColumn';
 import ChatColumn from './components/ChatColumn';
+import {
+  getListJoinedServerAction,
+  selectListJoinedServer,
+} from 'src/features/server/serverSlice';
+import useCheckAuth from 'src/hooks/useCheckAuth';
 
 const channels = [
   {
@@ -29,18 +35,24 @@ const channels = [
     type: 'voice',
   },
 ];
-const servers = [1, 2, 3, 4, 5].map((id) => ({
-  id,
-  name: 'Server ' + id,
-  channels,
-  avatar:
-    Math.random() < 0.5
-      ? 'https://material-ui.com/static/images/avatar/1.jpg'
-      : '',
-}));
 
 const HomePage = () => {
-  const [selectedServerId, setSelectedServerId] = React.useState(servers[0]);
+  const dispatch = useDispatch();
+
+  const listJoinedServer = useSelector(selectListJoinedServer);
+
+  const { isAuth, isGetMe } = useCheckAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getListJoinedServerAction());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!isAuth && !isGetMe) {
+      // navigate('/authen/login');
+    }
+  }, [isAuth, isGetMe, navigate]);
 
   return (
     <React.Fragment>
@@ -50,11 +62,7 @@ const HomePage = () => {
 
       <Stack height="100vh" direction="row">
         <Box height="100%" maxWidth={80}>
-          <ServersColumn
-            servers={servers}
-            selectedServerId={selectedServerId}
-            setSelectedServerId={setSelectedServerId}
-          />
+          <ServersColumn servers={listJoinedServer} />
         </Box>
 
         <Box height="100%" maxWidth={250}>
