@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IconButton,
   Stack,
@@ -14,27 +14,29 @@ import {
   NotificationsRounded as NotificationIcon,
   PeopleAltRounded as PeopleIcon,
   AddCircleRounded as AddIcon,
+  SendOutlined,
 } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import useCheckAuth from 'src/hooks/useCheckAuth';
 
-const message = {
-  id: 2,
-  author: 'John Doe',
-  content:
-    'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laudantium veniam libero molestias delectus neque, ducimus vel deleniti eum sit. Tempora eos fuga, aliquam quidem laborum vero ratione cum ipsam dicta?',
-  time: '12:00',
-  avatar: 'https://mui.com/static/images/avatar/2.jpg',
-};
-
-function ChatColumn({ channel }) {
+function ChatColumn({ socket }) {
   const theme = useTheme();
 
-  const [messages, setMessages] = useState(
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((i) => ({
-      ...message,
-      id: i,
-      time: new Date().toLocaleTimeString(),
-    }))
-  );
+  const curChannel = useSelector((state) => state.servers.currentChannel);
+  const { userData } = useCheckAuth();
+
+  const [msgInput, setMsgInput] = React.useState('');
+
+  useEffect(() => {
+    curChannel?._id &&
+      userData?._id &&
+      socket &&
+      socket.emit('joinVoiceChannel', {
+        userId: userData?._id,
+        channelId: curChannel?._id,
+      });
+  }, [curChannel?._id, socket, userData?._id]);
 
   return (
     <Stack height="100%" width="100%" backgroundColor={theme.palette.grey[850]}>
@@ -45,7 +47,7 @@ function ChatColumn({ channel }) {
           fontWeight="bold"
           alignSelf="center"
         >
-          # {channel.name}
+          # {curChannel.name}
         </Typography>
 
         <Stack direction="row" ml="auto" alignItems="center" spacing={1}>
@@ -69,9 +71,9 @@ function ChatColumn({ channel }) {
         spacing={1}
         sx={{ overflowY: 'scroll' }}
       >
-        {messages.map((message) => (
-          <Stack key={message.id} direction="row" p={1} spacing={2}>
-            <Avatar sizes="3" />
+        {curChannel?.messages?.map((message) => (
+          <Stack key={message?._id} direction="row" p={1} spacing={2}>
+            <Avatar sizes="3" src={message?.author?.avatar} />
 
             <Stack direction="column" width="100%">
               <Stack direction="row" spacing={2} alignItems="center">
@@ -80,15 +82,15 @@ function ChatColumn({ channel }) {
                   component="span"
                   fontWeight="bold"
                 >
-                  {message.author}
+                  {message?.author?.name}
                 </Typography>
                 <Typography variant="caption" component="span">
-                  {message.time}
+                  {message?.time}
                 </Typography>
               </Stack>
 
               <Typography variant="body1" component="p">
-                {message.content}
+                {message?.content}
               </Typography>
             </Stack>
           </Stack>
@@ -114,7 +116,17 @@ function ChatColumn({ channel }) {
             multiline
             maxRows={10}
             fullWidth
+            value={msgInput}
+            onChange={(e) => setMsgInput(e.target.value)}
           />
+
+          <IconButton
+            onClick={() => {
+              // socket.emit()
+            }}
+          >
+            <SendOutlined />
+          </IconButton>
         </Stack>
       </Box>
     </Stack>

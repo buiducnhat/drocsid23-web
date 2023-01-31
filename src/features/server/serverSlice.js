@@ -52,11 +52,27 @@ export const getServerInfoAction = createAsyncThunk(
   }
 );
 
+export const getChannelInfoAction = createAsyncThunk(
+  'servers/getChannelInfo',
+  async (channelId, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.getChannelInfo(channelId);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
 const serverSlice = createSlice({
   name: 'servers',
   initialState: {
     listJoinedServer: [],
     currentServer: {},
+    currentChannel: {},
   },
   reducers: {},
 
@@ -92,6 +108,17 @@ const serverSlice = createSlice({
         hideLoadingModal();
       })
       .addCase(getServerInfoAction.rejected, (state, action) => {
+        hideLoadingModal();
+      })
+
+      .addCase(getChannelInfoAction.pending, (state, action) => {
+        showLoadingModal();
+      })
+      .addCase(getChannelInfoAction.fulfilled, (state, action) => {
+        state.currentChannel = action.payload;
+        hideLoadingModal();
+      })
+      .addCase(getChannelInfoAction.rejected, (state, action) => {
         hideLoadingModal();
       });
   },

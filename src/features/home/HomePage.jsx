@@ -12,6 +12,8 @@ import {
   selectListJoinedServer,
 } from 'src/features/server/serverSlice';
 import useCheckAuth from 'src/hooks/useCheckAuth';
+import { io } from 'socket.io-client';
+import Cookies from 'js-cookie';
 
 const channels = [
   {
@@ -44,6 +46,8 @@ const HomePage = () => {
   const { isAuth, isGetMe } = useCheckAuth();
   const navigate = useNavigate();
 
+  const [socket, setSocket] = React.useState(null);
+
   useEffect(() => {
     dispatch(getListJoinedServerAction());
   }, [dispatch]);
@@ -51,8 +55,16 @@ const HomePage = () => {
   useEffect(() => {
     if (!isAuth && !isGetMe) {
       navigate('/authen/login');
+    } else if (isAuth && !socket) {
+      setSocket(
+        io(process.env.REACT_APP_WS_SERVER, {
+          query: {
+            accessToken: Cookies.get('accessToken'),
+          },
+        })
+      );
     }
-  }, [isAuth, isGetMe, navigate]);
+  }, [isAuth, isGetMe, navigate, socket]);
 
   return (
     <React.Fragment>
@@ -70,7 +82,7 @@ const HomePage = () => {
         </Box>
 
         <Box height="100%" width="100%">
-          <ChatColumn channel={channels[0]} />
+          <ChatColumn channel={channels[0]} socket={socket} />
         </Box>
       </Stack>
     </React.Fragment>

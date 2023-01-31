@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Typography, Button, Box, TextField, Stack } from '@mui/material';
-import { io } from 'socket.io-client';
 import Peer from 'simple-peer';
 import Video from './Video';
 import useCheckAuth from 'src/hooks/useCheckAuth';
 
-const socket = io('http://localhost:9999');
-
-function VideoChat() {
+function VideoChat({ socket }) {
   const { userData } = useCheckAuth();
 
   const [localStream, setLocalStream] = useState();

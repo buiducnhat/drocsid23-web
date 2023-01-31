@@ -71,6 +71,14 @@ const serverAPI = {
       Cookies.get('accessToken')
     );
   },
+
+  getChannelInfo(channelId) {
+    return axiosRequest(
+      channelEndPoint + `/${channelId}`,
+      axiosMethod.GET,
+      Cookies.get('accessToken')
+    );
+  }
 };
 
 export default serverAPI;

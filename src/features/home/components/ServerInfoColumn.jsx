@@ -22,9 +22,12 @@ import {
   HeadsetOffRounded as HeadphoneOffIcon,
   SettingsRounded as SettingsIcon,
 } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getChannelInfoAction } from 'src/features/server/serverSlice';
 
 const ChannelRow = ({ channel }) => {
+  const dispatch = useDispatch();
+
   return (
     <Link
       underline="none"
@@ -35,6 +38,10 @@ const ChannelRow = ({ channel }) => {
         '&:hover': {
           backgroundColor: colors.grey[800],
         },
+      }}
+      onClick={(e) => {
+        e.preventDefault();
+        dispatch(getChannelInfoAction(channel._id));
       }}
     >
       <Stack direction="row" spacing={1} color={colors.grey[500]}>
