@@ -36,6 +36,11 @@ function ChatColumn({ socket }) {
         userId: userData?._id,
         channelId: curChannel?._id,
       });
+
+    socket &&
+      socket.on('newMessage', (data) => {
+        console.log(data);
+      });
   }, [curChannel?._id, socket, userData?._id]);
 
   return (
@@ -73,7 +78,7 @@ function ChatColumn({ socket }) {
       >
         {curChannel?.messages?.map((message) => (
           <Stack key={message?._id} direction="row" p={1} spacing={2}>
-            <Avatar sizes="3" src={message?.author?.avatar} />
+            <Avatar sizes="3" src={message?.author?.avatar || message?.author_id?.avatar} />
 
             <Stack direction="column" width="100%">
               <Stack direction="row" spacing={2} alignItems="center">
@@ -82,15 +87,15 @@ function ChatColumn({ socket }) {
                   component="span"
                   fontWeight="bold"
                 >
-                  {message?.author?.name}
+                  {message?.author?.name || message?.author_id?.name}
                 </Typography>
                 <Typography variant="caption" component="span">
-                  {message?.time}
+                  {message?.createdAt}
                 </Typography>
               </Stack>
 
               <Typography variant="body1" component="p">
-                {message?.content}
+                {message?.content?.toLocaleString()}
               </Typography>
             </Stack>
           </Stack>
@@ -122,7 +127,10 @@ function ChatColumn({ socket }) {
 
           <IconButton
             onClick={() => {
-              // socket.emit()
+              socket.emit('sendMessage', {
+                channelId: curChannel?._id,
+                content: msgInput,
+              });
             }}
           >
             <SendOutlined />
