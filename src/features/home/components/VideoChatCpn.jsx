@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, Typography, Button, Box, TextField, Stack } from '@mui/material';
+import { Grid, Typography, Box, Button, Stack } from '@mui/material';
+import { useSelector } from 'react-redux';
 import Peer from 'simple-peer';
 import Video from './Video';
 import useCheckAuth from 'src/hooks/useCheckAuth';
 
-function VideoChat({ socket }) {
+function VideoChatCpn({ socket }) {
   const { userData } = useCheckAuth();
 
-  const [localStream, setLocalStream] = useState();
-  const [userId, setUserId] = useState('');
-  const [channelId, setChannelId] = useState('');
+  const curChannel = useSelector((state) => state.servers.currentChannel);
   const [isJoined, setIsJoined] = useState(false);
-  const [curChannel, setCurChannel] = useState({});
+
+  const [localStream, setLocalStream] = useState();
   const [peers, setPeers] = useState([]);
 
   useEffect(() => {
@@ -22,27 +22,31 @@ function VideoChat({ socket }) {
       });
   }, []);
 
-  const joinChannel = () => {
-    setIsJoined(true);
+  useEffect(() => {
+    return () => {
+      // component will unmount logic here
+      peers.forEach((peer) => {
+        peer.destroy();
+      });
+      setPeers([]);
+      isJoined && socket.emit('leaveChannel');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isJoined]);
 
-    socket.emit('joinChannel', {
-      userId,
-      channelId,
-    });
+  const joinVideoCall = () => {
+    socket.emit('joinChannel', curChannel._id);
 
-    socket.on('rejectToChannel', () => {
-      setIsJoined(false);
-      setCurChannel({});
-      console.log('rejectToChannel');
-    });
-
-    socket.on('acceptToChannel', (channel) => {
-      setCurChannel(channel);
+    socket.on('acceptToVoiceChannel', (channel) => {
+      console.log('accept to voice channel');
+      if (channel._id !== curChannel._id) return;
+      setIsJoined(true);
       const tmpPeers = new Map();
 
       // Có user mới vào room
       // => tạo peer kiểu host, gửi signal về cho user đó qua event 'pair'
-      socket.on('userJoinedChannel', (newUser) => {
+      socket.on('userJoinedVoiceChannel', (newUser) => {
+        console.log('new user joined', newUser);
         const peer = new Peer({
           initiator: true,
           trickle: false,
@@ -54,9 +58,9 @@ function VideoChat({ socket }) {
           // Emit signal về cho user mới joined
           socket.emit('setupPeer', {
             isInitiator: true,
-            from: userId,
+            from: userData?._id,
             to: newUser._id,
-            channelId,
+            channelId: channel._id,
             signal: data,
           });
         });
@@ -65,10 +69,16 @@ function VideoChat({ socket }) {
           setPeers((prev) => [
             ...prev,
             {
+              peer,
               user: { id: newUser._id, name: newUser.name },
               stream,
             },
           ]);
+        });
+
+        peer.on('close', () => {
+          console.log('close');
+          // peer.destroy();
         });
       });
 
@@ -77,8 +87,14 @@ function VideoChat({ socket }) {
       // Có 2 case: là user cũ, nhận được accept từ user mới join
       // hoặc là user mới, nhận được signal từ user cũ
       socket.on('setupPeer', ({ isInitiator, from, to, channelId, signal }) => {
-        console.log('setupPeer', { isInitiator, from, to, channelId, signal });
-        if (to === userData._id && channelId === channel._id) {
+        console.log('setupPeer', {
+          isInitiator,
+          from,
+          to,
+          channelId,
+          signal,
+        });
+        if (to === userData?._id && channelId === channel._id) {
           // Đây là data từ user cũ gửi cho mình khi vừa joined
           if (isInitiator) {
             const peer = new Peer({
@@ -101,8 +117,9 @@ function VideoChat({ socket }) {
               setPeers((prev) => [
                 ...prev,
                 {
-                  user: channel.listActiveUser.find((x) => x._id === from),
+                  user: { id: from, name: from },
                   stream,
+                  peer,
                 },
               ]);
             });
@@ -114,19 +131,22 @@ function VideoChat({ socket }) {
           }
         }
       });
-    });
-  };
 
-  const leaveChannel = () => {
-    socket.emit('leaveChannel');
-    setIsJoined(false);
-    setPeers([]);
-    setCurChannel({});
+      socket.on('userLeftChannel', (userId) => {
+        console.log('user left', userId);
+        peers.forEach((peer) => {
+          if (peer.user.id === userId) {
+            peer.destroy();
+          }
+        });
+        setPeers((prev) => prev.filter((peer) => peer.user.id !== userId));
+      });
+    });
   };
 
   const videoLayouts = React.useMemo(() => {
     const num = peers.length + 1;
-    if (num === 1) return 12;
+    if (num === 1) return 8;
     if (num === 2) return 6;
     if (num === 3) return 4;
     if (num === 4) return 3;
@@ -134,39 +154,10 @@ function VideoChat({ socket }) {
   }, [peers.length]);
 
   return (
-    <Box p={5}>
-      <Stack spacing={2} direction="row">
-        <TextField
-          label="User ID"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-        />
-        <TextField
-          label="Channel ID"
-          value={channelId}
-          onChange={(e) => setChannelId(e.target.value)}
-        />
-
-        <Button
-          variant="contained"
-          disabled={isJoined || !userId || !channelId}
-          onClick={joinChannel}
-        >
-          Join
-        </Button>
-        <Button
-          variant="outlined"
-          color="error"
-          disabled={!isJoined}
-          onClick={leaveChannel}
-        >
-          Leave
-        </Button>
-      </Stack>
-
-      <Grid container spacing={2} mt={2}>
-        {localStream && (
-          <Grid item xs={12} md={videoLayouts} sx={{ position: 'relative' }}>
+    <Grid container spacing={2}>
+      {localStream && (
+        <Grid item xs={12} md={videoLayouts} sx={{ position: 'relative' }}>
+          <Stack>
             <Video playsInline muted autoPlay stream={localStream} />
             <Box
               p={1}
@@ -176,12 +167,18 @@ function VideoChat({ socket }) {
             >
               <Typography variant="body1">Me</Typography>
             </Box>
-          </Grid>
-        )}
+            <Button
+              sx={{ display: isJoined ? 'none' : 'initial' }}
+              onClick={joinVideoCall}
+            >
+              Join
+            </Button>
+          </Stack>
+        </Grid>
+      )}
 
-        {isJoined &&
-          peers.length &&
-          peers.map((peer, index) => {
+      {peers.length > 0
+        ? peers.map((peer, index) => {
             return (
               <Grid
                 key={index}
@@ -202,14 +199,14 @@ function VideoChat({ socket }) {
                   }}
                   bgcolor="gray"
                 >
-                  <Typography variant="body1">{peer.user.name}</Typography>
+                  <Typography variant="body1">{peer?.user?.name}</Typography>
                 </Box>
               </Grid>
             );
-          })}
-      </Grid>
-    </Box>
+          })
+        : null}
+    </Grid>
   );
 }
 
-export default VideoChat;
+export default VideoChatCpn;

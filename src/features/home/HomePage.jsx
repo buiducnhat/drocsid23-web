@@ -2,13 +2,15 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Stack, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { APP_NAME } from 'src/app/constants';
 import ServersColumn from './components/ServersColumn';
 import ServerInfoColumn from './components/ServerInfoColumn';
 import ChatColumn from './components/ChatColumn';
 import {
+  getChannelInfoAction,
   getListJoinedServerAction,
+  getServerInfoAction,
   selectListJoinedServer,
 } from 'src/features/server/serverSlice';
 import useCheckAuth from 'src/hooks/useCheckAuth';
@@ -40,6 +42,20 @@ const channels = [
 
 const HomePage = () => {
   const dispatch = useDispatch();
+
+  const params = useParams();
+
+  useEffect(() => {
+    const { serverId, channelId } = params;
+
+    if (serverId) {
+      dispatch(getServerInfoAction(serverId));
+    }
+
+    if (serverId && channelId) {
+      dispatch(getChannelInfoAction(channelId));
+    }
+  }, [dispatch, params]);
 
   const listJoinedServer = useSelector(selectListJoinedServer);
 

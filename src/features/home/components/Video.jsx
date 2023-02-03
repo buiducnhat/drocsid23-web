@@ -9,7 +9,9 @@ const Video = ({ stream, ...rest }) => {
     }
   }, [stream]);
 
-  return <video style={{ width: '100%' }} ref={videoRef} {...rest} />;
+  return (
+    <video style={{ width: '100%', maxHeight: 800 }} ref={videoRef} {...rest} />
+  );
 };
 
 export default Video;

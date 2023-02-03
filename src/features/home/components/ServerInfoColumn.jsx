@@ -23,27 +23,24 @@ import {
   SettingsRounded as SettingsIcon,
 } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
-import { getChannelInfoAction } from 'src/features/server/serverSlice';
 import useCheckAuth from 'src/hooks/useCheckAuth';
 import { setOnMicrophone, setOnVolume } from 'src/features/app/appSlice';
 
 const ChannelRow = ({ channel }) => {
-  const dispatch = useDispatch();
+  const activeChannel = useSelector((state) => state.servers.currentChannel);
 
   return (
     <Link
       underline="none"
-      href="#"
+      href={`/channels/${channel.serverId}/${channel._id}`}
       borderRadius={1}
       p={0.5}
       sx={{
         '&:hover': {
-          backgroundColor: colors.grey[800],
+          backgroundColor: colors.grey[700],
         },
-      }}
-      onClick={(e) => {
-        e.preventDefault();
-        dispatch(getChannelInfoAction(channel._id));
+        backgroundColor:
+          channel._id === activeChannel._id ? colors.grey[800] : 'transparent',
       }}
     >
       <Stack direction="row" spacing={1} color={colors.grey[500]}>
