@@ -26,7 +26,9 @@ import {
   HeadsetOffRounded as HeadphoneOffIcon,
   SettingsRounded as SettingsIcon, PersonAddAlt, Settings, AddCircle,
 } from '@mui/icons-material';
-import {useSelector} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import useCheckAuth from 'src/hooks/useCheckAuth';
+import { setOnMicrophone, setOnVolume } from 'src/features/app/appSlice';
 import NiceModal from '@ebay/nice-modal-react';
 
 import AddChannelDialog from "src/features/home/components/AddChannelDialog";
@@ -36,6 +38,8 @@ import {Link as LinkDom} from "react-router-dom";
 
 
 const ChannelRow = ({channel}) => {
+  const activeChannel = useSelector((state) => state.servers.currentChannel);
+
   return (
     <Stack direction='row' justifyContent='space-between' alignItems='center'>
       <Link
@@ -71,11 +75,13 @@ const ChannelRow = ({channel}) => {
 
 function ServerInfoColumn() {
   const theme = useTheme();
+  const dispatch = useDispatch();
+
+  const { userData } = useCheckAuth();
 
   const currentServer = useSelector((state) => state.servers.currentServer);
-
-  const [offMic, setOffMic] = React.useState(false);
-  const [offHeadphone, setOffHeadphone] = React.useState(false);
+  const onMicrophone = useSelector((state) => state.app.onMicrophone);
+  const onVolume = useSelector((state) => state.app.onVolume);
 
   //  modal setting server
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -197,30 +203,35 @@ function ServerInfoColumn() {
           >
             <Avatar
               alt="personal avatar"
-              src="https://material-ui.com/static/images/avatar/3.jpg"
+              src={userData?.avatarUrl}
               sx={{width: 36, height: 36}}
             />
           </Badge>
-          <Typography variant="subtitle2" fontWeight="bold">
-            group23
-          </Typography>
+          <Stack spacing={0.25}>
+            <Typography variant="caption" fontWeight="bold">
+              {userData?.fullname?.split(' ')[0]}
+            </Typography>
+            <Typography variant="caption" color="lightgray">
+              #{userData?._id.slice(0, 6)}
+            </Typography>
+          </Stack>
         </Stack>
 
         <Stack direction="row" p={0.5} spacing={0.5}>
           <IconButton
             color="default"
             size="small"
-            onClick={() => setOffMic(!offMic)}
+            onClick={() => dispatch(setOnMicrophone(!onMicrophone))}
           >
-            {offMic ? <MicOffIcon/> : <MicIcon/>}
+            {onMicrophone ? <MicIcon /> : <MicOffIcon />}
           </IconButton>
 
           <IconButton
             color="default"
             size="small"
-            onClick={() => setOffHeadphone(!offHeadphone)}
+            onClick={() => dispatch(setOnVolume(!onVolume))}
           >
-            {offHeadphone ? <HeadphoneOffIcon/> : <HeadphoneIcon/>}
+            {onVolume ? <HeadphoneIcon /> : <HeadphoneOffIcon />}
           </IconButton>
 
           <LinkDom to='/setting'>

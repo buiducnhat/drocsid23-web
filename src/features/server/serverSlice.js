@@ -52,13 +52,38 @@ export const getServerInfoAction = createAsyncThunk(
   }
 );
 
+export const getChannelInfoAction = createAsyncThunk(
+  'servers/getChannelInfo',
+  async (channelId, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.getChannelInfo(channelId);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
 const serverSlice = createSlice({
   name: 'servers',
   initialState: {
     listJoinedServer: [],
     currentServer: {},
+    currentChannel: {},
   },
-  reducers: {},
+  reducers: {
+    addMessageToCurrentChannel: (state, action) => {
+      if (action.payload.channelId === state.currentChannel._id) {
+        state.currentChannel.messages = [
+          ...state.currentChannel.messages,
+          action.payload,
+        ];
+      }
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -93,6 +118,17 @@ const serverSlice = createSlice({
       })
       .addCase(getServerInfoAction.rejected, (state, action) => {
         hideLoadingModal();
+      })
+
+      .addCase(getChannelInfoAction.pending, (state, action) => {
+        showLoadingModal();
+      })
+      .addCase(getChannelInfoAction.fulfilled, (state, action) => {
+        state.currentChannel = action.payload;
+        hideLoadingModal();
+      })
+      .addCase(getChannelInfoAction.rejected, (state, action) => {
+        hideLoadingModal();
       });
   },
 });
@@ -100,5 +136,6 @@ const serverSlice = createSlice({
 export const selectListJoinedServer = (state) => state.servers.listJoinedServer,
   selectCurrentServer = (state) => state.servers.currentServer;
 
-export const { setCurrentServer } = serverSlice.actions;
+export const { setCurrentServer, addMessageToCurrentChannel } =
+  serverSlice.actions;
 export default serverSlice.reducer;

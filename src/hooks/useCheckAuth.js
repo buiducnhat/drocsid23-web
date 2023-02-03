@@ -6,7 +6,6 @@ import {
   selectIsAuth,
   getMeAction,
 } from 'src/features/authen/authenSlice';
-import { hideLoadingModal, showLoadingModal } from 'src/helpers/modal.helper';
 
 function useCheckAuth() {
   const dispatch = useDispatch();
@@ -18,14 +17,6 @@ function useCheckAuth() {
   useEffect(() => {
     dispatch(getMeAction());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (isGetMe) {
-      showLoadingModal();
-    } else {
-      hideLoadingModal();
-    }
-  }, [isGetMe]);
 
   return { isAuth, userData, isGetMe };
 }

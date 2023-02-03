@@ -7,7 +7,6 @@ import UserSetting from 'src/features/userSetting/UserSetting';
 import ChannelSetting from 'src/features/channelSetting/ChannelSetting';
 import ServerSettingPage from 'src/features/channel/ServerSettingPage';
 import ServerSetting from "src/features/serverSetting";
-import VideoChat from 'src/features/home/components/VideoChat';
 
 const routes = [
   {
@@ -15,13 +14,14 @@ const routes = [
     element: <MainLayout />,
     children: [
       { path: '/', element: <HomePage /> },
+      { path: '/channels/:serverId', element: <HomePage /> },
+      { path: '/channels/:serverId/:channelId', element: <HomePage /> },
       { path: '/channels/:serverId/settings', element: <ServerSettingPage /> },
       { path: '404', element: <NotFoundPage /> },
       { path: '*', element: <NotFoundPage /> },
       { path: '/setting', element: <UserSetting /> },
       { path: '/channelSetting', element: <ChannelSetting /> },
       { path: '/serverSetting', element: <ServerSetting /> },
-      { path: '/:serverId/:channelId', element: <VideoChat /> },
     ],
   },
   {

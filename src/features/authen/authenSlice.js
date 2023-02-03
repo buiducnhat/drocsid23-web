@@ -76,18 +76,21 @@ const authenSlice = createSlice({
       .addCase(getMeAction.pending, (state, action) => {
         state.isGetMe = true;
         state.getMeMsg = null;
+        showLoadingModal();
       })
       .addCase(getMeAction.fulfilled, (state, action) => {
         state.isGetMe = false;
         state.getMeMsg = null;
-        state.userData = action.payload.data.user;
+        state.userData = action.payload.data;
         state.isAuth = true;
+        hideLoadingModal();
       })
       .addCase(getMeAction.rejected, (state, action) => {
         state.isGetMe = false;
         state.getMeMsg = action.payload.message;
         state.isAuth = false;
         state.userData = null;
+        hideLoadingModal();
       })
 
       .addCase(loginAction.pending, (state, action) => {
