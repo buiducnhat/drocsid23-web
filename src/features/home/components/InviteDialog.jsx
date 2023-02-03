@@ -74,7 +74,7 @@ const InviteDialog = NiceModal.create(() => {
         <DialogContent>
           <Stack style={{ maxHeight: 250, overflow: 'auto' }} >
             {listFriend.map((fr) => (
-              <Stack direction='row' alignItems='center' justifyContent='space-between' px={1} py={0.5} sx={{ '&:hover':{backgroundColor:colors.grey[800]}}}>
+              <Stack key={fr.id} direction='row' alignItems='center' justifyContent='space-between' px={1} py={0.5} sx={{ '&:hover':{backgroundColor:colors.grey[800]}}}>
                 <Stack direction='row' alignItems='center' spacing={1}>
                   <Avatar src={fr.avatar}/>
                   <Typography fontWeight={500} fontSize={18}>{fr.username}</Typography>

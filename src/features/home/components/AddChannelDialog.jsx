@@ -5,7 +5,7 @@ import {
   IconButton,
   Dialog,
   Container, TextField, Stack, Button, Typography,
-  FormControl, RadioGroup, FormControlLabel, Radio, Switch
+  FormControl, RadioGroup, FormControlLabel, Radio, Switch, Divider
 } from '@mui/material';
 import {Close as CloseIcon} from '@mui/icons-material';
 import NiceModal, {useModal} from '@ebay/nice-modal-react';

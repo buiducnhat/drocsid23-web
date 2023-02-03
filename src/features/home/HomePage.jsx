@@ -50,7 +50,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!isAuth && !isGetMe) {
-      navigate('/authen/login');
+      // navigate('/authen/login');
     }
   }, [isAuth, isGetMe, navigate]);
 
