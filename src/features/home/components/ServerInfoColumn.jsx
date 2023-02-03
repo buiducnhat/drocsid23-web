@@ -24,6 +24,7 @@ import {
 } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
 import { getChannelInfoAction } from 'src/features/server/serverSlice';
+import useCheckAuth from 'src/hooks/useCheckAuth';
 
 const ChannelRow = ({ channel }) => {
   const dispatch = useDispatch();
@@ -57,7 +58,9 @@ const ChannelRow = ({ channel }) => {
 function ServerInfoColumn() {
   const theme = useTheme();
 
+  const { userData } = useCheckAuth();
   const currentServer = useSelector((state) => state.servers.currentServer);
+  const curChannel = useSelector((state) => state.servers.currentChannel);
 
   const [offMic, setOffMic] = React.useState(false);
   const [offHeadphone, setOffHeadphone] = React.useState(false);
@@ -128,13 +131,18 @@ function ServerInfoColumn() {
           >
             <Avatar
               alt="personal avatar"
-              src="https://material-ui.com/static/images/avatar/3.jpg"
+              src={userData?.avatarUrl}
               sx={{ width: 36, height: 36 }}
             />
           </Badge>
-          <Typography variant="subtitle2" fontWeight="bold">
-            group23
-          </Typography>
+          <Stack spacing={0.25}>
+            <Typography variant="caption" fontWeight="bold">
+              {userData?.fullname?.split(' ')[0]}
+            </Typography>
+            <Typography variant="caption">
+              #{userData?._id.slice(0, 6)}
+            </Typography>
+          </Stack>
         </Stack>
 
         <Stack direction="row" p={0.5} spacing={0.5}>

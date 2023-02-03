@@ -96,7 +96,7 @@ function ChatColumn({ socket }) {
       >
         {curChannel?.messages?.map((message) => (
           <Stack key={message?._id} direction="row" p={1} spacing={2}>
-            <Avatar sizes="3" src={message?.author?.avatar} />
+            <Avatar sizes="3" src={message?.author?.avatarUrl} />
 
             <Stack direction="column" width="100%">
               <Stack direction="row" spacing={2} alignItems="center">
