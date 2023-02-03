@@ -74,7 +74,16 @@ const serverSlice = createSlice({
     currentServer: {},
     currentChannel: {},
   },
-  reducers: {},
+  reducers: {
+    addMessageToCurrentChannel: (state, action) => {
+      if (action.payload.channelId === state.currentChannel._id) {
+        state.currentChannel.messages = [
+          ...state.currentChannel.messages,
+          action.payload,
+        ];
+      }
+    },
+  },
 
   extraReducers: (builder) => {
     builder
@@ -127,5 +136,6 @@ const serverSlice = createSlice({
 export const selectListJoinedServer = (state) => state.servers.listJoinedServer,
   selectCurrentServer = (state) => state.servers.currentServer;
 
-export const { setCurrentServer } = serverSlice.actions;
+export const { setCurrentServer, addMessageToCurrentChannel } =
+  serverSlice.actions;
 export default serverSlice.reducer;

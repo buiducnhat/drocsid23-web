@@ -25,24 +25,24 @@ function VideoChat({ socket }) {
   const joinChannel = () => {
     setIsJoined(true);
 
-    socket.emit('joinVoiceChannel', {
+    socket.emit('joinChannel', {
       userId,
       channelId,
     });
 
-    socket.on('rejectToVoiceChannel', () => {
+    socket.on('rejectToChannel', () => {
       setIsJoined(false);
       setCurChannel({});
       console.log('rejectToChannel');
     });
 
-    socket.on('acceptToVoiceChannel', (channel) => {
+    socket.on('acceptToChannel', (channel) => {
       setCurChannel(channel);
       const tmpPeers = new Map();
 
       // Có user mới vào room
       // => tạo peer kiểu host, gửi signal về cho user đó qua event 'pair'
-      socket.on('userJoinedVoiceChannel', (newUser) => {
+      socket.on('userJoinedChannel', (newUser) => {
         const peer = new Peer({
           initiator: true,
           trickle: false,
@@ -118,7 +118,7 @@ function VideoChat({ socket }) {
   };
 
   const leaveChannel = () => {
-    socket.emit('leaveVoiceChannel');
+    socket.emit('leaveChannel');
     setIsJoined(false);
     setPeers([]);
     setCurChannel({});

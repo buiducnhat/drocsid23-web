@@ -16,12 +16,30 @@ import {
   AddCircleRounded as AddIcon,
   SendOutlined,
 } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import useCheckAuth from 'src/hooks/useCheckAuth';
+import { formatDistanceToNowStrict, format } from 'date-fns';
+import { addMessageToCurrentChannel } from 'src/features/server/serverSlice';
+
+function formatRelativeTimestamp(timestamp) {
+  const now = new Date();
+  const difference = now.getTime() - timestamp.getTime();
+  const oneHourInMilliseconds = 60 * 60 * 1000;
+  const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
+
+  if (difference >= oneMonthInMilliseconds) {
+    return format(timestamp, 'MMM dd, hh:mm a');
+  } else if (difference >= oneHourInMilliseconds) {
+    return format(timestamp, 'hh:mm a');
+  }
+
+  return formatDistanceToNowStrict(timestamp, { addSuffix: true });
+}
 
 function ChatColumn({ socket }) {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const curChannel = useSelector((state) => state.servers.currentChannel);
   const { userData } = useCheckAuth();
@@ -32,16 +50,16 @@ function ChatColumn({ socket }) {
     curChannel?._id &&
       userData?._id &&
       socket &&
-      socket.emit('joinVoiceChannel', {
-        userId: userData?._id,
-        channelId: curChannel?._id,
-      });
+      socket.emit('joinChannel', curChannel?._id);
+  }, [curChannel?._id, userData?._id, socket]);
 
+  useEffect(() => {
     socket &&
       socket.on('newMessage', (data) => {
         console.log(data);
+        dispatch(addMessageToCurrentChannel(data));
       });
-  }, [curChannel?._id, socket, userData?._id]);
+  }, [dispatch, socket]);
 
   return (
     <Stack height="100%" width="100%" backgroundColor={theme.palette.grey[850]}>
@@ -78,7 +96,7 @@ function ChatColumn({ socket }) {
       >
         {curChannel?.messages?.map((message) => (
           <Stack key={message?._id} direction="row" p={1} spacing={2}>
-            <Avatar sizes="3" src={message?.author?.avatar || message?.author_id?.avatar} />
+            <Avatar sizes="3" src={message?.author?.avatar} />
 
             <Stack direction="column" width="100%">
               <Stack direction="row" spacing={2} alignItems="center">
@@ -87,15 +105,15 @@ function ChatColumn({ socket }) {
                   component="span"
                   fontWeight="bold"
                 >
-                  {message?.author?.name || message?.author_id?.name}
+                  {message?.author?.fullname}
                 </Typography>
                 <Typography variant="caption" component="span">
-                  {message?.createdAt}
+                  {formatRelativeTimestamp(new Date(message?.createdAt))}
                 </Typography>
               </Stack>
 
               <Typography variant="body1" component="p">
-                {message?.content?.toLocaleString()}
+                {message?.content}
               </Typography>
             </Stack>
           </Stack>
@@ -123,14 +141,25 @@ function ChatColumn({ socket }) {
             fullWidth
             value={msgInput}
             onChange={(e) => setMsgInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.ctrlKey && e.key === 'Enter' && msgInput.length > 0) {
+                socket.emit('sendMessage', {
+                  channelId: curChannel?._id,
+                  content: msgInput,
+                });
+                setMsgInput('');
+              }
+            }}
           />
 
           <IconButton
             onClick={() => {
-              socket.emit('sendMessage', {
-                channelId: curChannel?._id,
-                content: msgInput,
-              });
+              msgInput.length > 0 &&
+                socket.emit('sendMessage', {
+                  channelId: curChannel?._id,
+                  content: msgInput,
+                });
+              setMsgInput('');
             }}
           >
             <SendOutlined />
