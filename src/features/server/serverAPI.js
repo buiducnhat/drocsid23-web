@@ -78,7 +78,7 @@ const serverAPI = {
       axiosMethod.GET,
       Cookies.get('accessToken')
     );
-  }
+  },
 };
 
 export default serverAPI;

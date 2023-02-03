@@ -25,6 +25,7 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { getChannelInfoAction } from 'src/features/server/serverSlice';
 import useCheckAuth from 'src/hooks/useCheckAuth';
+import { setOnMicrophone, setOnVolume } from 'src/features/app/appSlice';
 
 const ChannelRow = ({ channel }) => {
   const dispatch = useDispatch();
@@ -57,13 +58,13 @@ const ChannelRow = ({ channel }) => {
 
 function ServerInfoColumn() {
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   const { userData } = useCheckAuth();
-  const currentServer = useSelector((state) => state.servers.currentServer);
-  const curChannel = useSelector((state) => state.servers.currentChannel);
 
-  const [offMic, setOffMic] = React.useState(false);
-  const [offHeadphone, setOffHeadphone] = React.useState(false);
+  const currentServer = useSelector((state) => state.servers.currentServer);
+  const onMicrophone = useSelector((state) => state.app.onMicrophone);
+  const onVolume = useSelector((state) => state.app.onVolume);
 
   return (
     <Stack height="100%" width="250px" p={1} backgroundColor={colors.grey[900]}>
@@ -139,7 +140,7 @@ function ServerInfoColumn() {
             <Typography variant="caption" fontWeight="bold">
               {userData?.fullname?.split(' ')[0]}
             </Typography>
-            <Typography variant="caption">
+            <Typography variant="caption" color="lightgray">
               #{userData?._id.slice(0, 6)}
             </Typography>
           </Stack>
@@ -149,17 +150,17 @@ function ServerInfoColumn() {
           <IconButton
             color="default"
             size="small"
-            onClick={() => setOffMic(!offMic)}
+            onClick={() => dispatch(setOnMicrophone(!onMicrophone))}
           >
-            {offMic ? <MicOffIcon /> : <MicIcon />}
+            {onMicrophone ? <MicIcon /> : <MicOffIcon />}
           </IconButton>
 
           <IconButton
             color="default"
             size="small"
-            onClick={() => setOffHeadphone(!offHeadphone)}
+            onClick={() => dispatch(setOnVolume(!onVolume))}
           >
-            {offHeadphone ? <HeadphoneOffIcon /> : <HeadphoneIcon />}
+            {onVolume ? <HeadphoneIcon /> : <HeadphoneOffIcon />}
           </IconButton>
 
           <IconButton color="default" size="small">
