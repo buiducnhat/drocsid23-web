@@ -9,18 +9,32 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import {useDispatch} from "react-redux";
+
 
 const AddServerDialog = NiceModal.create(() => {
   const modal = useModal();
   const [nameServer,setNameServer] = React.useState(null)
+  const [description,setDescription] = React.useState(null)
 
   const handleNameServer = (e) => {
     setNameServer(e.target.value)
   }
 
+  const dispatch = useDispatch();
+
   const handleCreateServer = () => {
-    console.log(nameServer)
+    const data = {
+      'name' : nameServer,
+      'description': description,
+      'isPublic' : true
+    }
+    console.log(data)
     modal.hide()
+  }
+
+  const handleDescription = (e) => {
+    setDescription(e.target.value)
   }
 
   return (
@@ -40,8 +54,9 @@ const AddServerDialog = NiceModal.create(() => {
         </IconButton>
         <DialogTitle align='center'>Create new Server</DialogTitle>
         <DialogContent>
-          <Stack p={1}>
+          <Stack p={1} spacing={2}>
           <TextField onChange={handleNameServer} id="outlined-basic" label="Server Name" variant="outlined" />
+          <TextField onChange={handleDescription} multiline={3} id="outlined-basic" label="Description" variant="outlined" />
           </Stack>
         </DialogContent>
         <Stack direction='row-reverse' pb={2}>

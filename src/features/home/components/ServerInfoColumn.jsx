@@ -14,7 +14,7 @@ import {
   Button,
   MenuItem,
   Menu,
-  Fade, Tooltip,
+  Fade, Tooltip
 } from '@mui/material';
 import {
   TagRounded as TagIcon,
@@ -26,7 +26,11 @@ import {
   HeadsetOffRounded as HeadphoneOffIcon,
   SettingsRounded as SettingsIcon, PersonAddAlt, Settings, AddCircle,
 } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
+import NiceModal from '@ebay/nice-modal-react';
+
+import AddChannelDialog from "src/features/home/components/AddChannelDialog";
+import InviteDialog from "src/features/home/components/InviteDialog";
 
 import {Link as LinkDom} from "react-router-dom";
 
@@ -73,6 +77,7 @@ function ServerInfoColumn() {
   const [offMic, setOffMic] = React.useState(false);
   const [offHeadphone, setOffHeadphone] = React.useState(false);
 
+  //  modal setting server
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -104,8 +109,11 @@ function ServerInfoColumn() {
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          <MenuItem onClick={handleClose}>
-            <Stack width={190} direction='row' justifyContent='space-between'>
+          <MenuItem onClick={()=>{
+            handleClose();
+            NiceModal.show(InviteDialog);
+          }}>
+            <Stack  width={190} direction='row' justifyContent='space-between'>
               <Typography>Invite People</Typography>
               <PersonAddAlt fontSize='small'/>
             </Stack>
@@ -118,7 +126,10 @@ function ServerInfoColumn() {
               </Stack>
             </LinkDom>
           </MenuItem>
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={()=>{
+            handleClose();
+            NiceModal.show(AddChannelDialog);
+          }}>
             <Stack width={190} direction='row' justifyContent='space-between'>
               <Typography>Create Channel</Typography>
               <AddCircle fontSize='small'/>
@@ -147,7 +158,7 @@ function ServerInfoColumn() {
               {currentServer?.listChannel
                 ?.filter((item) => item.type === type)
                 ?.map((item) => (
-                  <ChannelRow key={item._id} channel={item} />
+                  <ChannelRow key={item._id} channel={item}/>
                 ))}
             </Stack>
           </AccordionDetails>
