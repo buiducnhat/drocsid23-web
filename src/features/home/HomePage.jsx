@@ -70,7 +70,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!isAuth && !isGetMe) {
-      navigate('/authen/login');
+      // navigate('/authen/login');
     } else if (isAuth && !socket) {
       setSocket(
         io(process.env.REACT_APP_WS_SERVER, {

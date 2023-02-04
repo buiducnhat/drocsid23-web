@@ -46,7 +46,7 @@ const AddChannelDialog = NiceModal.create(() => {
 
   return (
     <Dialog open={modal.visible} onClose={() => modal.hide()}>
-      <Container sx={{position: 'relative', width: 500}}>
+      <Container sx={{position: 'relative', width:500}} >
         <IconButton
           aria-label="close"
           sx={{

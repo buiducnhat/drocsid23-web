@@ -26,13 +26,15 @@ import {
   HeadsetOffRounded as HeadphoneOffIcon,
   SettingsRounded as SettingsIcon, PersonAddAlt, Settings, AddCircle,
 } from '@mui/icons-material';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import useCheckAuth from 'src/hooks/useCheckAuth';
-import { setOnMicrophone, setOnVolume } from 'src/features/app/appSlice';
+import {setOnMicrophone, setOnVolume} from 'src/features/app/appSlice';
 import NiceModal from '@ebay/nice-modal-react';
 
 import AddChannelDialog from "src/features/home/components/AddChannelDialog";
 import InviteDialog from "src/features/home/components/InviteDialog";
+import ServerSetting from "src/features/serverSetting";
+import UserSetting from "src/features/userSetting/UserSetting";
 
 import {Link as LinkDom} from "react-router-dom";
 
@@ -77,7 +79,7 @@ function ServerInfoColumn() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const { userData } = useCheckAuth();
+  const {userData} = useCheckAuth();
 
   const currentServer = useSelector((state) => state.servers.currentServer);
   const onMicrophone = useSelector((state) => state.app.onMicrophone);
@@ -115,24 +117,25 @@ function ServerInfoColumn() {
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          <MenuItem onClick={()=>{
+          <MenuItem onClick={() => {
             handleClose();
             NiceModal.show(InviteDialog);
           }}>
-            <Stack  width={190} direction='row' justifyContent='space-between'>
+            <Stack width={190} direction='row' justifyContent='space-between'>
               <Typography>Invite People</Typography>
               <PersonAddAlt fontSize='small'/>
             </Stack>
           </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <LinkDom to='/serverSetting' style={{color: 'white', textDecoration: 'none'}}>
-              <Stack width={190} direction='row' justifyContent='space-between'>
-                <Typography>Server Settings</Typography>
-                <Settings fontSize='small'/>
-              </Stack>
-            </LinkDom>
+          <MenuItem onClick={() => {
+            handleClose();
+            NiceModal.show(ServerSetting);
+          }}>
+            <Stack width={190} direction='row' justifyContent='space-between'>
+              <Typography>Server Settings</Typography>
+              <Settings fontSize='small'/>
+            </Stack>
           </MenuItem>
-          <MenuItem onClick={()=>{
+          <MenuItem onClick={() => {
             handleClose();
             NiceModal.show(AddChannelDialog);
           }}>
@@ -223,7 +226,7 @@ function ServerInfoColumn() {
             size="small"
             onClick={() => dispatch(setOnMicrophone(!onMicrophone))}
           >
-            {onMicrophone ? <MicIcon /> : <MicOffIcon />}
+            {onMicrophone ? <MicIcon/> : <MicOffIcon/>}
           </IconButton>
 
           <IconButton
@@ -231,14 +234,11 @@ function ServerInfoColumn() {
             size="small"
             onClick={() => dispatch(setOnVolume(!onVolume))}
           >
-            {onVolume ? <HeadphoneIcon /> : <HeadphoneOffIcon />}
+            {onVolume ? <HeadphoneIcon/> : <HeadphoneOffIcon/>}
           </IconButton>
-
-          <LinkDom to='/setting'>
-            <IconButton color="default" size="small">
+            <IconButton onClick={()=>{NiceModal.show(UserSetting);}} color="default" size="small">
               <SettingsIcon/>
             </IconButton>
-          </LinkDom>
         </Stack>
       </Stack>
     </Stack>
