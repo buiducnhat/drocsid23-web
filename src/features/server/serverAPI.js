@@ -79,6 +79,16 @@ const serverAPI = {
       Cookies.get('accessToken')
     );
   },
+
+  createChannel(data) {
+    return axiosRequest(
+      channelEndPoint + `/`,
+      axiosMethod.POST,
+      Cookies.get('accessToken'),
+      null,
+      data
+    );
+  }
 };
 
 export default serverAPI;

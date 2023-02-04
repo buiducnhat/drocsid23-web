@@ -19,6 +19,7 @@ import {
   selectCurrentServer,
 } from 'src/features/server/serverSlice';
 import { useNavigate } from 'react-router';
+import AddChannelDialog from './AddChannelDialog';
 
 function ServerItem({ isDirect, serverId, name, imgUrl }) {
   const theme = useTheme();
@@ -74,6 +75,14 @@ function ServerItem({ isDirect, serverId, name, imgUrl }) {
           }}
         >
           Server Settings
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            dispatch(getServerInfoAction(serverId));
+            NiceModal.show(AddChannelDialog, { serverId });
+          }}
+        >
+          Add channel
         </MenuItem>
       </Menu>
       <Box

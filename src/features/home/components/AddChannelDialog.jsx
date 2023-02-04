@@ -13,18 +13,18 @@ import {
   RadioGroup,
   FormControlLabel,
   Radio,
-  Switch,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import NiceModal, { muiDialogV5, useModal } from '@ebay/nice-modal-react';
-import LockIcon from '@mui/icons-material/Lock';
+import { useDispatch } from 'react-redux';
+import { createChannelAction } from 'src/features/server/serverSlice';
 
-const AddChannelDialog = NiceModal.create(() => {
+const AddChannelDialog = NiceModal.create(({ serverId }) => {
   const modal = useModal();
   const [nameChannel, setNameChannel] = React.useState(null);
   const [description, setDescription] = React.useState(null);
   const [channelType, setChannelType] = React.useState('text');
-  const [isPrivate, setIsPeivate] = React.useState(false);
+  const dispatch = useDispatch();
 
   const handleNameChannel = (e) => {
     setNameChannel(e.target.value);
@@ -36,17 +36,15 @@ const AddChannelDialog = NiceModal.create(() => {
     setChannelType(e.target.value);
   };
 
-  const handlePrivateChannel = (e) => {
-    setIsPeivate(e.target.checked);
-  };
   const handleSubmitCreateChannel = () => {
     const data = {
+      serverId,
       name: nameChannel,
       description: description,
       type: channelType,
-      isPublic: !isPrivate,
     };
-    console.log(data);
+    dispatch(createChannelAction(data));
+
     modal.hide();
   };
 
@@ -99,27 +97,6 @@ const AddChannelDialog = NiceModal.create(() => {
               label="Description"
               variant="outlined"
             />
-          </Stack>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            pt={1}
-          >
-            <Stack direction="row" alignItems="center" spacing={0.5}>
-              <LockIcon />
-              <Typography>Private Channel</Typography>
-            </Stack>
-            <Stack>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isPrivate}
-                    onChange={handlePrivateChannel}
-                  ></Switch>
-                }
-              />
-            </Stack>
           </Stack>
         </DialogContent>
         <Stack direction="row-reverse" pb={2}>

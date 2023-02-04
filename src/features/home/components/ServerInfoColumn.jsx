@@ -106,7 +106,7 @@ function ServerInfoColumn() {
           onClick={handleClick}
           sx={{ color: colors.grey[300] }}
         >
-          Name Server
+          {currentServer.name}
         </Button>
         <Menu
           id="fade-menu"
@@ -153,6 +153,7 @@ function ServerInfoColumn() {
           </MenuItem>
         </Menu>
       </Stack>
+
       {[
         ['text channel', 'text'],
         ['voice channel', 'voice'],
