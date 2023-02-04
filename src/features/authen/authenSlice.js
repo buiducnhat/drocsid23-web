@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import { hideLoadingModal, showLoadingModal } from 'src/helpers/modal.helper';
 
-import authenAPI from './authenApi';
+import authenAPI from './authenAPI';
 
 export const loginAction = createAsyncThunk(
   'authen/login',

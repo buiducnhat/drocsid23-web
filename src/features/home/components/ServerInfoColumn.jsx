@@ -14,7 +14,8 @@ import {
   Button,
   MenuItem,
   Menu,
-  Fade, Tooltip
+  Fade,
+  Tooltip,
 } from '@mui/material';
 import {
   TagRounded as TagIcon,
@@ -24,52 +25,52 @@ import {
   MicOffRounded as MicOffIcon,
   HeadsetMicRounded as HeadphoneIcon,
   HeadsetOffRounded as HeadphoneOffIcon,
-  SettingsRounded as SettingsIcon, PersonAddAlt, Settings, AddCircle,
+  SettingsRounded as SettingsIcon,
+  PersonAddAlt,
+  Settings,
+  AddCircle,
 } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
 import useCheckAuth from 'src/hooks/useCheckAuth';
 import { setOnMicrophone, setOnVolume } from 'src/features/app/appSlice';
 import NiceModal from '@ebay/nice-modal-react';
+import AddChannelDialog from 'src/features/home/components/AddChannelDialog';
+import InviteDialog from 'src/features/home/components/InviteDialog';
+import { Link as LinkDom } from 'react-router-dom';
 
-import AddChannelDialog from "src/features/home/components/AddChannelDialog";
-import InviteDialog from "src/features/home/components/InviteDialog";
-
-import {Link as LinkDom} from "react-router-dom";
-
-
-const ChannelRow = ({channel}) => {
+const ChannelRow = ({ channel }) => {
   const activeChannel = useSelector((state) => state.servers.currentChannel);
 
   return (
-    <Stack direction='row' justifyContent='space-between' alignItems='center'>
-      <Link
-        key={channel.id}
-        underline="none"
-        href="#"
-        borderRadius={1}
-        p={0.5}
-        sx={{
-          '&:hover': {
-            backgroundColor: colors.grey[800],
-          },
-        }}
-        width={170}
-      >
-        <Stack direction="row" spacing={1} color={colors.grey[500]}>
-          {channel.type === 'text' ? <TagIcon/> : <VolumeUpIcon/>}
-          <Typography variant="subtitle2" component="h4">
-            {channel.name}
-          </Typography>
-        </Stack>
-      </Link>
-      <Stack sx={{cursor: 'pointer'}}>
-        <LinkDom to='channelSetting'>
-          <Tooltip title='setting' placement="right">
-            <SettingsIcon fontSize='small' sx={{color: 'Grey'}}/>
-          </Tooltip>
-        </LinkDom>
+    <Link
+      component={LinkDom}
+      key={channel._id}
+      underline="none"
+      to={`/channels/${channel.serverId}/${channel._id}`}
+      borderRadius={1}
+      p={0.5}
+      sx={{
+        '&:hover': {
+          backgroundColor: colors.grey[700],
+        },
+        backgroundColor:
+          channel._id === activeChannel._id ? colors.grey[800] : 'transparent',
+      }}
+    >
+      <Stack direction="row" spacing={1} color={colors.grey[500]}>
+        {channel.type === 'text' ? <TagIcon /> : <VolumeUpIcon />}
+        <Typography variant="subtitle2" component="h4">
+          {channel.name}
+        </Typography>
       </Stack>
-    </Stack>
+      {/* <Stack sx={{ cursor: 'pointer' }}>
+          <Link component={LinkDom} to="channelSetting">
+            <Tooltip title="setting" placement="right">
+              <SettingsIcon fontSize="small" sx={{ color: 'Grey' }} />
+            </Tooltip>
+          </Link>
+        </Stack> */}
+    </Link>
   );
 };
 
@@ -101,7 +102,7 @@ function ServerInfoColumn() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
-          sx={{color: colors.grey[300]}}
+          sx={{ color: colors.grey[300] }}
         >
           Name Server
         </Button>
@@ -115,30 +116,37 @@ function ServerInfoColumn() {
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          <MenuItem onClick={()=>{
-            handleClose();
-            NiceModal.show(InviteDialog);
-          }}>
-            <Stack  width={190} direction='row' justifyContent='space-between'>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              NiceModal.show(InviteDialog);
+            }}
+          >
+            <Stack width={190} direction="row" justifyContent="space-between">
               <Typography>Invite People</Typography>
-              <PersonAddAlt fontSize='small'/>
+              <PersonAddAlt fontSize="small" />
             </Stack>
           </MenuItem>
           <MenuItem onClick={handleClose}>
-            <LinkDom to='/serverSetting' style={{color: 'white', textDecoration: 'none'}}>
-              <Stack width={190} direction='row' justifyContent='space-between'>
+            <LinkDom
+              to="/serverSetting"
+              style={{ color: 'white', textDecoration: 'none' }}
+            >
+              <Stack width={190} direction="row" justifyContent="space-between">
                 <Typography>Server Settings</Typography>
-                <Settings fontSize='small'/>
+                <Settings fontSize="small" />
               </Stack>
             </LinkDom>
           </MenuItem>
-          <MenuItem onClick={()=>{
-            handleClose();
-            NiceModal.show(AddChannelDialog);
-          }}>
-            <Stack width={190} direction='row' justifyContent='space-between'>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              NiceModal.show(AddChannelDialog);
+            }}
+          >
+            <Stack width={190} direction="row" justifyContent="space-between">
               <Typography>Create Channel</Typography>
-              <AddCircle fontSize='small'/>
+              <AddCircle fontSize="small" />
             </Stack>
           </MenuItem>
         </Menu>
@@ -149,7 +157,7 @@ function ServerInfoColumn() {
       ].map(([title, type], key) => (
         <Accordion key={key} defaultExpanded={true} disableGutters={true}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{color: colors.grey[500]}}/>}
+            expandIcon={<ExpandMoreIcon sx={{ color: colors.grey[500] }} />}
           >
             <Typography
               color={colors.grey[500]}
@@ -164,7 +172,7 @@ function ServerInfoColumn() {
               {currentServer?.listChannel
                 ?.filter((item) => item.type === type)
                 ?.map((item) => (
-                  <ChannelRow key={item._id} channel={item}/>
+                  <ChannelRow key={item._id} channel={item} />
                 ))}
             </Stack>
           </AccordionDetails>
@@ -177,7 +185,7 @@ function ServerInfoColumn() {
         m={-1}
         mt="auto"
         p={1}
-        sx={{backgroundColor: theme.palette.background.paper}}
+        sx={{ backgroundColor: theme.palette.background.paper }}
       >
         <Stack
           direction="row"
@@ -204,7 +212,7 @@ function ServerInfoColumn() {
             <Avatar
               alt="personal avatar"
               src={userData?.avatarUrl}
-              sx={{width: 36, height: 36}}
+              sx={{ width: 36, height: 36 }}
             />
           </Badge>
           <Stack spacing={0.25}>
@@ -234,9 +242,9 @@ function ServerInfoColumn() {
             {onVolume ? <HeadphoneIcon /> : <HeadphoneOffIcon />}
           </IconButton>
 
-          <LinkDom to='/setting'>
+          <LinkDom to="/setting">
             <IconButton color="default" size="small">
-              <SettingsIcon/>
+              <SettingsIcon />
             </IconButton>
           </LinkDom>
         </Stack>

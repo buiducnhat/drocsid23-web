@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {Grid, colors, IconButton, useTheme} from '@mui/material';
+import { Grid, colors, IconButton, useTheme } from '@mui/material';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import { Stack } from '@mui/system';
 import SidebarSetting from './components/SidebarSetting';

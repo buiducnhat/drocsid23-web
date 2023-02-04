@@ -26,9 +26,12 @@ function ServersColumn() {
           key={server._id}
           serverId={server._id}
           name={server.name}
-          imgUrl={`https://ui-avatars.com/api/?name=${server.name
-            .split(' ')
-            .join()}&background=random`}
+          imgUrl={
+            server.avatarUrl ||
+            `https://ui-avatars.com/api/?name=${server.name
+              .split(' ')
+              .join()}&background=random`
+          }
         />
       ))}
 

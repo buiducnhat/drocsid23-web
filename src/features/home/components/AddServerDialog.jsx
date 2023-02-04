@@ -7,7 +7,6 @@ import {
   Container, TextField, Stack, Button, Divider, Typography, Box
 } from '@mui/material';
 import {Close as CloseIcon} from '@mui/icons-material';
-import PropTypes from 'prop-types';
 import NiceModal, {useModal} from '@ebay/nice-modal-react';
 import {useDispatch} from "react-redux";
 

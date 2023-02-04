@@ -8,10 +8,15 @@ import {
   Button,
   Avatar,
 } from '@mui/material';
+import useCheckAuth from 'src/hooks/useCheckAuth';
+import { useSelector } from 'react-redux';
+import { selectListJoinedServer } from 'src/features/server/serverSlice';
 
-function Profiles({ user, servers }) {
+function Profiles() {
+  const { userData: user } = useCheckAuth();
+  const servers = useSelector(selectListJoinedServer);
   const [avatar, setAvatar] = React.useState(user.avatar);
-  console.log(avatar);
+
   return (
     <Stack color={colors.grey[400]}>
       <Stack width="100%" py={2} color={colors.grey[100]}>

@@ -1,5 +1,13 @@
 import React from 'react';
-import {Box, Button, Stack, colors, Divider, Card, useTheme} from '@mui/material';
+import {
+  Box,
+  Button,
+  Stack,
+  colors,
+  Divider,
+  Card,
+  useTheme,
+} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import {
@@ -9,19 +17,21 @@ import {
 } from './Dialog';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
+import useCheckAuth from 'src/hooks/useCheckAuth';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function MyAccount({ user }) {
+function MyAccount() {
   const theme = useTheme();
   const [index, setIndex] = React.useState(0);
   const [openDialog, setOpenDialog] = React.useState(false);
 
+  const { userData } = useCheckAuth();
+
   const handleCloseModal = (isOpen) => {
     setOpenDialog(!isOpen);
-    console.log(!openDialog);
   };
   return (
     <Stack>
@@ -32,7 +42,7 @@ function MyAccount({ user }) {
         sx={{
           width: 680,
           borderRadius: 2,
-          backgroundColor:theme.palette.grey[860],
+          backgroundColor: theme.palette.grey[860],
         }}
       >
         <Stack
@@ -51,9 +61,9 @@ function MyAccount({ user }) {
                 marginRight: 2,
               }}
               alt="Remy Sharp"
-              src={user.avatar}
+              src={userData.avatarUrl}
             />
-            {user.first_name} {user.last_name}
+            {userData.fullname}
           </Stack>
         </Stack>
         <Box
@@ -75,10 +85,10 @@ function MyAccount({ user }) {
                 variant="inherit"
                 color={colors.grey[400]}
               >
-                Username:{' '}
+                Email:{' '}
               </Typography>
               <Typography variant="inherit" pl={1}>
-                {user.username}
+                {userData.email}
               </Typography>
             </Stack>
             <Box>
@@ -104,7 +114,7 @@ function MyAccount({ user }) {
                 Full Name:{' '}
               </Typography>
               <Typography variant="inherit" pl={1}>
-                {user.first_name} {user.last_name}
+                {userData.fullname}
               </Typography>
             </Stack>
             <Box>
@@ -116,25 +126,6 @@ function MyAccount({ user }) {
                 height={20}
                 variant="contained"
               >
-                Edit
-              </Button>
-            </Box>
-          </Stack>
-          <Stack justifyContent="space-between" direction="row">
-            <Stack>
-              <Typography
-                fontSize={13}
-                variant="inherit"
-                color={colors.grey[400]}
-              >
-                Email:{' '}
-              </Typography>
-              <Typography variant="inherit" pl={1}>
-                {user.email}
-              </Typography>
-            </Stack>
-            <Box>
-              <Button height={20} variant="contained">
                 Edit
               </Button>
             </Box>
@@ -153,14 +144,14 @@ function MyAccount({ user }) {
                   case 1:
                     return (
                       <DialogEditName
-                        user={user}
+                        user={userData}
                         handleCloseModal={handleCloseModal}
                       />
                     );
                   case 0:
                     return (
                       <DialogEditUsername
-                        user={user}
+                        user={userData}
                         handleCloseModal={handleCloseModal}
                       />
                     );
