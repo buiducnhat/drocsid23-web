@@ -12,10 +12,13 @@ import {
   Typography,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal, { muiDialogV5, useModal } from '@ebay/nice-modal-react';
+import { useDispatch } from 'react-redux';
+import { createServerAction } from 'src/features/server/serverSlice';
 
 const AddServerDialog = NiceModal.create(() => {
   const modal = useModal();
+  const dispatch = useDispatch();
   const [nameServer, setNameServer] = React.useState(null);
   const [description, setDescription] = React.useState(null);
   const [linkInvite, setLinkInvite] = React.useState(null);
@@ -36,7 +39,9 @@ const AddServerDialog = NiceModal.create(() => {
       description: description,
       isPublic: true,
     };
-    console.log(data);
+
+    dispatch(createServerAction(data));
+
     modal.hide();
   };
 
@@ -46,7 +51,7 @@ const AddServerDialog = NiceModal.create(() => {
   };
 
   return (
-    <Dialog open={modal.visible} onClose={() => modal.hide()}>
+    <Dialog {...muiDialogV5(modal)}>
       <Container sx={{ position: 'relative', width: 400 }}>
         <IconButton
           aria-label="close"

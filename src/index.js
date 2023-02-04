@@ -14,6 +14,7 @@ import reportWebVitals from './reportWebVitals';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
+import 'react-toastify/dist/ReactToastify.css';
 
 root.render(
   <React.StrictMode>

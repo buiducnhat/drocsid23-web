@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 import { hideLoadingModal, showLoadingModal } from 'src/helpers/modal.helper';
 
 import authenAPI from './authenAPI';
@@ -111,6 +112,7 @@ const authenSlice = createSlice({
         state.isAuth = false;
         state.loginMsg = action.payload.message;
         hideLoadingModal();
+        toast.error(action.payload.message || 'Wrong email or password');
       })
 
       .addCase(registerAction.pending, (state) => {
@@ -128,6 +130,7 @@ const authenSlice = createSlice({
         state.isAuth = false;
         state.registerMsg = action.payload.message;
         hideLoadingModal();
+        toast.error(action.payload.message || 'Wrong email or password');
       });
   },
 });

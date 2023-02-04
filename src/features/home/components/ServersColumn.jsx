@@ -2,7 +2,7 @@ import React from 'react';
 import { Stack, useTheme } from '@mui/material';
 import { useSelector } from 'react-redux';
 
-import ChatAvatar from './ChatAvatar';
+import ServerItem from './ServerItem';
 import AddServerOnColumn from './AddServerOnColumn';
 import { selectListJoinedServer } from 'src/features/server/serverSlice';
 
@@ -19,10 +19,10 @@ function ServersColumn() {
       spacing={2}
       backgroundColor={theme.palette.background.paper}
     >
-      <ChatAvatar isDirect={true} name="Direct Messages" />
+      <ServerItem isDirect={true} name="Direct Messages" />
 
       {listJoinedServer.map((server) => (
-        <ChatAvatar
+        <ServerItem
           key={server._id}
           serverId={server._id}
           name={server.name}

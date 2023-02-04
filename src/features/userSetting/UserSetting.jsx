@@ -58,7 +58,7 @@ import ContentSetting from './components/ContentSetting';
 // }
 
 import { Dialog } from '@mui/material';
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal, { muiDialogV5, useModal } from '@ebay/nice-modal-react';
 
 const UserSetting = NiceModal.create(() => {
   const theme = useTheme();
@@ -70,8 +70,7 @@ const UserSetting = NiceModal.create(() => {
 
   return (
     <Dialog
-      open={modal.visible}
-      onClose={() => modal.hide()}
+      {...muiDialogV5(modal)}
       fullWidth
       maxWidth="false"
       sx={{ height: '100vh' }}

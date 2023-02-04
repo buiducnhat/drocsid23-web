@@ -26,6 +26,7 @@ import {
   ListItemAvatar,
   IconButton,
   Dialog,
+  Stack,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -35,7 +36,12 @@ import {
   Close as CloseIcon,
 } from '@mui/icons-material';
 import PropTypes from 'prop-types';
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal, { muiDialogV5, useModal } from '@ebay/nice-modal-react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectCurrentServer,
+  updateServerAction,
+} from 'src/features/server/serverSlice';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -207,11 +213,22 @@ const _mockUsers_ = [
 
 const ServerSettingDialog = NiceModal.create(() => {
   const modal = useModal();
+  const dispatch = useDispatch();
+  const currentServer = useSelector(selectCurrentServer);
 
   const [currentTab, setCurrentTab] = React.useState(0);
+  const [serverName, setServerName] = React.useState(currentServer.name);
+
+  const updateServer = (data) => {
+    dispatch(updateServerAction({ id: currentServer._id, data }));
+  };
+
+  React.useEffect(() => {
+    setServerName(currentServer.name);
+  }, [currentServer.name]);
 
   return (
-    <Dialog fullScreen open={modal.visible} onClose={() => modal.hide()}>
+    <Dialog fullScreen {...muiDialogV5(modal)}>
       <Container sx={{ position: 'relative' }}>
         <IconButton
           aria-label="close"
@@ -267,7 +284,21 @@ const ServerSettingDialog = NiceModal.create(() => {
                   }}
                   onClick={() => alert('Change avatar')}
                 />
-                <TextField size="small" label="Server name" />
+                <Stack direction="column" spacing={1}>
+                  <TextField
+                    size="small"
+                    label="Server name"
+                    value={serverName}
+                    onChange={(event) => setServerName(event.target.value)}
+                  />
+                  <Button
+                    variant="contained"
+                    disabled={serverName === currentServer.name}
+                    onClick={() => updateServer({ name: serverName })}
+                  >
+                    Save
+                  </Button>
+                </Stack>
               </Box>
             </TabPanel>
 

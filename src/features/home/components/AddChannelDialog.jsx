@@ -16,7 +16,7 @@ import {
   Switch,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal, { muiDialogV5, useModal } from '@ebay/nice-modal-react';
 import LockIcon from '@mui/icons-material/Lock';
 
 const AddChannelDialog = NiceModal.create(() => {
@@ -51,7 +51,7 @@ const AddChannelDialog = NiceModal.create(() => {
   };
 
   return (
-    <Dialog open={modal.visible} onClose={() => modal.hide()}>
+    <Dialog {...muiDialogV5(modal)}>
       <Container sx={{ position: 'relative', width: 500 }}>
         <IconButton
           aria-label="close"

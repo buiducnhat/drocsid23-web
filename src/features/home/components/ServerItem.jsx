@@ -11,15 +11,19 @@ import {
 import * as colors from '@mui/material/colors';
 import PeopleAltTwoTone from '@mui/icons-material/PeopleAltTwoTone';
 import NiceModal from '@ebay/nice-modal-react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import ServerSettingDialog from './ServerSettingDialog';
-import { selectCurrentServer } from 'src/features/server/serverSlice';
+import {
+  getServerInfoAction,
+  selectCurrentServer,
+} from 'src/features/server/serverSlice';
 import { useNavigate } from 'react-router';
 
-function ChatAvatar({ isDirect, serverId, name, imgUrl }) {
+function ServerItem({ isDirect, serverId, name, imgUrl }) {
   const theme = useTheme();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const currentServer = useSelector(selectCurrentServer);
   const isSelected = currentServer._id === serverId;
@@ -65,10 +69,7 @@ function ChatAvatar({ isDirect, serverId, name, imgUrl }) {
         <MenuItem>Access</MenuItem>
         <MenuItem
           onClick={() => {
-            // openModal('serverSettings', {
-            //   fullScreen: true,
-            //   children: <ServerSettingDialog close={closeModal} />,
-            // });
+            dispatch(getServerInfoAction(serverId));
             NiceModal.show(ServerSettingDialog);
           }}
         >
@@ -152,4 +153,4 @@ function ChatAvatar({ isDirect, serverId, name, imgUrl }) {
   );
 }
 
-export default ChatAvatar;
+export default ServerItem;

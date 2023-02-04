@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 import { hideLoadingModal, showLoadingModal } from 'src/helpers/modal.helper';
-
 import serverAPI from './serverAPI';
 
 export const getListJoinedServerAction = createAsyncThunk(
@@ -33,15 +33,26 @@ export const createServerAction = createAsyncThunk(
   }
 );
 
+export const updateServerAction = createAsyncThunk(
+  'servers/updateServer',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.updateServer(id, data);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
 export const getServerInfoAction = createAsyncThunk(
   'servers/getServerInfo',
   async (serverId, { rejectWithValue }) => {
     try {
       const response = await serverAPI.getServerInfo(serverId);
-      const channelResponse = await serverAPI.getChannelsOfServer(serverId);
-
-      const serverData = response.data.data;
-      serverData.listChannel = channelResponse.data.data;
 
       return response.data.data;
     } catch (error) {
@@ -104,9 +115,28 @@ const serverSlice = createSlice({
       .addCase(createServerAction.fulfilled, (state, action) => {
         state.listJoinedServer.push(action.payload);
         hideLoadingModal();
+        toast.success('Create server successfully');
       })
       .addCase(createServerAction.rejected, () => {
         hideLoadingModal();
+        toast.error('Create server failed');
+      })
+
+      .addCase(updateServerAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(updateServerAction.fulfilled, (state, action) => {
+        state.listJoinedServer = state.listJoinedServer.map((server) =>
+          server._id === action.payload._id ? action.payload : server
+        );
+        console.log(action.payload);
+
+        hideLoadingModal();
+        toast.success('Update server successfully');
+      })
+      .addCase(updateServerAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Update server failed');
       })
 
       .addCase(getServerInfoAction.pending, () => {

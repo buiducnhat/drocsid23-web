@@ -171,7 +171,7 @@ function ServerInfoColumn() {
           </AccordionSummary>
           <AccordionDetails>
             <Stack spacing={0.25}>
-              {currentServer?.listChannel
+              {currentServer?.channels
                 ?.filter((item) => item.type === type)
                 ?.map((item) => (
                   <ChannelRow key={item._id} channel={item} />

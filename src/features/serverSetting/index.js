@@ -12,7 +12,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import Typography from '@mui/material/Typography';
 import SidebarServer from 'src/features/serverSetting/components/SidebarServer';
 import ContentSettingServer from 'src/features/serverSetting/components/ContentSettingServer';
-import NiceModal, { useModal } from '@ebay/nice-modal-react';
+import NiceModal, { muiDialogV5, useModal } from '@ebay/nice-modal-react';
 
 const ServerSetting = NiceModal.create(() => {
   const theme = useTheme();
@@ -24,8 +24,7 @@ const ServerSetting = NiceModal.create(() => {
 
   return (
     <Dialog
-      open={modal.visible}
-      onClose={() => modal.hide()}
+      {...muiDialogV5(modal)}
       fullWidth
       maxWidth="false"
       sx={{ height: '100vh' }}
