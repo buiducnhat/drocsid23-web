@@ -4,8 +4,12 @@ import Box from '@mui/material/Box';
 import { colors, Divider } from '@mui/material';
 import { Stack } from '@mui/system';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useDispatch } from 'react-redux';
+import { logout } from 'src/features/authen/authenSlice';
 
 function SidebarSetting(props) {
+  const dispatch = useDispatch();
+
   const styleTab = {
     height: 30,
     mr: 0.5,
@@ -66,6 +70,7 @@ function SidebarSetting(props) {
               direction="row"
               alignItems="center"
               justifyContent="space-between"
+              onClick={() => dispatch(logout())}
             >
               <Typography px={2}>Log Out</Typography>
               <LogoutIcon fontSize="small" />

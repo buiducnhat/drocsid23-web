@@ -14,7 +14,6 @@ import {
   FormControlLabel,
   Radio,
   Switch,
-  Divider,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';

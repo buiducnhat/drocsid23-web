@@ -10,11 +10,9 @@ import {
   Button,
   Divider,
   Typography,
-  Box,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
-import { useDispatch } from 'react-redux';
 
 const AddServerDialog = NiceModal.create(() => {
   const modal = useModal();
@@ -31,8 +29,6 @@ const AddServerDialog = NiceModal.create(() => {
   const handleLinkInvite = (e) => {
     setLinkInvite(e.target.value);
   };
-
-  const dispatch = useDispatch();
 
   const handleCreateServer = () => {
     const data = {

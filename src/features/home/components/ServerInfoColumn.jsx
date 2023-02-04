@@ -37,13 +37,8 @@ import NiceModal from '@ebay/nice-modal-react';
 import AddChannelDialog from 'src/features/home/components/AddChannelDialog';
 import InviteDialog from 'src/features/home/components/InviteDialog';
 import { Link as LinkDom } from 'react-router-dom';
-
-import AddChannelDialog from 'src/features/home/components/AddChannelDialog';
-import InviteDialog from 'src/features/home/components/InviteDialog';
 import ServerSetting from 'src/features/serverSetting';
 import UserSetting from 'src/features/userSetting/UserSetting';
-
-import { Link as LinkDom } from 'react-router-dom';
 
 const ChannelRow = ({ channel }) => {
   const activeChannel = useSelector((state) => state.servers.currentChannel);

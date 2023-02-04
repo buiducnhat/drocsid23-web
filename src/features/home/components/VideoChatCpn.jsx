@@ -31,7 +31,6 @@ function VideoChatCpn({ socket }) {
       setPeers([]);
       isJoined && socket.emit('leaveChannel');
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isJoined]);
 
   const joinVideoCall = () => {

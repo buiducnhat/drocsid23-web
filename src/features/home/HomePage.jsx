@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Stack, Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { APP_NAME } from 'src/app/constants';
 import ServersColumn from './components/ServersColumn';
 import ServerInfoColumn from './components/ServerInfoColumn';
@@ -44,6 +44,7 @@ const HomePage = () => {
   const dispatch = useDispatch();
 
   const params = useParams();
+  const location = useLocation();
 
   useEffect(() => {
     const { serverId, channelId } = params;
@@ -70,7 +71,7 @@ const HomePage = () => {
 
   useEffect(() => {
     if (!isAuth && !isGetMe) {
-      // navigate('/authen/login');
+      navigate('/authen/login', { state: { from: location.pathname } });
     } else if (isAuth && !socket) {
       setSocket(
         io(process.env.REACT_APP_WS_SERVER, {
