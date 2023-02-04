@@ -5,7 +5,7 @@ import {
   Grid,
   colors,
   IconButton,
-  Typography,
+  Typography, useTheme,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -17,6 +17,7 @@ function ChannelSetting() {
   const handleIndexTab = (index) => {
     setIndex(index);
   };
+  const theme = useTheme();
   return (
     <Stack minWidth={1000}>
       <Grid direction="row" container height="100vh">
@@ -32,7 +33,7 @@ function ChannelSetting() {
           item
           xs={8.5}
           color={colors.grey[100]}
-          backgroundColor={colors.grey[800]}
+          backgroundColor={theme.palette.grey[850]}
         >
           <Grid container flexDirection="row">
             <Grid item xs={8.5}>

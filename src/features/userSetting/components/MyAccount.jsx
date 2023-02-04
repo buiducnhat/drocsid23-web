@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Stack, colors, Divider, Card } from '@mui/material';
+import {Box, Button, Stack, colors, Divider, Card, useTheme} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import {
@@ -15,6 +15,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 function MyAccount({ user }) {
+  const theme = useTheme();
   const [index, setIndex] = React.useState(0);
   const [openDialog, setOpenDialog] = React.useState(false);
 
@@ -31,7 +32,7 @@ function MyAccount({ user }) {
         sx={{
           width: 680,
           borderRadius: 2,
-          backgroundColor: colors.grey[900],
+          backgroundColor:theme.palette.grey[860],
         }}
       >
         <Stack
@@ -60,7 +61,7 @@ function MyAccount({ user }) {
           m="auto"
           mb={4}
           p={2}
-          backgroundColor={colors.grey[800]}
+          backgroundColor={theme.palette.grey[850]}
           sx={{
             width: 620,
             borderRadius: 2,

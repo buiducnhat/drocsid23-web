@@ -11,6 +11,10 @@ import {
   Badge,
   useTheme,
   IconButton,
+  Button,
+  MenuItem,
+  Menu,
+  Fade, Tooltip
 } from '@mui/material';
 import {
   TagRounded as TagIcon,
@@ -20,36 +24,52 @@ import {
   MicOffRounded as MicOffIcon,
   HeadsetMicRounded as HeadphoneIcon,
   HeadsetOffRounded as HeadphoneOffIcon,
-  SettingsRounded as SettingsIcon,
+  SettingsRounded as SettingsIcon, PersonAddAlt, Settings, AddCircle,
 } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
 import useCheckAuth from 'src/hooks/useCheckAuth';
 import { setOnMicrophone, setOnVolume } from 'src/features/app/appSlice';
+import NiceModal from '@ebay/nice-modal-react';
 
-const ChannelRow = ({ channel }) => {
+import AddChannelDialog from "src/features/home/components/AddChannelDialog";
+import InviteDialog from "src/features/home/components/InviteDialog";
+
+import {Link as LinkDom} from "react-router-dom";
+
+
+const ChannelRow = ({channel}) => {
   const activeChannel = useSelector((state) => state.servers.currentChannel);
 
   return (
-    <Link
-      underline="none"
-      href={`/channels/${channel.serverId}/${channel._id}`}
-      borderRadius={1}
-      p={0.5}
-      sx={{
-        '&:hover': {
-          backgroundColor: colors.grey[700],
-        },
-        backgroundColor:
-          channel._id === activeChannel._id ? colors.grey[800] : 'transparent',
-      }}
-    >
-      <Stack direction="row" spacing={1} color={colors.grey[500]}>
-        {channel.type === 'text' ? <TagIcon /> : <VolumeUpIcon />}
-        <Typography variant="subtitle2" component="h4">
-          {channel.name}
-        </Typography>
+    <Stack direction='row' justifyContent='space-between' alignItems='center'>
+      <Link
+        key={channel.id}
+        underline="none"
+        href="#"
+        borderRadius={1}
+        p={0.5}
+        sx={{
+          '&:hover': {
+            backgroundColor: colors.grey[800],
+          },
+        }}
+        width={170}
+      >
+        <Stack direction="row" spacing={1} color={colors.grey[500]}>
+          {channel.type === 'text' ? <TagIcon/> : <VolumeUpIcon/>}
+          <Typography variant="subtitle2" component="h4">
+            {channel.name}
+          </Typography>
+        </Stack>
+      </Link>
+      <Stack sx={{cursor: 'pointer'}}>
+        <LinkDom to='channelSetting'>
+          <Tooltip title='setting' placement="right">
+            <SettingsIcon fontSize='small' sx={{color: 'Grey'}}/>
+          </Tooltip>
+        </LinkDom>
       </Stack>
-    </Link>
+    </Stack>
   );
 };
 
@@ -63,19 +83,73 @@ function ServerInfoColumn() {
   const onMicrophone = useSelector((state) => state.app.onMicrophone);
   const onVolume = useSelector((state) => state.app.onVolume);
 
+  //  modal setting server
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <Stack height="100%" width="250px" p={1} backgroundColor={colors.grey[900]}>
-      <Typography variant="h6" component="h1">
-        Name Server
-      </Typography>
-
+      <Stack pb={1} pl={1}>
+        <Button
+          id="fade-button"
+          aria-controls={open ? 'fade-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          sx={{color: colors.grey[300]}}
+        >
+          Name Server
+        </Button>
+        <Menu
+          id="fade-menu"
+          MenuListProps={{
+            'aria-labelledby': 'fade-button',
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          TransitionComponent={Fade}
+        >
+          <MenuItem onClick={()=>{
+            handleClose();
+            NiceModal.show(InviteDialog);
+          }}>
+            <Stack  width={190} direction='row' justifyContent='space-between'>
+              <Typography>Invite People</Typography>
+              <PersonAddAlt fontSize='small'/>
+            </Stack>
+          </MenuItem>
+          <MenuItem onClick={handleClose}>
+            <LinkDom to='/serverSetting' style={{color: 'white', textDecoration: 'none'}}>
+              <Stack width={190} direction='row' justifyContent='space-between'>
+                <Typography>Server Settings</Typography>
+                <Settings fontSize='small'/>
+              </Stack>
+            </LinkDom>
+          </MenuItem>
+          <MenuItem onClick={()=>{
+            handleClose();
+            NiceModal.show(AddChannelDialog);
+          }}>
+            <Stack width={190} direction='row' justifyContent='space-between'>
+              <Typography>Create Channel</Typography>
+              <AddCircle fontSize='small'/>
+            </Stack>
+          </MenuItem>
+        </Menu>
+      </Stack>
       {[
         ['text channel', 'text'],
         ['voice channel', 'voice'],
       ].map(([title, type], key) => (
         <Accordion key={key} defaultExpanded={true} disableGutters={true}>
           <AccordionSummary
-            expandIcon={<ExpandMoreIcon sx={{ color: colors.grey[500] }} />}
+            expandIcon={<ExpandMoreIcon sx={{color: colors.grey[500]}}/>}
           >
             <Typography
               color={colors.grey[500]}
@@ -90,7 +164,7 @@ function ServerInfoColumn() {
               {currentServer?.listChannel
                 ?.filter((item) => item.type === type)
                 ?.map((item) => (
-                  <ChannelRow key={item._id} channel={item} />
+                  <ChannelRow key={item._id} channel={item}/>
                 ))}
             </Stack>
           </AccordionDetails>
@@ -103,7 +177,7 @@ function ServerInfoColumn() {
         m={-1}
         mt="auto"
         p={1}
-        sx={{ backgroundColor: theme.palette.background.paper }}
+        sx={{backgroundColor: theme.palette.background.paper}}
       >
         <Stack
           direction="row"
@@ -130,7 +204,7 @@ function ServerInfoColumn() {
             <Avatar
               alt="personal avatar"
               src={userData?.avatarUrl}
-              sx={{ width: 36, height: 36 }}
+              sx={{width: 36, height: 36}}
             />
           </Badge>
           <Stack spacing={0.25}>
@@ -160,9 +234,11 @@ function ServerInfoColumn() {
             {onVolume ? <HeadphoneIcon /> : <HeadphoneOffIcon />}
           </IconButton>
 
-          <IconButton color="default" size="small">
-            <SettingsIcon />
-          </IconButton>
+          <LinkDom to='/setting'>
+            <IconButton color="default" size="small">
+              <SettingsIcon/>
+            </IconButton>
+          </LinkDom>
         </Stack>
       </Stack>
     </Stack>
