@@ -8,7 +8,8 @@ import {
   Divider,
   Slide,
   Stack,
-  Typography, useTheme,
+  Typography,
+  useTheme,
 } from '@mui/material';
 import TokenIcon from '@mui/icons-material/Token';
 import IconButton from '@mui/material/IconButton';
@@ -182,7 +183,7 @@ export default function PrivateChannel() {
   const handleDeleteRole = (data) => {
     setDataRole(dataRole.filter((role) => role !== data));
   };
-  const theme = useTheme()
+  const theme = useTheme();
   return (
     <Stack bgcolor={theme.palette.grey[800]} borderRadius={2}>
       <Stack

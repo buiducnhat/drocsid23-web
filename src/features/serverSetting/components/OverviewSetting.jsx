@@ -1,14 +1,11 @@
-import {Stack} from "@mui/material";
-
+import { Stack } from '@mui/material';
 
 const OverviewSetting = () => {
   return (
     <>
-      <Stack>
-        overview
-      </Stack>
+      <Stack>overview</Stack>
     </>
-  )
-}
+  );
+};
 
-export default OverviewSetting
+export default OverviewSetting;

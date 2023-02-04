@@ -1,3 +1,4 @@
+import React from 'react';
 import MainLayout from 'src/layouts/MainLayout';
 import LoginPage from 'src/features/authen/login/LoginPage';
 import RegisterPage from 'src/features/authen/register/RegisterPage';

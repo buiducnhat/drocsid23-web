@@ -1,16 +1,28 @@
 import {
-  Accordion, AccordionDetails, AccordionSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
-  Button, colors,
+  Button,
+  colors,
   FormControl,
   InputAdornment,
-  InputLabel, List, ListItem, ListItemSecondaryAction, ListItemText,
+  InputLabel,
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  ListItemText,
   OutlinedInput,
-  Stack, Switch,
-  Typography
-} from "@mui/material";
-import {ExpandMore as ExpandMoreIcon, Person as PersonIcon, Search as SearchIcon} from "@mui/icons-material";
-import * as React from "react";
+  Stack,
+  Switch,
+  Typography,
+} from '@mui/material';
+import {
+  ExpandMore as ExpandMoreIcon,
+  Person as PersonIcon,
+  Search as SearchIcon,
+} from '@mui/icons-material';
+import * as React from 'react';
 
 const _mockRoles_ = [
   {
@@ -132,26 +144,21 @@ const _mockRoles_ = [
 const RoleSetting = () => {
   return (
     <>
-      <Stack >
+      <Stack>
         <Typography variant="h5" component="h2">
           Roles
         </Typography>
-        <Typography
-          variant="subtitle1"
-          component="p"
-          color={'GrayText'}
-          mb={4}
-        >
+        <Typography variant="subtitle1" component="p" color={'GrayText'} mb={4}>
           Use roles to manage permissions for your server members.
         </Typography>
 
-        <Box display="flex" mb={2} sx={{width: '100%'}}>
-          <FormControl size="small" sx={{mr: 1, width: '50ch'}}>
+        <Box display="flex" mb={2} sx={{ width: '100%' }}>
+          <FormControl size="small" sx={{ mr: 1, width: '50ch' }}>
             <InputLabel>Search role</InputLabel>
             <OutlinedInput
               endAdornment={
-                <InputAdornment position="end" sx={{color: 'GrayText'}}>
-                  <SearchIcon/>
+                <InputAdornment position="end" sx={{ color: 'GrayText' }}>
+                  <SearchIcon />
                 </InputAdornment>
               }
               label="Search role"
@@ -161,24 +168,21 @@ const RoleSetting = () => {
         </Box>
 
         {_mockRoles_.map((role, index) => (
-          <Accordion
-            key={index}
-            sx={{backgroundColor: colors.grey[900]}}
-          >
+          <Accordion key={index} sx={{ backgroundColor: colors.grey[900] }}>
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon/>}
+              expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1-content"
               id="panel2"
             >
               <Typography
                 variant="subtitle1"
                 fontWeight="bold"
-                sx={{width: '50%', flexShrink: 0}}
+                sx={{ width: '50%', flexShrink: 0 }}
               >
                 {role.name}
               </Typography>
-              <PersonIcon sx={{color: 'text.secondary', mr: 1}}/>
-              <Typography sx={{color: 'text.secondary'}}>
+              <PersonIcon sx={{ color: 'text.secondary', mr: 1 }} />
+              <Typography sx={{ color: 'text.secondary' }}>
                 {role.countMember}
               </Typography>
             </AccordionSummary>
@@ -206,7 +210,7 @@ const RoleSetting = () => {
         ))}
       </Stack>
     </>
-  )
-}
+  );
+};
 
-export default RoleSetting
+export default RoleSetting;

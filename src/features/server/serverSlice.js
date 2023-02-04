@@ -87,47 +87,47 @@ const serverSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(getListJoinedServerAction.pending, (state, action) => {
+      .addCase(getListJoinedServerAction.pending, () => {
         showLoadingModal();
       })
       .addCase(getListJoinedServerAction.fulfilled, (state, action) => {
         state.listJoinedServer = action.payload;
         hideLoadingModal();
       })
-      .addCase(getListJoinedServerAction.rejected, (state, action) => {
+      .addCase(getListJoinedServerAction.rejected, () => {
         hideLoadingModal();
       })
 
-      .addCase(createServerAction.pending, (state, action) => {
+      .addCase(createServerAction.pending, () => {
         showLoadingModal();
       })
       .addCase(createServerAction.fulfilled, (state, action) => {
         state.listJoinedServer.push(action.payload);
         hideLoadingModal();
       })
-      .addCase(createServerAction.rejected, (state, action) => {
+      .addCase(createServerAction.rejected, () => {
         hideLoadingModal();
       })
 
-      .addCase(getServerInfoAction.pending, (state, action) => {
+      .addCase(getServerInfoAction.pending, () => {
         showLoadingModal();
       })
       .addCase(getServerInfoAction.fulfilled, (state, action) => {
         state.currentServer = action.payload;
         hideLoadingModal();
       })
-      .addCase(getServerInfoAction.rejected, (state, action) => {
+      .addCase(getServerInfoAction.rejected, () => {
         hideLoadingModal();
       })
 
-      .addCase(getChannelInfoAction.pending, (state, action) => {
+      .addCase(getChannelInfoAction.pending, () => {
         showLoadingModal();
       })
       .addCase(getChannelInfoAction.fulfilled, (state, action) => {
         state.currentChannel = action.payload;
         hideLoadingModal();
       })
-      .addCase(getChannelInfoAction.rejected, (state, action) => {
+      .addCase(getChannelInfoAction.rejected, () => {
         hideLoadingModal();
       });
   },

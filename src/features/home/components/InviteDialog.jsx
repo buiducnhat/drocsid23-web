@@ -4,11 +4,15 @@ import {
   DialogContent,
   IconButton,
   Dialog,
-  Container, Stack, Button, Avatar, Typography, colors
+  Container,
+  Stack,
+  Button,
+  Avatar,
+  Typography,
+  colors,
 } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import NiceModal, { useModal } from '@ebay/nice-modal-react';
-
 
 const listFriend = [
   {
@@ -46,18 +50,18 @@ const listFriend = [
     avatar:
       'https://i.pinimg.com/originals/49/3f/a0/493fa0f13970ab3ef29375669f670451.jpg',
   },
-]
+];
 
 const InviteDialog = NiceModal.create(() => {
   const modal = useModal();
   const handleCreateServer = () => {
-    modal.hide()
-  }
-  const linkInvite = 'https://discord.gg/wH7xHsuE'
+    modal.hide();
+  };
+  const linkInvite = 'https://discord.gg/wH7xHsuE';
 
   return (
     <Dialog open={modal.visible} onClose={() => modal.hide()}>
-      <Container sx={{ position: 'relative', width:500 }}>
+      <Container sx={{ position: 'relative', width: 500 }}>
         <IconButton
           aria-label="close"
           sx={{
@@ -70,21 +74,33 @@ const InviteDialog = NiceModal.create(() => {
         >
           <CloseIcon />
         </IconButton>
-        <DialogTitle >Invite Friends </DialogTitle>
+        <DialogTitle>Invite Friends </DialogTitle>
         <DialogContent>
-          <Stack style={{ maxHeight: 250, overflow: 'auto' }} >
+          <Stack style={{ maxHeight: 250, overflow: 'auto' }}>
             {listFriend.map((fr) => (
-              <Stack key={fr.id} direction='row' alignItems='center' justifyContent='space-between' px={1} py={0.5} sx={{ '&:hover':{backgroundColor:colors.grey[800]}}}>
-                <Stack direction='row' alignItems='center' spacing={1}>
-                  <Avatar src={fr.avatar}/>
-                  <Typography fontWeight={500} fontSize={18}>{fr.username}</Typography>
+              <Stack
+                key={fr.id}
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                px={1}
+                py={0.5}
+                sx={{ '&:hover': { backgroundColor: colors.grey[800] } }}
+              >
+                <Stack direction="row" alignItems="center" spacing={1}>
+                  <Avatar src={fr.avatar} />
+                  <Typography fontWeight={500} fontSize={18}>
+                    {fr.username}
+                  </Typography>
                 </Stack>
-                <Button variant='outlined'>Invite</Button>
+                <Button variant="outlined">Invite</Button>
               </Stack>
             ))}
           </Stack>
           <Stack pt={2}>
-            <Typography fontWeight={600}>Or send a server invite link to a friend</Typography>
+            <Typography fontWeight={600}>
+              Or send a server invite link to a friend
+            </Typography>
             <Stack bgcolor={colors.grey[900]} p={1}>
               <Typography fontSize={16}>{linkInvite}</Typography>
             </Stack>

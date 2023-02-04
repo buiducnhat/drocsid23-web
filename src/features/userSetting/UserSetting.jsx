@@ -7,7 +7,6 @@ import { Stack } from '@mui/system';
 import SidebarSetting from './components/SidebarSetting';
 import ContentSetting from './components/ContentSetting';
 
-
 // export default function UserSetting() {
 //   const theme = useTheme();
 //   const [index, setIndex] = React.useState(0);
@@ -58,9 +57,8 @@ import ContentSetting from './components/ContentSetting';
 //   );
 // }
 
-import {Dialog} from "@mui/material";
-import NiceModal, {useModal} from '@ebay/nice-modal-react';
-
+import { Dialog } from '@mui/material';
+import NiceModal, { useModal } from '@ebay/nice-modal-react';
 
 const UserSetting = NiceModal.create(() => {
   const theme = useTheme();
@@ -71,7 +69,13 @@ const UserSetting = NiceModal.create(() => {
   const modal = useModal();
 
   return (
-    <Dialog open={modal.visible} onClose={() => modal.hide()} fullWidth maxWidth="false" sx={{height:'100vh'}}>
+    <Dialog
+      open={modal.visible}
+      onClose={() => modal.hide()}
+      fullWidth
+      maxWidth="false"
+      sx={{ height: '100vh' }}
+    >
       <Stack minWidth={1000}>
         <Grid direction="row" container height="92vh">
           <Grid
@@ -100,8 +104,8 @@ const UserSetting = NiceModal.create(() => {
                   position="absolute"
                   align="center"
                 >
-                  <IconButton  onClick={() => modal.hide()}>
-                      <HighlightOffIcon fontSize="large" />
+                  <IconButton onClick={() => modal.hide()}>
+                    <HighlightOffIcon fontSize="large" />
                   </IconButton>
                   <Typography color="grey"> ESC </Typography>
                 </Box>

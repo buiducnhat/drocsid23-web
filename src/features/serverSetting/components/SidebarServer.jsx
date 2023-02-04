@@ -1,8 +1,8 @@
-import {colors, Divider, Stack} from "@mui/material";
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import LogoutIcon from "@mui/icons-material/Logout";
+import { colors, Divider, Stack } from '@mui/material';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import LogoutIcon from '@mui/icons-material/Logout';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const SidebarServer = (props) => {
@@ -88,6 +88,6 @@ const SidebarServer = (props) => {
       </Box>
     </Stack>
   );
-}
+};
 
-export default SidebarServer
+export default SidebarServer;

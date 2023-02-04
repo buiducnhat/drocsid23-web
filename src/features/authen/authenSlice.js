@@ -73,7 +73,7 @@ const authenSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(getMeAction.pending, (state, action) => {
+      .addCase(getMeAction.pending, (state) => {
         state.isGetMe = true;
         state.getMeMsg = null;
         showLoadingModal();
@@ -93,7 +93,7 @@ const authenSlice = createSlice({
         hideLoadingModal();
       })
 
-      .addCase(loginAction.pending, (state, action) => {
+      .addCase(loginAction.pending, (state) => {
         state.isLogin = true;
         state.isAuth = false;
         showLoadingModal();
@@ -113,7 +113,7 @@ const authenSlice = createSlice({
         hideLoadingModal();
       })
 
-      .addCase(registerAction.pending, (state, action) => {
+      .addCase(registerAction.pending, (state) => {
         state.isRegister = true;
         state.isAuth = false;
         showLoadingModal();

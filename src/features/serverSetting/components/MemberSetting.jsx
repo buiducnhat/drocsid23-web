@@ -2,16 +2,24 @@ import {
   Avatar,
   Box,
   Button,
-  FormControl, IconButton,
+  FormControl,
+  IconButton,
   InputAdornment,
   InputLabel,
-  List, ListItem, ListItemAvatar, ListItemSecondaryAction, ListItemText,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemSecondaryAction,
+  ListItemText,
   OutlinedInput,
   Stack,
-  Typography
-} from "@mui/material";
-import {Delete as DeleteIcon, Search as SearchIcon} from "@mui/icons-material";
-import * as React from "react";
+  Typography,
+} from '@mui/material';
+import {
+  Delete as DeleteIcon,
+  Search as SearchIcon,
+} from '@mui/icons-material';
+import * as React from 'react';
 
 const _mockUsers_ = [
   {
@@ -35,27 +43,18 @@ const _mockUsers_ = [
 ];
 
 const MemberSetting = () => {
-  return(
+  return (
     <>
-    <Stack>
+      <Stack>
         <Typography variant="h5" component="h2">
           Members
         </Typography>
-        <Typography
-          variant="subtitle1"
-          component="p"
-          color={'GrayText'}
-          mb={4}
-        >
+        <Typography variant="subtitle1" component="p" color={'GrayText'} mb={4}>
           Manage your server members.
         </Typography>
 
         <Box display="flex" mb={2} sx={{ width: '100%' }}>
-          <FormControl
-            fullWidth
-            size="small"
-            sx={{ mr: 1, width: '50ch' }}
-          >
+          <FormControl fullWidth size="small" sx={{ mr: 1, width: '50ch' }}>
             <InputLabel>Search member</InputLabel>
             <OutlinedInput
               endAdornment={
@@ -75,10 +74,7 @@ const MemberSetting = () => {
               <ListItemAvatar>
                 <Avatar alt={user.name} src={user.avatarUrl} />
               </ListItemAvatar>
-              <ListItemText
-                primary={user.name}
-                secondary={user.username}
-              />
+              <ListItemText primary={user.name} secondary={user.username} />
               <ListItemSecondaryAction>
                 <IconButton edge="end" aria-label="delete">
                   <DeleteIcon />
@@ -87,9 +83,9 @@ const MemberSetting = () => {
             </ListItem>
           ))}
         </List>
-    </Stack>
+      </Stack>
     </>
-  )
-}
+  );
+};
 
-export default MemberSetting
+export default MemberSetting;

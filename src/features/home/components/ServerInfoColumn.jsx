@@ -30,23 +30,22 @@ import {
   Settings,
   AddCircle,
 } from '@mui/icons-material';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import useCheckAuth from 'src/hooks/useCheckAuth';
-import {setOnMicrophone, setOnVolume} from 'src/features/app/appSlice';
+import { setOnMicrophone, setOnVolume } from 'src/features/app/appSlice';
 import NiceModal from '@ebay/nice-modal-react';
 import AddChannelDialog from 'src/features/home/components/AddChannelDialog';
 import InviteDialog from 'src/features/home/components/InviteDialog';
 import { Link as LinkDom } from 'react-router-dom';
 
-import AddChannelDialog from "src/features/home/components/AddChannelDialog";
-import InviteDialog from "src/features/home/components/InviteDialog";
-import ServerSetting from "src/features/serverSetting";
-import UserSetting from "src/features/userSetting/UserSetting";
+import AddChannelDialog from 'src/features/home/components/AddChannelDialog';
+import InviteDialog from 'src/features/home/components/InviteDialog';
+import ServerSetting from 'src/features/serverSetting';
+import UserSetting from 'src/features/userSetting/UserSetting';
 
-import {Link as LinkDom} from "react-router-dom";
+import { Link as LinkDom } from 'react-router-dom';
 
-
-const ChannelRow = ({channel}) => {
+const ChannelRow = ({ channel }) => {
   const activeChannel = useSelector((state) => state.servers.currentChannel);
 
   return (
@@ -86,7 +85,7 @@ function ServerInfoColumn() {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  const {userData} = useCheckAuth();
+  const { userData } = useCheckAuth();
 
   const currentServer = useSelector((state) => state.servers.currentServer);
   const onMicrophone = useSelector((state) => state.app.onMicrophone);
@@ -124,29 +123,35 @@ function ServerInfoColumn() {
           onClose={handleClose}
           TransitionComponent={Fade}
         >
-          <MenuItem onClick={() => {
-            handleClose();
-            NiceModal.show(InviteDialog);
-          }}>
-            <Stack width={190} direction='row' justifyContent='space-between'>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              NiceModal.show(InviteDialog);
+            }}
+          >
+            <Stack width={190} direction="row" justifyContent="space-between">
               <Typography>Invite People</Typography>
               <PersonAddAlt fontSize="small" />
             </Stack>
           </MenuItem>
-          <MenuItem onClick={() => {
-            handleClose();
-            NiceModal.show(ServerSetting);
-          }}>
-            <Stack width={190} direction='row' justifyContent='space-between'>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              NiceModal.show(ServerSetting);
+            }}
+          >
+            <Stack width={190} direction="row" justifyContent="space-between">
               <Typography>Server Settings</Typography>
-              <Settings fontSize='small'/>
+              <Settings fontSize="small" />
             </Stack>
           </MenuItem>
-          <MenuItem onClick={() => {
-            handleClose();
-            NiceModal.show(AddChannelDialog);
-          }}>
-            <Stack width={190} direction='row' justifyContent='space-between'>
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              NiceModal.show(AddChannelDialog);
+            }}
+          >
+            <Stack width={190} direction="row" justifyContent="space-between">
               <Typography>Create Channel</Typography>
               <AddCircle fontSize="small" />
             </Stack>
@@ -233,7 +238,7 @@ function ServerInfoColumn() {
             size="small"
             onClick={() => dispatch(setOnMicrophone(!onMicrophone))}
           >
-            {onMicrophone ? <MicIcon/> : <MicOffIcon/>}
+            {onMicrophone ? <MicIcon /> : <MicOffIcon />}
           </IconButton>
 
           <IconButton
@@ -241,11 +246,17 @@ function ServerInfoColumn() {
             size="small"
             onClick={() => dispatch(setOnVolume(!onVolume))}
           >
-            {onVolume ? <HeadphoneIcon/> : <HeadphoneOffIcon/>}
+            {onVolume ? <HeadphoneIcon /> : <HeadphoneOffIcon />}
           </IconButton>
-            <IconButton onClick={()=>{NiceModal.show(UserSetting);}} color="default" size="small">
-              <SettingsIcon/>
-            </IconButton>
+          <IconButton
+            onClick={() => {
+              NiceModal.show(UserSetting);
+            }}
+            color="default"
+            size="small"
+          >
+            <SettingsIcon />
+          </IconButton>
         </Stack>
       </Stack>
     </Stack>
