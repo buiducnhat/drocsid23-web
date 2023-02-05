@@ -7,16 +7,15 @@ import {
   TextField,
   Box,
 } from '@mui/material';
-import {
-  NotificationsRounded as NotificationIcon,
-  PeopleAltRounded as PeopleIcon,
-} from '@mui/icons-material';
+import { PeopleAltRounded as PeopleIcon } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import useCheckAuth from 'src/hooks/useCheckAuth';
 import { addMessageToCurrentChannel } from 'src/features/server/serverSlice';
 import TextChatCpn from './TextChatCpn';
 import VideoChatCpn from './VideoChatCpn';
+import NiceModal from '@ebay/nice-modal-react';
+import ListUserChannel from './ListUserChannelDialog';
 
 function ChatColumn({ socket }) {
   const theme = useTheme();
@@ -53,11 +52,11 @@ function ChatColumn({ socket }) {
         </Typography>
 
         <Stack direction="row" ml="auto" alignItems="center" spacing={1}>
-          <IconButton>
-            <NotificationIcon />
-          </IconButton>
-
-          <IconButton>
+          <IconButton
+            onClick={() =>
+              NiceModal.show(ListUserChannel, { channelId: curChannel._id })
+            }
+          >
             <PeopleIcon />
           </IconButton>
 

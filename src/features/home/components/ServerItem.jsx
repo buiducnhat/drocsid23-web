@@ -20,6 +20,7 @@ import {
 } from 'src/features/server/serverSlice';
 import { useNavigate } from 'react-router';
 import AddChannelDialog from './AddChannelDialog';
+import CreateInvitationDialog from './CreateInvitationDialog';
 
 function ServerItem({ isDirect, serverId, name, imgUrl }) {
   const theme = useTheme();
@@ -67,7 +68,6 @@ function ServerItem({ isDirect, serverId, name, imgUrl }) {
             : undefined
         }
       >
-        <MenuItem>Access</MenuItem>
         <MenuItem
           onClick={() => {
             dispatch(getServerInfoAction(serverId));
@@ -75,6 +75,13 @@ function ServerItem({ isDirect, serverId, name, imgUrl }) {
           }}
         >
           Server Settings
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            NiceModal.show(CreateInvitationDialog, { serverId });
+          }}
+        >
+          Create invitation
         </MenuItem>
         <MenuItem
           onClick={() => {

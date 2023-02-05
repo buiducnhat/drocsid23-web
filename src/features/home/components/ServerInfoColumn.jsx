@@ -15,7 +15,7 @@ import {
   MenuItem,
   Menu,
   Fade,
-  Tooltip,
+  Box,
 } from '@mui/material';
 import {
   TagRounded as TagIcon,
@@ -39,16 +39,16 @@ import InviteDialog from 'src/features/home/components/InviteDialog';
 import { Link as LinkDom } from 'react-router-dom';
 import ServerSetting from 'src/features/serverSetting';
 import UserSetting from 'src/features/userSetting/UserSetting';
+import ChannelSettingDialog from './ChannelSettingDialog';
+import { selectCurrentServer } from 'src/features/server/serverSlice';
 
 const ChannelRow = ({ channel }) => {
   const activeChannel = useSelector((state) => state.servers.currentChannel);
 
+  const currentServer = useSelector(selectCurrentServer);
+
   return (
-    <Link
-      component={LinkDom}
-      key={channel._id}
-      underline="none"
-      to={`/channels/${channel.serverId}/${channel._id}`}
+    <Box
       borderRadius={1}
       p={0.5}
       sx={{
@@ -58,21 +58,30 @@ const ChannelRow = ({ channel }) => {
         backgroundColor:
           channel._id === activeChannel._id ? colors.grey[800] : 'transparent',
       }}
+      position="relative"
     >
-      <Stack direction="row" spacing={1} color={colors.grey[500]}>
-        {channel.type === 'text' ? <TagIcon /> : <VolumeUpIcon />}
-        <Typography variant="subtitle2" component="h4">
-          {channel.name}
-        </Typography>
-      </Stack>
-      {/* <Stack sx={{ cursor: 'pointer' }}>
-          <Link component={LinkDom} to="channelSetting">
-            <Tooltip title="setting" placement="right">
-              <SettingsIcon fontSize="small" sx={{ color: 'Grey' }} />
-            </Tooltip>
-          </Link>
-        </Stack> */}
-    </Link>
+      <Link
+        component={LinkDom}
+        underline="none"
+        to={`/channels/${currentServer._id}/${channel._id}`}
+      >
+        <Stack direction="row" spacing={1} color={colors.grey[500]}>
+          {channel.type === 'text' ? <TagIcon /> : <VolumeUpIcon />}
+          <Typography variant="subtitle2" component="h4">
+            {channel.name}
+          </Typography>
+        </Stack>
+      </Link>
+      <IconButton
+        size="small"
+        sx={{ position: 'absolute', top: 0, right: 0 }}
+        onClick={() =>
+          NiceModal.show(ChannelSettingDialog, { channelId: channel._id })
+        }
+      >
+        <SettingsIcon fontSize="small" sx={{ color: 'Grey' }} />
+      </IconButton>
+    </Box>
   );
 };
 

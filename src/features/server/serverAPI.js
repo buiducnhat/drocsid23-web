@@ -88,7 +88,35 @@ const serverAPI = {
       null,
       data
     );
-  }
+  },
+
+  updateChannel(channelId, data) {
+    return axiosRequest(
+      channelEndPoint + `/${channelId}`,
+      axiosMethod.PUT,
+      Cookies.get('accessToken'),
+      null,
+      data
+    );
+  },
+
+  createServerInviteCode: (id, data) => {
+    return axiosRequest(
+      serverEndPoint + `/create-invite/${id}`,
+      axiosMethod.POST,
+      Cookies.get('accessToken'),
+      null,
+      data
+    );
+  },
+
+  joinServerWithCode: (code) => {
+    return axiosRequest(
+      `${API_ENDPOINT}/users/invite/${code}`,
+      axiosMethod.GET,
+      Cookies.get('accessToken')
+    );
+  },
 };
 
 export default serverAPI;

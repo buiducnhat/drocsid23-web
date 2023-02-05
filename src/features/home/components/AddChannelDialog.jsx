@@ -69,12 +69,7 @@ const AddChannelDialog = NiceModal.create(({ serverId }) => {
             Channel type
           </Typography>
           <FormControl>
-            <RadioGroup
-              aria-labelledby="demo-controlled-radio-buttons-group"
-              name="controlled-radio-buttons-group"
-              value={channelType}
-              onChange={handleChangeType}
-            >
+            <RadioGroup value={channelType} onChange={handleChangeType}>
               <FormControlLabel value="text" control={<Radio />} label="Text" />
               <FormControlLabel
                 value="voice"

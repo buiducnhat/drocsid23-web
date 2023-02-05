@@ -93,6 +93,21 @@ export const createChannelAction = createAsyncThunk(
   }
 );
 
+export const updateChannelAction = createAsyncThunk(
+  'servers/updateChannel',
+  async ({ id, data }, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.updateChannel(id, data);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
 const serverSlice = createSlice({
   name: 'servers',
   initialState: {
@@ -186,6 +201,23 @@ const serverSlice = createSlice({
       .addCase(createChannelAction.rejected, () => {
         hideLoadingModal();
         toast.error('Create channel failed');
+      })
+
+      .addCase(updateChannelAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(updateChannelAction.fulfilled, (state, action) => {
+        state.currentServer.channels = state.currentServer.channels.map(
+          (channel) =>
+            channel._id === action.payload._id ? action.payload : channel
+        );
+
+        hideLoadingModal();
+        toast.success('Update channel successfully');
+      })
+      .addCase(updateChannelAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Update channel failed');
       });
   },
 });

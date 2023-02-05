@@ -14,14 +14,20 @@ import {
 import { Close as CloseIcon } from '@mui/icons-material';
 import NiceModal, { muiDialogV5, useModal } from '@ebay/nice-modal-react';
 import { useDispatch } from 'react-redux';
-import { createServerAction } from 'src/features/server/serverSlice';
+import {
+  createServerAction,
+  getListJoinedServerAction,
+} from 'src/features/server/serverSlice';
+import serverAPI from 'src/features/server/serverAPI';
+import LoadingModal from 'src/commons/components/LoadingModal';
+import {toast} from 'react-toastify';
 
 const AddServerDialog = NiceModal.create(() => {
   const modal = useModal();
   const dispatch = useDispatch();
   const [nameServer, setNameServer] = React.useState(null);
   const [description, setDescription] = React.useState(null);
-  const [linkInvite, setLinkInvite] = React.useState(null);
+  const [serverCode, setServerCode] = React.useState(null);
 
   const handleNameServer = (e) => {
     setNameServer(e.target.value);
@@ -29,8 +35,8 @@ const AddServerDialog = NiceModal.create(() => {
   const handleDescription = (e) => {
     setDescription(e.target.value);
   };
-  const handleLinkInvite = (e) => {
-    setLinkInvite(e.target.value);
+  const onCodeInputChange = (e) => {
+    setServerCode(e.target.value);
   };
 
   const handleCreateServer = () => {
@@ -46,8 +52,20 @@ const AddServerDialog = NiceModal.create(() => {
   };
 
   const handleJoinServer = () => {
-    console.log(linkInvite);
-    modal.hide();
+    NiceModal.hide(LoadingModal);
+    serverAPI
+      .joinServerWithCode(serverCode)
+      .then(() => {
+        NiceModal.hide(LoadingModal);
+        toast.success('Join server successfully');
+        dispatch(getListJoinedServerAction());
+
+        modal.hide();
+      })
+      .catch((err) => {
+        console.log(err);
+        NiceModal.hide(LoadingModal);
+      });
   };
 
   return (
@@ -86,15 +104,20 @@ const AddServerDialog = NiceModal.create(() => {
               Create
             </Button>
           </Stack>
-          <Divider />
+
+          <Divider sx={{ marginY: 2 }} />
+
           <Stack>
             <Typography pt={1} fontWeight={500} fontSize={18}>
-              Join a server with link invite
+              Join a server with code
             </Typography>
+
             <TextField
-              onChange={handleLinkInvite}
+              sx={{ mt: 2 }}
+              onChange={onCodeInputChange}
               multiline
-              label="Link Invite"
+              margin="dense"
+              label="Server code"
               variant="outlined"
             />
             <Stack direction="row-reverse" py={1}>
