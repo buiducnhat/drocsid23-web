@@ -16,10 +16,10 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-
 import Copyright from 'src/commons/components/Copyright';
 import { loginAction } from 'src/features/authen/authenSlice';
 import useCheckAuth from 'src/hooks/useCheckAuth';
+import { Link as LinkDom } from 'react-router-dom';
 
 export default function LoginPage() {
   const dispatch = useDispatch();
@@ -109,7 +109,7 @@ export default function LoginPage() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="/authen/register" variant="body2">
+              <Link component={LinkDom} to="/authen/register" variant="body2">
                 {"Don't have an account? Create one now"}
               </Link>
             </Grid>

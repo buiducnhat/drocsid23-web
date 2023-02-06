@@ -13,21 +13,37 @@ import {
   useTheme,
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-
 import Copyright from 'src/commons/components/Copyright';
+import { useDispatch } from 'react-redux';
+import { registerAction } from '../authenSlice';
+import { Link as LinkDom, useNavigate } from 'react-router-dom';
+import useCheckAuth from 'src/hooks/useCheckAuth';
 
 export default function RegisterPage() {
   const theme = useTheme();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isAuth } = useCheckAuth();
+
   const themeMode = theme.palette.mode;
+  const [inputs, setInputs] = React.useState({
+    fullname: '',
+    email: '',
+    password: '',
+  });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    dispatch(registerAction(inputs));
   };
+
+  React.useEffect(() => {
+    if (isAuth) {
+      navigate('/');
+    }
+  }, [isAuth, navigate]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -52,35 +68,28 @@ export default function RegisterPage() {
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12}>
               <TextField
-                autoComplete="given-name"
-                name="firstName"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
+                label="Full name"
                 autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
+                value={inputs.fullname}
+                onChange={(e) =>
+                  setInputs({ ...inputs, fullname: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
+                label="Email address"
                 autoComplete="email"
+                value={inputs.email}
+                onChange={(e) =>
+                  setInputs({ ...inputs, email: e.target.value })
+                }
               />
             </Grid>
             <Grid item xs={12}>
@@ -90,8 +99,19 @@ export default function RegisterPage() {
                 name="password"
                 label="Password"
                 type="password"
-                id="password"
-                autoComplete="new-password"
+                value={inputs.password}
+                onChange={(e) =>
+                  setInputs({ ...inputs, password: e.target.value })
+                }
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                label="Confirm password"
+                type="password"
               />
             </Grid>
             <Grid item xs={12}>
@@ -111,7 +131,7 @@ export default function RegisterPage() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/authen/login" variant="body2">
+              <Link component={LinkDom} to="/authen/login" variant="body2">
                 Already have an account? Login
               </Link>
             </Grid>

@@ -27,7 +27,7 @@ const CreateInvitationDialog = NiceModal.create(({ serverId }) => {
     NiceModal.show(LoadingModal);
 
     serverAPI
-      .createInviteLink(serverId, { expireTime })
+      .createInvitationCode(serverId, { expireTime })
       .then((res) => {
         setCode(res.data.data.inviteCode);
         NiceModal.hide(LoadingModal);

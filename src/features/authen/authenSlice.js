@@ -130,7 +130,7 @@ const authenSlice = createSlice({
         state.isAuth = false;
         state.registerMsg = action.payload.message;
         hideLoadingModal();
-        toast.error(action.payload.message || 'Wrong email or password');
+        toast.error(action.payload.message);
       });
   },
 });

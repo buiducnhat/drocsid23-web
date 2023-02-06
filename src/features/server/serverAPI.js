@@ -44,7 +44,7 @@ const serverAPI = {
     );
   },
 
-  createInviteLink: (id, data) => {
+  createInvitationCode: (id, data) => {
     return axiosRequest(
       serverEndPoint + `/create-invite/${id}`,
       axiosMethod.POST,
