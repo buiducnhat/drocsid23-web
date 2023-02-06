@@ -23,16 +23,15 @@ import {
   ExpandMoreRounded as ExpandMoreIcon,
   MicRounded as MicIcon,
   MicOffRounded as MicOffIcon,
-  HeadsetMicRounded as HeadphoneIcon,
-  HeadsetOffRounded as HeadphoneOffIcon,
+  VideocamRounded as CameraIcon,
+  VideocamOffRounded as CameraOffIcon,
   SettingsRounded as SettingsIcon,
-  PersonAddAlt,
-  Settings,
-  AddCircle,
+  PersonAddAlt as AddPersonIcon,
+  AddCircle as AddICon,
 } from '@mui/icons-material';
 import { useSelector, useDispatch } from 'react-redux';
 import useCheckAuth from 'src/hooks/useCheckAuth';
-import { setOnMicrophone, setOnVolume } from 'src/features/app/appSlice';
+import { setOnCamera, setOnMicrophone } from 'src/features/app/appSlice';
 import NiceModal from '@ebay/nice-modal-react';
 import AddChannelDialog from 'src/features/home/components/AddChannelDialog';
 import InviteDialog from 'src/features/home/components/InviteDialog';
@@ -93,7 +92,7 @@ function ServerInfoColumn() {
 
   const currentServer = useSelector((state) => state.servers.currentServer);
   const onMicrophone = useSelector((state) => state.app.onMicrophone);
-  const onVolume = useSelector((state) => state.app.onVolume);
+  const onCamera = useSelector((state) => state.app.onCamera);
 
   //  modal setting server
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -135,7 +134,7 @@ function ServerInfoColumn() {
           >
             <Stack width={190} direction="row" justifyContent="space-between">
               <Typography>Invite People</Typography>
-              <PersonAddAlt fontSize="small" />
+              <AddPersonIcon fontSize="small" />
             </Stack>
           </MenuItem>
           <MenuItem
@@ -146,7 +145,7 @@ function ServerInfoColumn() {
           >
             <Stack width={190} direction="row" justifyContent="space-between">
               <Typography>Server Settings</Typography>
-              <Settings fontSize="small" />
+              <SettingsIcon fontSize="small" />
             </Stack>
           </MenuItem>
           <MenuItem
@@ -157,7 +156,7 @@ function ServerInfoColumn() {
           >
             <Stack width={190} direction="row" justifyContent="space-between">
               <Typography>Create Channel</Typography>
-              <AddCircle fontSize="small" />
+              <AddICon fontSize="small" />
             </Stack>
           </MenuItem>
         </Menu>
@@ -249,9 +248,9 @@ function ServerInfoColumn() {
           <IconButton
             color="default"
             size="small"
-            onClick={() => dispatch(setOnVolume(!onVolume))}
+            onClick={() => dispatch(setOnCamera(!onCamera))}
           >
-            {onVolume ? <HeadphoneIcon /> : <HeadphoneOffIcon />}
+            {onCamera ? <CameraIcon /> : <CameraOffIcon />}
           </IconButton>
           <IconButton
             onClick={() => {

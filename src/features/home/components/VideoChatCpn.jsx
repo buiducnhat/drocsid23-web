@@ -9,6 +9,9 @@ function VideoChatCpn({ socket }) {
   const { userData } = useCheckAuth();
 
   const curChannel = useSelector((state) => state.servers.currentChannel);
+  const onMicrophone = useSelector((state) => state.app.onMicrophone);
+  const onCamera = useSelector((state) => state.app.onCamera);
+
   const [isJoined, setIsJoined] = useState(false);
 
   const [localStream, setLocalStream] = useState();
@@ -32,6 +35,14 @@ function VideoChatCpn({ socket }) {
       isJoined && socket.emit('leaveChannel');
     };
   }, [isJoined]);
+
+  useEffect(() => {
+    // off camera
+    if (localStream) {
+      localStream.getTracks()[1].enabled = onCamera;
+    }
+    // localStream && console.log(localStream.getTracks()[1]);
+  }, [onCamera, localStream]);
 
   const joinVideoCall = () => {
     socket.emit('joinChannel', curChannel._id);
@@ -186,7 +197,12 @@ function VideoChatCpn({ socket }) {
                 md={videoLayouts}
                 position="relative"
               >
-                <Video stream={peer.stream} playsInline autoPlay />
+                <Video
+                  stream={peer.stream}
+                  playsInline
+                  autoPlay
+                  muted={!onMicrophone}
+                />
                 <Box
                   p={1}
                   borderRadius={4}

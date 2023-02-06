@@ -190,27 +190,6 @@ const _mockRoles_ = [
   },
 ];
 
-const _mockUsers_ = [
-  {
-    name: 'John Smith',
-    avatarUrl: 'https://example.com/avatar1.jpg',
-    username: 'jsmith',
-    roles: ['admin', 'moderator'],
-  },
-  {
-    name: 'Jane Doe',
-    avatarUrl: 'https://example.com/avatar2.jpg',
-    username: 'jdoe',
-    roles: ['member'],
-  },
-  {
-    name: 'Bob Johnson',
-    avatarUrl: 'https://example.com/avatar3.jpg',
-    username: 'bjohnson',
-    roles: ['member'],
-  },
-];
-
 const ServerSettingDialog = NiceModal.create(() => {
   const modal = useModal();
   const dispatch = useDispatch();
@@ -409,14 +388,14 @@ const ServerSettingDialog = NiceModal.create(() => {
               </Box>
 
               <List>
-                {_mockUsers_.map((user, index) => (
+                {currentServer.members.map((user, index) => (
                   <ListItem key={index}>
                     <ListItemAvatar>
-                      <Avatar alt={user.name} src={user.avatarUrl} />
+                      <Avatar alt={user?.fullname} src={user.avatarUrl} />
                     </ListItemAvatar>
                     <ListItemText
-                      primary={user.name}
-                      secondary={user.username}
+                      primary={user?.fullname}
+                      secondary={user?.email}
                     />
                     <ListItemSecondaryAction>
                       <IconButton edge="end" aria-label="delete">

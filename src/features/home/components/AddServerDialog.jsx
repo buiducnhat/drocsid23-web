@@ -20,7 +20,7 @@ import {
 } from 'src/features/server/serverSlice';
 import serverAPI from 'src/features/server/serverAPI';
 import LoadingModal from 'src/commons/components/LoadingModal';
-import {toast} from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const AddServerDialog = NiceModal.create(() => {
   const modal = useModal();
