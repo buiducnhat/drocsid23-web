@@ -52,13 +52,15 @@ function ChatColumn({ socket }) {
         </Typography>
 
         <Stack direction="row" ml="auto" alignItems="center" spacing={1}>
-          <IconButton
-            onClick={() =>
-              NiceModal.show(ListUserChannel, { channelId: curChannel._id })
-            }
-          >
-            <PeopleIcon />
-          </IconButton>
+          {curChannel._id && (
+            <IconButton
+              onClick={() =>
+                NiceModal.show(ListUserChannel, { channelId: curChannel._id })
+              }
+            >
+              <PeopleIcon />
+            </IconButton>
+          )}
 
           <TextField size="small" placeholder="Search" />
         </Stack>

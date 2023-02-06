@@ -49,16 +49,22 @@ const ListUserChannel = NiceModal.create(({ channelId }) => {
           <DialogTitle>Users of channel</DialogTitle>
 
           <DialogContent>
-            {channelDetail?.userIds?.map((user) => {
+            {channelDetail?.users?.map((user) => {
               return (
-                <Stack key={user._id}>
+                <Stack
+                  key={user._id}
+                  direction="row"
+                  spacing={2}
+                  alignItems="center"
+                  mb={1.5}
+                >
                   <Avatar src={user?.avatarUrl} />
 
                   <Stack direction="column">
-                    <Typography variant="subtitle2" component="h4">
+                    <Typography variant="subtitle1" component="h4">
                       {user?.fullname}
                     </Typography>
-                    <Typography variant="subtitle2" component="h4">
+                    <Typography variant="subtitle2" color="GrayText">
                       {user?.email}
                     </Typography>
                   </Stack>
