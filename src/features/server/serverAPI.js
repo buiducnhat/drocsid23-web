@@ -117,6 +117,14 @@ const serverAPI = {
       Cookies.get('accessToken')
     );
   },
+
+  deleteServer: (id) => {
+    return axiosRequest(
+      serverEndPoint + `/${id}`,
+      axiosMethod.DELETE,
+      Cookies.get('accessToken')
+    );
+  },
 };
 
 export default serverAPI;

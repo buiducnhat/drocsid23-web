@@ -23,7 +23,7 @@ export const registerAction = createAsyncThunk(
   'authen/register',
   async (params, { rejectWithValue }) => {
     try {
-      const response = await authenAPI.register(params);
+      const response = await authenAPI.register({ ...params, gender: 'male' });
       return response.data;
     } catch (error) {
       return rejectWithValue(

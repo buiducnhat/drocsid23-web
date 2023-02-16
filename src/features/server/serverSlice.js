@@ -108,6 +108,21 @@ export const updateChannelAction = createAsyncThunk(
   }
 );
 
+export const deleteServerAction = createAsyncThunk(
+  'servers/deleteServer',
+  async (serverId, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.deleteServer(serverId);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
 const serverSlice = createSlice({
   name: 'servers',
   initialState: {
@@ -218,6 +233,23 @@ const serverSlice = createSlice({
       .addCase(updateChannelAction.rejected, () => {
         hideLoadingModal();
         toast.error('Update channel failed');
+      })
+
+      .addCase(deleteServerAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(deleteServerAction.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.listJoinedServer = state.listJoinedServer.filter(
+          (server) => server._id !== action.payload
+        );
+
+        hideLoadingModal();
+        toast.success('Delete server successfully');
+      })
+      .addCase(deleteServerAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Delete server failed');
       });
   },
 });

@@ -309,7 +309,7 @@ const ServerSettingDialog = NiceModal.create(() => {
                 <Button variant="outlined">Create role</Button>
               </Box>
 
-              {_mockRoles_.map((role, index) => (
+              {currentServer.roles.map((role, index) => (
                 <Accordion
                   key={index}
                   sx={{ backgroundColor: colors.grey[900] }}
@@ -328,23 +328,20 @@ const ServerSettingDialog = NiceModal.create(() => {
                     </Typography>
                     <PersonIcon sx={{ color: 'text.secondary', mr: 1 }} />
                     <Typography sx={{ color: 'text.secondary' }}>
-                      {role.countMember}
+                      {role.users.length}
                     </Typography>
                   </AccordionSummary>
 
                   <AccordionDetails>
                     <List>
-                      {role.permissions.map((permission, index2) => (
-                        <ListItem key={index2}>
-                          <ListItemText
-                            primary={permission.name}
-                            secondary={permission.description}
-                          />
+                      {role.rolePolicies.map((policy) => (
+                        <ListItem key={policy}>
+                          <ListItemText primary={'hehe'} secondary={'kaka'} />
                           <ListItemSecondaryAction>
                             <Switch
                               edge="end"
-                              checked={permission.value}
-                              value={permission.value}
+                              checked={policy}
+                              value={policy}
                             />
                           </ListItemSecondaryAction>
                         </ListItem>

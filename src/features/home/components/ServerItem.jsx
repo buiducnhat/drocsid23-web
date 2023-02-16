@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ServerSettingDialog from './ServerSettingDialog';
 import {
+  deleteServerAction,
   getServerInfoAction,
   selectCurrentServer,
 } from 'src/features/server/serverSlice';
@@ -46,6 +47,7 @@ function ServerItem({ isDirect, serverId, name, imgUrl }) {
         navigate(`/channels/${serverId}`);
       }}
       onContextMenu={(e) => {
+        e.stopPropagation();
         e.preventDefault();
         setIsHover(false);
         setContextMenu(
@@ -90,6 +92,13 @@ function ServerItem({ isDirect, serverId, name, imgUrl }) {
           }}
         >
           Add channel
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            dispatch(deleteServerAction(serverId));
+          }}
+        >
+          Delete
         </MenuItem>
       </Menu>
       <Box
