@@ -172,11 +172,11 @@ export const addUserToRoleAction = createAsyncThunk(
   'servers/addUserToRole',
   async ({ serverId, roleId, userId }, { rejectWithValue }) => {
     try {
-      const response = await serverAPI.addUserToRole(serverId, roleId, {
+      await serverAPI.addUserToRole(serverId, roleId, {
         userId,
       });
 
-      return response.data.data;
+      return { roleId, userId };
     } catch (error) {
       return rejectWithValue(
         error?.response?.data?.message || error?.response || error
@@ -189,11 +189,14 @@ export const removeUserFromRoleAction = createAsyncThunk(
   'servers/removeUserFromRole',
   async ({ serverId, roleId, userId }, { rejectWithValue }) => {
     try {
-      const response = await serverAPI.removeUserFromRole(serverId, roleId, {
+      await serverAPI.removeUserFromRole(serverId, roleId, {
         userId,
       });
 
-      return response.data.data;
+      return {
+        roleId,
+        userId,
+      };
     } catch (error) {
       return rejectWithValue(
         error?.response?.data?.message || error?.response || error
@@ -267,6 +270,19 @@ const serverSlice = createSlice({
       })
       .addCase(getServerInfoAction.fulfilled, (state, action) => {
         state.currentServer = action.payload;
+
+        const r = [];
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        action.payload.roles
+          .filter(
+            (role) =>
+              role.users.findIndex((user) => user._id === userData._id) !== -1
+          )
+          .forEach((role) => {
+            r.push(...role.rolePolicies);
+          });
+        state.currentServer.policies = [...new Set(r)];
+
         hideLoadingModal();
       })
       .addCase(getServerInfoAction.rejected, () => {
@@ -318,7 +334,6 @@ const serverSlice = createSlice({
         showLoadingModal();
       })
       .addCase(deleteServerAction.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.listJoinedServer = state.listJoinedServer.filter(
           (server) => server._id !== action.payload
         );
@@ -356,7 +371,6 @@ const serverSlice = createSlice({
         showLoadingModal();
       })
       .addCase(createRoleAction.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.currentServer.roles = [
           ...state.currentServer.roles,
           { ...action.payload, users: [] },
@@ -390,15 +404,14 @@ const serverSlice = createSlice({
         showLoadingModal();
       })
       .addCase(addUserToRoleAction.fulfilled, (state, action) => {
-        console.log(action.payload);
-        // state.currentServer.roles = state.currentServer.roles.map((role) =>
-        //   role._id === action.payload._id
-        //     ? {
-        //         ...role,
-        //         users: [...role.users, action.payload.user],
-        //       }
-        //     : role
-        // );
+        state.currentServer.roles = state.currentServer.roles.map((role) =>
+          role._id === action.payload.roleId
+            ? {
+                ...role,
+                users: [...role.users, { _id: action.payload.userId }],
+              }
+            : role
+        );
 
         hideLoadingModal();
         toast.success('Add user to role successfully');
@@ -412,17 +425,16 @@ const serverSlice = createSlice({
         showLoadingModal();
       })
       .addCase(removeUserFromRoleAction.fulfilled, (state, action) => {
-        console.log(action.payload);
-        // state.currentServer.roles = state.currentServer.roles.map((role) =>
-        //   role._id === action.payload._id
-        //     ? {
-        //         ...role,
-        //         users: role.users.filter(
-        //           (user) => user._id !== action.payload.user._id
-        //         ),
-        //       }
-        //     : role
-        // );
+        state.currentServer.roles = state.currentServer.roles.map((role) =>
+          role._id === action.payload.roleId
+            ? {
+                ...role,
+                users: role.users.filter(
+                  (user) => user._id !== action.payload.userId
+                ),
+              }
+            : role
+        );
 
         hideLoadingModal();
         toast.success('Remove user from role successfully');

@@ -22,6 +22,7 @@ import {
 import { useNavigate } from 'react-router';
 import AddChannelDialog from './AddChannelDialog';
 import CreateInvitationDialog from './CreateInvitationDialog';
+import { SERVER_POLICY } from 'src/app/constants';
 
 function ServerItem({ isDirect, serverId, name, imgUrl }) {
   const theme = useTheme();
@@ -34,6 +35,16 @@ function ServerItem({ isDirect, serverId, name, imgUrl }) {
   const [isHover, setIsHover] = useState(false);
   const [contextMenu, setContextMenu] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const hasManageServerPolicy = currentServer?.policies?.includes(
+    SERVER_POLICY.MANAGE_SERVER
+  );
+  const hasManageChannelPolicy = currentServer?.policies?.includes(
+    SERVER_POLICY.MANAGE_CHANNEL
+  );
+  const hasInvitationPolicy = currentServer?.policies?.includes(
+    SERVER_POLICY.INVITE
+  );
 
   return (
     <Stack
@@ -78,28 +89,34 @@ function ServerItem({ isDirect, serverId, name, imgUrl }) {
         >
           Server Settings
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            NiceModal.show(CreateInvitationDialog, { serverId });
-          }}
-        >
-          Create invitation
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            dispatch(getServerInfoAction(serverId));
-            NiceModal.show(AddChannelDialog, { serverId });
-          }}
-        >
-          Add channel
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            dispatch(deleteServerAction(serverId));
-          }}
-        >
-          Delete
-        </MenuItem>
+        {hasInvitationPolicy && (
+          <MenuItem
+            onClick={() => {
+              NiceModal.show(CreateInvitationDialog, { serverId });
+            }}
+          >
+            Create invitation
+          </MenuItem>
+        )}
+        {hasManageChannelPolicy && (
+          <MenuItem
+            onClick={() => {
+              dispatch(getServerInfoAction(serverId));
+              NiceModal.show(AddChannelDialog, { serverId });
+            }}
+          >
+            Add channel
+          </MenuItem>
+        )}
+        {hasManageServerPolicy && (
+          <MenuItem
+            onClick={() => {
+              dispatch(deleteServerAction(serverId));
+            }}
+          >
+            Delete
+          </MenuItem>
+        )}
       </Menu>
       <Box
         height={isSelected ? '40px' : '20px'}

@@ -84,6 +84,7 @@ const authenSlice = createSlice({
         state.getMeMsg = null;
         state.userData = action.payload.data;
         state.isAuth = true;
+        localStorage.setItem('userData', JSON.stringify(action.payload.data));
         hideLoadingModal();
       })
       .addCase(getMeAction.rejected, (state, action) => {
@@ -105,6 +106,10 @@ const authenSlice = createSlice({
         state.accessToken = action.payload.data.token;
         state.userData = action.payload.data.data;
         Cookies.set('accessToken', action.payload.data.token);
+        localStorage.setItem(
+          'userData',
+          JSON.stringify(action.payload.data.data)
+        );
         hideLoadingModal();
       })
       .addCase(loginAction.rejected, (state, action) => {

@@ -14,7 +14,6 @@ import {
   FormControl,
   InputLabel,
   OutlinedInput,
-  InputAdornment,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -30,7 +29,6 @@ import {
   Tooltip,
 } from '@mui/material';
 import {
-  Search as SearchIcon,
   ExpandMore as ExpandMoreIcon,
   Person as PersonIcon,
   Delete as DeleteIcon,
@@ -47,7 +45,7 @@ import {
   updateRoleAction,
   updateServerAction,
 } from 'src/features/server/serverSlice';
-import { SERVER_POLICY_NAMES } from 'src/app/constants';
+import { SERVER_POLICY, SERVER_POLICY_NAMES } from 'src/app/constants';
 import UserRoleSettingDialog from './UserRoleSettingDialog';
 
 function TabPanel(props) {
@@ -88,6 +86,11 @@ const ServerSettingDialog = NiceModal.create(() => {
   const [currentTab, setCurrentTab] = React.useState(0);
   const [serverName, setServerName] = React.useState(currentServer.name);
   const [addRoleName, setAddRoleName] = React.useState('');
+
+  const hasManageServerPolicy =
+    currentServer.policies.indexOf(SERVER_POLICY.MANAGE_SERVER) !== -1;
+  const hasManageRolePolicy =
+    currentServer.policies.indexOf(SERVER_POLICY.MANAGE_ROLE) !== -1;
 
   const updateServer = (data) => {
     dispatch(updateServerAction({ id: currentServer._id, data }));
@@ -162,14 +165,17 @@ const ServerSettingDialog = NiceModal.create(() => {
                     label="Server name"
                     value={serverName}
                     onChange={(event) => setServerName(event.target.value)}
+                    disabled={!hasManageServerPolicy}
                   />
-                  <Button
-                    variant="contained"
-                    disabled={serverName === currentServer.name}
-                    onClick={() => updateServer({ name: serverName })}
-                  >
-                    Save
-                  </Button>
+                  {hasManageServerPolicy && (
+                    <Button
+                      variant="contained"
+                      disabled={serverName === currentServer.name}
+                      onClick={() => updateServer({ name: serverName })}
+                    >
+                      Save
+                    </Button>
+                  )}
                 </Stack>
               </Box>
             </TabPanel>
@@ -187,33 +193,35 @@ const ServerSettingDialog = NiceModal.create(() => {
                 Use roles to manage permissions for your server members.
               </Typography>
 
-              <Box display="flex" mb={2} sx={{ width: '100%' }}>
-                <FormControl size="small" sx={{ mr: 1, width: '50ch' }}>
-                  <InputLabel>Role name</InputLabel>
-                  <OutlinedInput
-                    label="Search role"
-                    value={addRoleName}
-                    onChange={(event) => setAddRoleName(event.target.value)}
-                  />
-                </FormControl>
-                <Button
-                  variant="outlined"
-                  onClick={() =>
-                    dispatch(
-                      createRoleAction({
-                        serverId: currentServer._id,
-                        data: {
-                          name: addRoleName,
-                          rolePolicies: [],
+              {hasManageRolePolicy && (
+                <Box display="flex" mb={2} sx={{ width: '100%' }}>
+                  <FormControl size="small" sx={{ mr: 1, width: '50ch' }}>
+                    <InputLabel>Role name</InputLabel>
+                    <OutlinedInput
+                      label="Search role"
+                      value={addRoleName}
+                      onChange={(event) => setAddRoleName(event.target.value)}
+                    />
+                  </FormControl>
+                  <Button
+                    variant="outlined"
+                    onClick={() =>
+                      dispatch(
+                        createRoleAction({
                           serverId: currentServer._id,
-                        },
-                      })
-                    )
-                  }
-                >
-                  Create role
-                </Button>
-              </Box>
+                          data: {
+                            name: addRoleName,
+                            rolePolicies: [],
+                            serverId: currentServer._id,
+                          },
+                        })
+                      )
+                    }
+                  >
+                    Create role
+                  </Button>
+                </Box>
+              )}
 
               {currentServer.roles.map((role, index) => (
                 <Accordion
@@ -265,7 +273,10 @@ const ServerSettingDialog = NiceModal.create(() => {
                             cursor: 'pointer',
                           }}
                           onClick={() =>
-                            NiceModal.show(UserRoleSettingDialog, { role })
+                            NiceModal.show(UserRoleSettingDialog, {
+                              roleId: role._id,
+                              hasManageRolePolicy,
+                            })
                           }
                         >
                           <SettingsIcon />
@@ -299,6 +310,7 @@ const ServerSettingDialog = NiceModal.create(() => {
                             <ListItemSecondaryAction>
                               <Switch
                                 edge="end"
+                                disabled={!hasManageRolePolicy}
                                 checked={role?.rolePolicies?.includes(+policy)}
                                 onChange={(event) => {
                                   let data = {
@@ -344,25 +356,6 @@ const ServerSettingDialog = NiceModal.create(() => {
               >
                 Manage your server members.
               </Typography>
-
-              <Box display="flex" mb={2} sx={{ width: '100%' }}>
-                <FormControl
-                  fullWidth
-                  size="small"
-                  sx={{ mr: 1, width: '50ch' }}
-                >
-                  <InputLabel>Search member</InputLabel>
-                  <OutlinedInput
-                    endAdornment={
-                      <InputAdornment position="end" sx={{ color: 'GrayText' }}>
-                        <SearchIcon />
-                      </InputAdornment>
-                    }
-                    label="Search member"
-                  />
-                </FormControl>
-                <Button variant="outlined">Invite member</Button>
-              </Box>
 
               <List>
                 {currentServer.members.map((user, index) => (
