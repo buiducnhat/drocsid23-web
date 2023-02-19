@@ -123,6 +123,85 @@ export const deleteServerAction = createAsyncThunk(
   }
 );
 
+export const updateRoleAction = createAsyncThunk(
+  'servers/updateRole',
+  async ({ serverId, roleId, data }, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.updateRole(serverId, roleId, data);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
+export const createRoleAction = createAsyncThunk(
+  'servers/createRole',
+  async ({ serverId, data }, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.createRole(serverId, data);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
+export const deleteRoleAction = createAsyncThunk(
+  'servers/deleteRole',
+  async ({ serverId, roleId }, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.deleteRole(serverId, roleId);
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
+export const addUserToRoleAction = createAsyncThunk(
+  'servers/addUserToRole',
+  async ({ serverId, roleId, userId }, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.addUserToRole(serverId, roleId, {
+        userId,
+      });
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
+export const removeUserFromRoleAction = createAsyncThunk(
+  'servers/removeUserFromRole',
+  async ({ serverId, roleId, userId }, { rejectWithValue }) => {
+    try {
+      const response = await serverAPI.removeUserFromRole(serverId, roleId, {
+        userId,
+      });
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
 const serverSlice = createSlice({
   name: 'servers',
   initialState: {
@@ -250,6 +329,107 @@ const serverSlice = createSlice({
       .addCase(deleteServerAction.rejected, () => {
         hideLoadingModal();
         toast.error('Delete server failed');
+      })
+
+      .addCase(updateRoleAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(updateRoleAction.fulfilled, (state, action) => {
+        state.currentServer.roles = state.currentServer.roles.map((role) =>
+          role._id === action.payload._id
+            ? {
+                ...role,
+                rolePolicies: action.payload.rolePolicies,
+              }
+            : role
+        );
+
+        hideLoadingModal();
+        toast.success('Update role successfully');
+      })
+      .addCase(updateRoleAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Update role failed');
+      })
+
+      .addCase(createRoleAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(createRoleAction.fulfilled, (state, action) => {
+        console.log(action.payload);
+        state.currentServer.roles = [
+          ...state.currentServer.roles,
+          { ...action.payload, users: [] },
+        ];
+
+        hideLoadingModal();
+        toast.success('Create role successfully');
+      })
+      .addCase(createRoleAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Create role failed');
+      })
+
+      .addCase(deleteRoleAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(deleteRoleAction.fulfilled, (state, action) => {
+        state.currentServer.roles = state.currentServer.roles.filter(
+          (role) => role._id !== action.payload._id
+        );
+
+        hideLoadingModal();
+        toast.success('Delete role successfully');
+      })
+      .addCase(deleteRoleAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Delete role failed');
+      })
+
+      .addCase(addUserToRoleAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(addUserToRoleAction.fulfilled, (state, action) => {
+        console.log(action.payload);
+        // state.currentServer.roles = state.currentServer.roles.map((role) =>
+        //   role._id === action.payload._id
+        //     ? {
+        //         ...role,
+        //         users: [...role.users, action.payload.user],
+        //       }
+        //     : role
+        // );
+
+        hideLoadingModal();
+        toast.success('Add user to role successfully');
+      })
+      .addCase(addUserToRoleAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Add user to role failed');
+      })
+
+      .addCase(removeUserFromRoleAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(removeUserFromRoleAction.fulfilled, (state, action) => {
+        console.log(action.payload);
+        // state.currentServer.roles = state.currentServer.roles.map((role) =>
+        //   role._id === action.payload._id
+        //     ? {
+        //         ...role,
+        //         users: role.users.filter(
+        //           (user) => user._id !== action.payload.user._id
+        //         ),
+        //       }
+        //     : role
+        // );
+
+        hideLoadingModal();
+        toast.success('Remove user from role successfully');
+      })
+      .addCase(removeUserFromRoleAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Remove user from role failed');
       });
   },
 });

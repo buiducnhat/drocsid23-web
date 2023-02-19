@@ -8,8 +8,20 @@ export const SERVER_POLICY = {
 };
 
 export const SERVER_POLICY_NAMES = {
-  [SERVER_POLICY.MANAGE_SERVER]: 'Manage Server',
-  [SERVER_POLICY.MANAGE_ROLE]: 'Manage Roles',
-  [SERVER_POLICY.INVITE]: 'Invite to server',
-  [SERVER_POLICY.MANAGE_CHANNEL]: 'Manage Channels',
+  [SERVER_POLICY.MANAGE_SERVER]: {
+    title: 'Manage Server',
+    description: 'Manage server settings, roles, and channels',
+  },
+  [SERVER_POLICY.MANAGE_ROLE]: {
+    title: 'Manage Roles',
+    description: 'Create, edit, and delete roles',
+  },
+  [SERVER_POLICY.INVITE]: {
+    title: 'Invite Members',
+    description: 'Invite new members to the server',
+  },
+  [SERVER_POLICY.MANAGE_CHANNEL]: {
+    title: 'Manage Channels',
+    description: 'Create, edit, and delete channels',
+  },
 };

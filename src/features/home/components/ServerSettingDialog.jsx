@@ -27,6 +27,7 @@ import {
   IconButton,
   Dialog,
   Stack,
+  Tooltip,
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -34,14 +35,20 @@ import {
   Person as PersonIcon,
   Delete as DeleteIcon,
   Close as CloseIcon,
+  Settings as SettingsIcon,
 } from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import NiceModal, { muiDialogV5, useModal } from '@ebay/nice-modal-react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
+  createRoleAction,
+  deleteRoleAction,
   selectCurrentServer,
+  updateRoleAction,
   updateServerAction,
 } from 'src/features/server/serverSlice';
+import { SERVER_POLICY_NAMES } from 'src/app/constants';
+import UserRoleSettingDialog from './UserRoleSettingDialog';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -73,123 +80,6 @@ function a11yProps(index) {
   };
 }
 
-const _mockRoles_ = [
-  {
-    name: 'admin',
-    countMember: 3,
-    permissions: [
-      {
-        name: 'View channels',
-        value: true,
-        description:
-          'Allows members to view and read messages in text channels and see voice channels.',
-      },
-      {
-        name: 'Send messages',
-        value: true,
-        description: 'Allows members to send messages in text channels.',
-      },
-      {
-        name: 'Manage messages',
-        value: false,
-        description:
-          'Allows members to delete and edit other members messages.',
-      },
-      {
-        name: 'Manage roles',
-        value: false,
-        description: 'Allows members to create, edit and delete roles.',
-      },
-      {
-        name: 'Manage channels',
-        value: false,
-        description: 'Allows members to create, edit and delete channels.',
-      },
-      {
-        name: 'Manage server',
-        value: false,
-        description: 'Allows members to edit server settings.',
-      },
-    ],
-  },
-  {
-    name: 'moderator',
-    countMember: 15,
-    permissions: [
-      {
-        name: 'View channels',
-        value: true,
-        description:
-          'Allows members to view and read messages in text channels and see voice channels.',
-      },
-      {
-        name: 'Send messages',
-        value: true,
-        description: 'Allows members to send messages in text channels.',
-      },
-      {
-        name: 'Manage messages',
-        value: false,
-        description:
-          'Allows members to delete and edit other members messages.',
-      },
-      {
-        name: 'Manage roles',
-        value: false,
-        description: 'Allows members to create, edit and delete roles.',
-      },
-      {
-        name: 'Manage channels',
-        value: false,
-        description: 'Allows members to create, edit and delete channels.',
-      },
-      {
-        name: 'Manage server',
-        value: false,
-        description: 'Allows members to edit server settings.',
-      },
-    ],
-  },
-  {
-    name: 'member',
-    countMember: 140,
-    permissions: [
-      {
-        name: 'View channels',
-        value: true,
-        description:
-          'Allows members to view and read messages in text channels and see voice channels.',
-      },
-      {
-        name: 'Send messages',
-        value: true,
-        description: 'Allows members to send messages in text channels.',
-      },
-      {
-        name: 'Manage messages',
-        value: false,
-        description:
-          'Allows members to delete and edit other members messages.',
-      },
-      {
-        name: 'Manage roles',
-        value: false,
-        description: 'Allows members to create, edit and delete roles.',
-      },
-      {
-        name: 'Manage channels',
-        value: false,
-        description: 'Allows members to create, edit and delete channels.',
-      },
-      {
-        name: 'Manage server',
-        value: false,
-        description: 'Allows members to edit server settings.',
-      },
-    ],
-  },
-];
-
 const ServerSettingDialog = NiceModal.create(() => {
   const modal = useModal();
   const dispatch = useDispatch();
@@ -197,6 +87,7 @@ const ServerSettingDialog = NiceModal.create(() => {
 
   const [currentTab, setCurrentTab] = React.useState(0);
   const [serverName, setServerName] = React.useState(currentServer.name);
+  const [addRoleName, setAddRoleName] = React.useState('');
 
   const updateServer = (data) => {
     dispatch(updateServerAction({ id: currentServer._id, data }));
@@ -261,7 +152,9 @@ const ServerSettingDialog = NiceModal.create(() => {
                       cursor: 'pointer',
                     },
                   }}
-                  onClick={() => alert('Change avatar')}
+                  src={`https://ui-avatars.com/api/?name=${currentServer.name
+                    .split(' ')
+                    .join()}&background=random`}
                 />
                 <Stack direction="column" spacing={1}>
                   <TextField
@@ -296,17 +189,30 @@ const ServerSettingDialog = NiceModal.create(() => {
 
               <Box display="flex" mb={2} sx={{ width: '100%' }}>
                 <FormControl size="small" sx={{ mr: 1, width: '50ch' }}>
-                  <InputLabel>Search role</InputLabel>
+                  <InputLabel>Role name</InputLabel>
                   <OutlinedInput
-                    endAdornment={
-                      <InputAdornment position="end" sx={{ color: 'GrayText' }}>
-                        <SearchIcon />
-                      </InputAdornment>
-                    }
                     label="Search role"
+                    value={addRoleName}
+                    onChange={(event) => setAddRoleName(event.target.value)}
                   />
                 </FormControl>
-                <Button variant="outlined">Create role</Button>
+                <Button
+                  variant="outlined"
+                  onClick={() =>
+                    dispatch(
+                      createRoleAction({
+                        serverId: currentServer._id,
+                        data: {
+                          name: addRoleName,
+                          rolePolicies: [],
+                          serverId: currentServer._id,
+                        },
+                      })
+                    )
+                  }
+                >
+                  Create role
+                </Button>
               </Box>
 
               {currentServer.roles.map((role, index) => (
@@ -322,30 +228,104 @@ const ServerSettingDialog = NiceModal.create(() => {
                     <Typography
                       variant="subtitle1"
                       fontWeight="bold"
-                      sx={{ width: '50%', flexShrink: 0 }}
+                      sx={{ width: '45%', flexShrink: 0 }}
                     >
                       {role.name}
                     </Typography>
                     <PersonIcon sx={{ color: 'text.secondary', mr: 1 }} />
-                    <Typography sx={{ color: 'text.secondary' }}>
-                      {role.users.length}
+                    <Typography sx={{ color: 'text.secondary', width: '45%' }}>
+                      {role?.users.length}
                     </Typography>
+                    {role.name !== 'everyone' && role.name !== 'admin' && (
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          dispatch(
+                            deleteRoleAction({
+                              serverId: currentServer._id,
+                              roleId: role._id,
+                            })
+                          );
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
                   </AccordionSummary>
 
                   <AccordionDetails>
-                    <List>
-                      {role.rolePolicies.map((policy) => (
-                        <ListItem key={policy}>
-                          <ListItemText primary={'hehe'} secondary={'kaka'} />
-                          <ListItemSecondaryAction>
-                            <Switch
-                              edge="end"
-                              checked={policy}
-                              value={policy}
+                    <Stack direction="row" spacing={2} px={2}>
+                      <Tooltip title="Add user to role">
+                        <Avatar
+                          sizes="50px"
+                          sx={{
+                            width: 48,
+                            height: 48,
+                            cursor: 'pointer',
+                          }}
+                          onClick={() =>
+                            NiceModal.show(UserRoleSettingDialog, { role })
+                          }
+                        >
+                          <SettingsIcon />
+                        </Avatar>
+                      </Tooltip>
+                      {role?.users?.map((_user) => {
+                        const user = currentServer.members.find(
+                          (u) => u._id === _user._id
+                        );
+
+                        return (
+                          <Tooltip key={user._id} title={user.email}>
+                            <Avatar
+                              sizes="50px"
+                              alt={`${user?.fullname}`}
+                              sx={{ width: 48, height: 48 }}
+                              src={`https://i.pravatar.cc/150?u=${user?._id}`}
                             />
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      ))}
+                          </Tooltip>
+                        );
+                      })}
+                    </Stack>
+                    <List>
+                      {Object.entries(SERVER_POLICY_NAMES).map(
+                        ([policy, { title, description }]) => (
+                          <ListItem key={policy}>
+                            <ListItemText
+                              primary={title}
+                              secondary={description}
+                            />
+                            <ListItemSecondaryAction>
+                              <Switch
+                                edge="end"
+                                checked={role?.rolePolicies?.includes(+policy)}
+                                onChange={(event) => {
+                                  let data = {
+                                    rolePolicies: [...role.rolePolicies],
+                                  };
+                                  if (event.target.checked) {
+                                    data.rolePolicies.push(+policy);
+                                  } else {
+                                    data.rolePolicies =
+                                      data.rolePolicies.filter(
+                                        (p) => p !== +policy
+                                      );
+                                  }
+
+                                  dispatch(
+                                    updateRoleAction({
+                                      serverId: currentServer._id,
+                                      roleId: role._id,
+                                      data,
+                                    })
+                                  );
+                                }}
+                              />
+                            </ListItemSecondaryAction>
+                          </ListItem>
+                        )
+                      )}
                     </List>
                   </AccordionDetails>
                 </Accordion>
@@ -388,7 +368,10 @@ const ServerSettingDialog = NiceModal.create(() => {
                 {currentServer.members.map((user, index) => (
                   <ListItem key={index}>
                     <ListItemAvatar>
-                      <Avatar alt={user?.fullname} src={user.avatarUrl} />
+                      <Avatar
+                        alt={user?.fullname}
+                        src={`https://i.pravatar.cc/150?u=${user._id}`}
+                      />
                     </ListItemAvatar>
                     <ListItemText
                       primary={user?.fullname}

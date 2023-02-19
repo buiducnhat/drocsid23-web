@@ -222,7 +222,7 @@ function ServerInfoColumn() {
           >
             <Avatar
               alt="personal avatar"
-              src={userData?.avatarUrl}
+              src={`https://i.pravatar.cc/150?u=${userData?._id}`}
               sx={{ width: 36, height: 36 }}
             />
           </Badge>

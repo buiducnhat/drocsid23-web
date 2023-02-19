@@ -125,6 +125,54 @@ const serverAPI = {
       Cookies.get('accessToken')
     );
   },
+
+  updateRole: (serverId, roleId, data) => {
+    return axiosRequest(
+      `${API_ENDPOINT}/servers/${serverId}/roles/${roleId}`,
+      axiosMethod.PUT,
+      Cookies.get('accessToken'),
+      null,
+      data
+    );
+  },
+
+  createRole: (serverId, data) => {
+    return axiosRequest(
+      `${API_ENDPOINT}/servers/${serverId}/roles`,
+      axiosMethod.POST,
+      Cookies.get('accessToken'),
+      null,
+      data
+    );
+  },
+
+  deleteRole: (serverId, roleId) => {
+    return axiosRequest(
+      `${API_ENDPOINT}/servers/${serverId}/roles/${roleId}`,
+      axiosMethod.DELETE,
+      Cookies.get('accessToken')
+    );
+  },
+
+  addUserToRole: (serverId, roleId, data) => {
+    return axiosRequest(
+      `${API_ENDPOINT}/servers/${serverId}/user-role/${roleId}`,
+      axiosMethod.PUT,
+      Cookies.get('accessToken'),
+      null,
+      data
+    );
+  },
+
+  removeUserFromRole: (serverId, roleId, data) => {
+    return axiosRequest(
+      `${API_ENDPOINT}/servers/${serverId}/user-role/${roleId}/${data.userId}`,
+      axiosMethod.DELETE,
+      Cookies.get('accessToken'),
+      null,
+      data
+    );
+  },
 };
 
 export default serverAPI;

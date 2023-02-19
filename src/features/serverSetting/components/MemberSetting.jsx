@@ -72,7 +72,10 @@ const MemberSetting = () => {
           {_mockUsers_.map((user, index) => (
             <ListItem key={index}>
               <ListItemAvatar>
-                <Avatar alt={user.name} src={user.avatarUrl} />
+                <Avatar
+                  alt={user.name}
+                  src={`https://i.pravatar.cc/150?u=${user._id}`}
+                />
               </ListItemAvatar>
               <ListItemText primary={user.name} secondary={user.username} />
               <ListItemSecondaryAction>

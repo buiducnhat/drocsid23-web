@@ -61,7 +61,7 @@ function MyAccount() {
                 marginRight: 2,
               }}
               alt="Remy Sharp"
-              src={userData.avatarUrl}
+              src={`https://i.pravatar.cc/150?u=${userData?._id}`}
             />
             {userData.fullname}
           </Stack>

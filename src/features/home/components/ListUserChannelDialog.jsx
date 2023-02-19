@@ -58,7 +58,7 @@ const ListUserChannel = NiceModal.create(({ channelId }) => {
                   alignItems="center"
                   mb={1.5}
                 >
-                  <Avatar src={user?.avatarUrl} />
+                  <Avatar src={`https://i.pravatar.cc/150?u=${user._id}`} />
 
                   <Stack direction="column">
                     <Typography variant="subtitle1" component="h4">
