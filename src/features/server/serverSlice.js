@@ -205,6 +205,23 @@ export const removeUserFromRoleAction = createAsyncThunk(
   }
 );
 
+export const removeUserFromServerAction = createAsyncThunk(
+  'servers/removeUserFromServer',
+  async ({ serverId, userId }, { rejectWithValue }) => {
+    try {
+      await serverAPI.removeUserFromServer(serverId, {
+        userId,
+      });
+
+      return userId;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || error?.response || error
+      );
+    }
+  }
+);
+
 const serverSlice = createSlice({
   name: 'servers',
   initialState: {
@@ -442,6 +459,26 @@ const serverSlice = createSlice({
       .addCase(removeUserFromRoleAction.rejected, () => {
         hideLoadingModal();
         toast.error('Remove user from role failed');
+      })
+
+      .addCase(removeUserFromServerAction.pending, () => {
+        showLoadingModal();
+      })
+      .addCase(removeUserFromServerAction.fulfilled, (state, action) => {
+        state.currentServer.members = state.currentServer.members.filter(
+          (member) => member._id !== action.payload
+        );
+        state.currentServer.roles = state.currentServer.roles.map((role) => ({
+          ...role,
+          users: role.users.filter((user) => user._id !== action.payload),
+        }));
+
+        hideLoadingModal();
+        toast.success('Kick user successfully');
+      })
+      .addCase(removeUserFromServerAction.rejected, () => {
+        hideLoadingModal();
+        toast.error('Kick user failed');
       });
   },
 });

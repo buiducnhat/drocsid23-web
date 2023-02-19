@@ -41,6 +41,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   createRoleAction,
   deleteRoleAction,
+  removeUserFromServerAction,
   selectCurrentServer,
   updateRoleAction,
   updateServerAction,
@@ -244,27 +245,29 @@ const ServerSettingDialog = NiceModal.create(() => {
                     <Typography sx={{ color: 'text.secondary', width: '45%' }}>
                       {role?.users.length}
                     </Typography>
-                    {role.name !== 'everyone' && role.name !== 'admin' && (
-                      <IconButton
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          dispatch(
-                            deleteRoleAction({
-                              serverId: currentServer._id,
-                              roleId: role._id,
-                            })
-                          );
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    )}
+                    {role.name !== 'everyone' &&
+                      role.name !== 'admin' &&
+                      hasManageRolePolicy && (
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(
+                              deleteRoleAction({
+                                serverId: currentServer._id,
+                                roleId: role._id,
+                              })
+                            );
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      )}
                   </AccordionSummary>
 
                   <AccordionDetails>
                     <Stack direction="row" spacing={2} px={2}>
-                      <Tooltip title="Add user to role">
+                      <Tooltip title="Setting role">
                         <Avatar
                           sizes="50px"
                           sx={{
@@ -288,7 +291,7 @@ const ServerSettingDialog = NiceModal.create(() => {
                         );
 
                         return (
-                          <Tooltip key={user._id} title={user.email}>
+                          <Tooltip key={user._id} title={user?.email}>
                             <Avatar
                               sizes="50px"
                               alt={`${user?.fullname}`}
@@ -370,11 +373,24 @@ const ServerSettingDialog = NiceModal.create(() => {
                       primary={user?.fullname}
                       secondary={user?.email}
                     />
-                    <ListItemSecondaryAction>
-                      <IconButton edge="end" aria-label="delete">
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
+                    {hasManageServerPolicy && (
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() =>
+                            dispatch(
+                              removeUserFromServerAction({
+                                serverId: currentServer._id,
+                                userId: user._id,
+                              })
+                            )
+                          }
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    )}
                   </ListItem>
                 ))}
               </List>

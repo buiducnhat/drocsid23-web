@@ -173,6 +173,16 @@ const serverAPI = {
       data
     );
   },
+
+  removeUserFromServer: (serverId, data) => {
+    return axiosRequest(
+      `${API_ENDPOINT}/servers/${serverId}/kick-user`,
+      axiosMethod.PUT,
+      Cookies.get('accessToken'),
+      null,
+      data
+    );
+  }
 };
 
 export default serverAPI;
