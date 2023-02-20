@@ -36,7 +36,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import AddChannelDialog from 'src/features/home/components/AddChannelDialog';
 import InviteDialog from 'src/features/home/components/InviteDialog';
 import { Link as LinkDom } from 'react-router-dom';
-import ServerSetting from 'src/features/serverSetting';
+// import ServerSetting from 'src/features/serverSetting';
 import UserSetting from 'src/features/userSetting/UserSetting';
 import ChannelSettingDialog from './ChannelSettingDialog';
 import { selectCurrentServer } from 'src/features/server/serverSlice';
@@ -116,7 +116,7 @@ function ServerInfoColumn() {
         >
           {currentServer.name}
         </Button>
-        <Menu
+        {/* <Menu
           id="fade-menu"
           MenuListProps={{
             'aria-labelledby': 'fade-button',
@@ -159,7 +159,7 @@ function ServerInfoColumn() {
               <AddICon fontSize="small" />
             </Stack>
           </MenuItem>
-        </Menu>
+        </Menu> */}
       </Stack>
 
       {[
