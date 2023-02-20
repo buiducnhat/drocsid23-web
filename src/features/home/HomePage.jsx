@@ -74,7 +74,7 @@ const HomePage = () => {
       navigate('/authen/login', { state: { from: location.pathname } });
     } else if (isAuth && !socket) {
       setSocket(
-        io(process.env.REACT_APP_WS_SERVER, {
+        io(import.meta.env.VITE_WS_SERVER, {
           query: {
             accessToken: Cookies.get('accessToken'),
           },

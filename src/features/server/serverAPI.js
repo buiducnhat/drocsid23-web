@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 
 import { axiosMethod, axiosRequest } from 'src/helpers/axios.helper';
 
-const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
+const API_ENDPOINT = import.meta.env.VITE_API_ENDPOINT;
 
 const serverEndPoint = API_ENDPOINT + '/servers';
 const channelEndPoint = API_ENDPOINT + '/channels';
