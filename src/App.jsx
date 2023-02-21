@@ -37,7 +37,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <NiceModal.Provider>
         <CssBaseline />
-        <ToastContainer />
+        <ToastContainer theme="dark" />
         {routing}
       </NiceModal.Provider>
     </ThemeProvider>
